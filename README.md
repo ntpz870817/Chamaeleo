@@ -8,5 +8,5 @@ This kit is mainly developed and operated by Synthetic Platform of BGI-Research.
 
 Here, we provide guidance for different visitors:
 
-- (1) If you are a learner, please pay attention to the user manual. **Chamaeleo\docs\User Manual.md**
-- (2) If you want to be a contributor to this kit, please pay attention to the contributor manual. **Chamaeleo\docs\Contributor Manual.md**
+- If you are a learner, please pay attention to the user manual, see **Chamaeleo\docs\User Manual.md**.
+- If you want to be a contributor to this kit, please pay attention to the contributor manual, see **Chamaeleo\docs\Contributor Manual.md**.
