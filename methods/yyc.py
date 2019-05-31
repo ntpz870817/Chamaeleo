@@ -201,9 +201,8 @@ class YYC:
                        Type: int or bit
 
         :returns good_datas, bad datas: good and bad data from total data
-                                        Type: list
+                                        Type: list(int)
         """
-        # print("divide library = " + str(len(matrix)))
 
         bad_indexs = []
         for row in range(len(matrix)):
