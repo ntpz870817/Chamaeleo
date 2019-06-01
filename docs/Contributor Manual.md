@@ -149,3 +149,20 @@ If the type is ERROR, we will end this program immediately.
 - If the type is NORMAL, print normal.
 - If the type is WARN, print yellow and high light.
 - If the type is ERROR, print red and high light.
+
+### Variable Naming Specification
+* The naming of variables requires the basic expression of the meaning of variables.
+  We do not recommend that you use some simple characters like "i", "j" or "k" as process variables, which can be obscure and not conducive to cooperative development.
+* Variables are represented by lowercase letters, numbers and underscores.
+* If you iterate based on subscripts, we recommend that you name the variable "index".
+* If some variables modify or save the original object (\*), it is recommended to use "current_\*", "last_\*", or "temp_\*".
+
+## Testing Process and Recommendations
+The complete process of testing is as follows:
+(1) setting input type, (2) single function test, (3) integration function test, (4) error input test (input reminder and optimization),
+(5) unilateral integration function test (encoding or decoding), (6) symmetrical integration function test (corresponding to encoding and decoding process)
+
+We strongly recommend that you complete all the tests before submitting them.
+
+In addition, considering that using “print” or “log” functions for testing is irrational.
+We recommend that you use package [**"PySnooper"**](https://github.com/cool-RR/PySnooper) for testing.

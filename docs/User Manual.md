@@ -1,1 +1,1 @@
-# Read before you want to make a contribution
+# Read before you want to use it

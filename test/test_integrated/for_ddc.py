@@ -15,12 +15,12 @@ import utils.model_saver as saver
 import utils.data_handle as data_handle
 
 
-read_file_path = "..\\test\\test_files\\founding ceremony.mp4"
-write_file_path = "..\\test\\create_files\\target.mp4"
+read_file_path = "..\\..\\test\\test_files\\founding ceremony.mp4"
+write_file_path = "..\\..\\test\\create_files\\target.mp4"
 
-dna_path = "..\\test\\create_files\\target.dna"
+dna_path = "..\\..\\test\\create_files\\target.dna"
 
-model_path = "..\\test\\create_files\\ddc.pkl"
+model_path = "..\\..\\test\\create_files\\ddc.pkl"
 
 if __name__ == '__main__':
     tool = ddc.DDC()
