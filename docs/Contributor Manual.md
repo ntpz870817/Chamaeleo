@@ -67,8 +67,8 @@ Two simple example is shown below:
 introduction: The initialization method of YYC.
 
 :param base_reference: Correspondence between base and binary data (RULE 1).
-                        Make sure that the first and third, and the second and fourth are equal, so there are only two cases:
-                        [0, 0, 1, 1] or [1, 1, 0, 0].
+                       Make sure that the first and third, and the second and fourth are equal, so there are only two cases:
+                       [0, 0, 1, 1] or [1, 1, 0, 0].
 
 :param current_code_matrix: Conversion rule between base and binary data based on support base and current base (RULE 2).
                              Label row is the support base, label col is the current base.
@@ -80,14 +80,14 @@ introduction: The initialization method of YYC.
                              Make sure that Xn + Yn = 1 and Xn * Yn = 0, n is in [1, 8].
 
 :param support_bases: Base replenishment before official data.
-                       Make sure that the count of support base must more than support spacing.
-                       Make sure that the number range of each position is {0, 1, 2, 3}, reference base index.
+                      Make sure that the count of support base must more than support spacing.
+                      Make sure that the number range of each position is {0, 1, 2, 3}, reference base index.
 
 :param support_spacing: Spacing between support base and current base.
-                         When the support base is the front of the current base, the spacing is 0.
+                        When the support base is the front of the current base, the spacing is 0.
 
 :param max_ratio: The max ratio of 0 or 1.
-                   When the (count/length) >= this parameter, we decide that this binary sequence is not good.
+                  When the (count/length) >= this parameter, we decide that this binary sequence is not good.
 
 """
 ```
@@ -109,7 +109,7 @@ introduction: Separate good and bad data from total data, and splice index and d
 
 ### Process Output Specification
 Part of the process may require a long loading time.
-We recommend that you be able to monitor the completion time using **monitor.py** objects under folder **utils**.
+We recommend that you be able to monitor the completion time using [**monitor.py**](https://github.com/ntpz870817/Chamaeleo/blob/master/utils/monitor.py) objects under folder **utils**.
 
 The specific usage is as follows:
 
@@ -125,7 +125,7 @@ for index in range(length):
 ```
 
 ### Log Output Specification
-We want you to print each core step to the console through **log.py**  in folder **utils**.
+We want you to print each core step to the console through [**log.py**](https://github.com/ntpz870817/Chamaeleo/blob/master/utils/log.py)  in folder **utils**.
 This helps us understand what steps a macro approach takes.
 
 The specific usage is as follows:
