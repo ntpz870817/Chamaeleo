@@ -5,7 +5,8 @@ Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): (1) Save and load model to file.
+Function(s): (1) Save model to file.
+             (2) Load model from file.
 """
 
 

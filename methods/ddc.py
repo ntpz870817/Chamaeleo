@@ -1,5 +1,5 @@
 """
-Name: DDYYC(Shuang-Shuang DNA Storage Code)
+Name: DDC(Double-Double DNA Storage Code)
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
@@ -24,7 +24,7 @@ class DDC(yyc.YYC):
 
     def __init_check__(self, support_bases, support_spacing, base_reference, current_code_matrix, max_ratio):
         """
-        introduction: The verification of initialization parameters in DDYYC.
+        introduction: The verification of initialization parameters in DDC.
 
         :param base_reference: Correspondence between base and binary data (RULE 1).
                                 Make sure that Two of the bases are 1 and the other two are 0.

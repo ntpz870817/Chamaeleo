@@ -1,10 +1,16 @@
+<p align="center">
+<img src="https://github.com/ntpz870817/Chamaeleo/blob/master/images/logo.png" alt="Chamaeleo" title="Chamaeleo" width="646"/>
+</p>
+
+---
+
 # Read Before You Want to Make a Contribution
 **Chamaeleo** is currently the only library focused on the coding and decoding methods for DNA storage.
 We hope to provide a readable, robust and high-performance learning and use framework for researchers and engineers.
 We very much welcome your participation and dedicate our strength to this community.
 
 ## Language in USE
-We use **Python3.5** to develop the entire kit currently.
+We use **Python3.5** to develop the kit.
 
 ## Package in USE
 The packages we are calling now is as follows:
@@ -25,6 +31,40 @@ When choosing the external package you need, you need to consider the problems c
 For example, the Windows version of Python has no "termios" module.
 We do not want situations where we cannot develop or use this kit because of the external packages.
 In addition, some non-robust external packages may lead to instability or even collapse of the kit.
+
+
+## Kit Tree Diagram
+```html
+├── docs                              // Description document folder
+│    ├── Contributor Manual.md        // Read Before You Want to Make a Contribution
+│    ├── User Manual.md               // Read before you want to use it
+├── methods                           // Method module
+│    ├── property                     // Inherent property folder
+│    │    ├── inherent.py             // inherent property
+│    ├── yyc.py                       // YYC(Ying-Yang DNA Storage Code)
+│    ├── ddc.py                       // DDC(Double-Double DNA Storage Code)
+├── test                              // Test module
+│    ├── generated_files              // DNA motif set file or binary file generated in the test
+│    │    ├── README.md               // Description document of generated files and the above folder
+│    ├── test_files                   // Files for testing
+│    ├── test_functional              // Functional test folder
+│    │    ├── README.md               // Description document of the above folder
+│    ├── test_integrated              // Integrated test folder
+│    │    ├── st_ddc.py               // Symmetrical testing of DDC
+│    │    ├── README.md               // Description document of the above folder
+├── utils                             // Util module
+│    ├── data_handle.py               // Conversion of DNA motifs and binary document
+│    ├── log.py                       // Outputting the logs in console
+│    ├── model_saver.py               // Save model to file and load model from file
+│    ├── monitor.py                   // Getting the progress  situation and the time left
+│    ├── motif_friendly.py            // Determining whether motif is friendly to sequencing and synthesis
+├── .gitignore                        // Upload Ignore File
+├── AUTHORS                           // Author catalogue
+├── chamaeleo.py                      // Main calling function
+├── LICENSE                           // Protocol of kit
+├── logo.png                          // Logo of kit
+├── README.md                         // Description document of kit
+```
 
 ## Coding Specification
 ### Document Header Annotation Specification
@@ -166,3 +206,6 @@ We strongly recommend that you complete all the tests before submitting them.
 
 In addition, considering that using “print” or “log” functions for testing is irrational.
 We recommend that you use package [**"PySnooper"**](https://github.com/cool-RR/PySnooper) for testing.
+
+## Other Requirements
+We strongly recommend that you update the **Contributor Manual** or **User Manual** as appropriate while completing the coding.

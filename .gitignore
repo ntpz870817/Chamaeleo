@@ -104,8 +104,8 @@ venv.bak/
 .mypy_cache/
 
 # test middleware
-test/create_files/*
-!test/create_files/*.md
+test/generated_files/*
+!test/generated_files/*.md
 
 # .idea/
 .idea/
