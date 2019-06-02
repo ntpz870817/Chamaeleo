@@ -38,6 +38,7 @@ class Simple:
 
         self.mapping_rule = mapping_rule
         self.file_size = 0
+        self.index_binary_length = 0
         self.monitor = monitor.Monitor()
 
     def __init_check__(self, mapping_rule):
@@ -89,11 +90,12 @@ class Simple:
         self.monitor.restore()
 
         self.file_size = file_size
+        self.index_binary_length = int(len(str(bin(len(matrix)))) - 2)
 
         dna_motifs = []
         for row in range(len(matrix)):
             self.monitor.output(row, len(matrix))
-            dna_motifs.append(self.__list_to_motif__(matrix[row]))
+            dna_motifs.append(self.__list_to_motif__(list(map(int, list(str(bin(row))[2:].zfill(self.index_binary_length)))) + matrix[row]))
 
         return dna_motifs
 
@@ -132,15 +134,28 @@ class Simple:
         :return matrix: The binary matrix corresponding to the dna motifs.
                          Type: Two-dimensional list(int).
         """
+        self.monitor.restore()
+
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Decode the DNA motif set.")
+                   "Convert DNA motifs to binary matrix.")
+        temp_matrix = []
+        for index in range(len(dna_motifs)):
+            self.monitor.output(index, len(dna_motifs))
+            temp_matrix.append(self.__motif_to_list__(dna_motifs[index]))
 
         self.monitor.restore()
 
-        matrix = []
-        for index in range(len(dna_motifs)):
-            self.monitor.output(index, len(dna_motifs))
-            matrix.append(self.__motif_to_list__(dna_motifs[index]))
+        self.monitor.restore()
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Divide index and data from binary matrix.")
+        indexs, datas = self.__divide_indexs_datas__(temp_matrix)
+
+        self.monitor.restore()
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Restore the disrupted data order.")
+        matrix = self.__sort_order__(indexs, datas)
+
+        self.monitor.restore()
 
         return matrix
 
@@ -165,3 +180,53 @@ class Simple:
                 one_list.append(self.mapping_rule[inherent.base_index.get(dna_motif[index])])
 
         return one_list
+
+    def __divide_indexs_datas__(self, matrix):
+        """
+        introduction: Separate data from indexes in binary strings.
+
+        :param matrix: The DNA motif of len(matrix) rows.
+                        Type: Two-dimensional list(int).
+
+        :returns index, datas: Obtained data sets and index sets in corresponding locations.
+                                Type: One-dimensional list(int), Two-dimensional list(int).
+        """
+
+        indexs = []
+        datas = []
+
+        for row in range(len(matrix)):
+            self.monitor.output(row, len(matrix))
+            # Convert binary index to decimal.
+            index = int("".join(list(map(str, matrix[row][:self.index_binary_length]))), 2)
+
+            indexs.append(index)
+            datas.append(matrix[row][self.index_binary_length:])
+
+        del matrix
+
+        return indexs, datas
+
+    # noinspection PyUnusedLocal
+    def __sort_order__(self, indexs, datas):
+        """
+        introduction: Restore data in order of index.
+
+        :param indexs: The indexes of data set.
+
+        :param datas: The disordered data set, the locations of this are corresponding to parameter "index".
+
+        :returns matrix: Binary list in correct order.
+                          Type: Two-dimensional list(int).
+        """
+
+        matrix = [[0 for col in range(len(datas[0]))] for row in range(len(indexs))]
+
+        for row in range(len(indexs)):
+            self.monitor.output(row, len(indexs))
+            if 0 <= row < len(matrix):
+                matrix[indexs[row]] = datas[row]
+
+        del indexs, datas
+
+        return matrix

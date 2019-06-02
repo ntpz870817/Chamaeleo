@@ -17,3 +17,4 @@ index_base.get(?)
 
 base_index = {'A': 0, 'T': 1, 'C': 2, 'G': 3}
 index_base = {0: 'A', 1: 'T', 2: 'C', 3: 'G'}
+dna_table = {'A': ['C', 'G', 'T'],  'C': ['G', 'T', 'A'], 'G': ['T', 'A', 'C'], 'T': ['A', 'C', 'G']}

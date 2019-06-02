@@ -41,6 +41,7 @@ In addition, some non-robust external packages may lead to instability or even c
 ├── methods                           // Method module
 │    ├── property                     // Inherent property folder
 │    │    ├── inherent.py             // inherent property
+│    │    ├── motif_friendly.py       // Determining whether motif is friendly to sequencing and synthesis
 │    ├── double_double.py             // DDC (Double-Double DNA Storage Code)
 │    ├── simple.py                    // Simple (Simple DNA Storage Code)
 │    ├── yin_yang.py                  // YYC (Yin-Yang DNA Storage Code)
@@ -59,7 +60,6 @@ In addition, some non-robust external packages may lead to instability or even c
 │    ├── log.py                       // Outputting the logs in console
 │    ├── model_saver.py               // Save model to file and load model from file
 │    ├── monitor.py                   // Getting the progress  situation and the time left
-│    ├── motif_friendly.py            // Determining whether motif is friendly to sequencing and synthesis
 ├── .gitignore                        // Upload Ignore File
 ├── AUTHORS                           // Author catalogue
 ├── chamaeleo.py                      // Main calling function

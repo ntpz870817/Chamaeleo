@@ -21,9 +21,9 @@ import sys
 import numpy
 
 import methods.property.inherent as inherent
+import methods.property.motif_friendly as motif_friendly
 import utils.log as log
 import utils.monitor as monitor
-import utils.motif_friendly as motif_friendly
 
 
 # noinspection PyUnresolvedReferences,PyMethodMayBeStatic,PyUnusedLocal,PyProtectedMember,PyBroadException
@@ -65,7 +65,7 @@ class YYC:
         if not current_code_matrix:
             current_code_matrix = [[1, 0, 1, 0], [1, 0, 1, 0], [0, 1, 0, 1], [0, 1, 0, 1]]
         if not support_bases:
-            support_bases = [inherent.index_base[1]]
+            support_bases = [inherent.index_base.get(0)]
 
         # Detect parameters correctness
         self.__init_check__(support_bases, support_spacing, base_reference, current_code_matrix, max_ratio)
