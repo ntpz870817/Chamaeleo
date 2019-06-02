@@ -1,5 +1,7 @@
 """
-Name: DDC(Double-Double DNA Storage Code)
+Name: DDC (Double-Double DNA Storage Code)
+
+Reference: None
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
@@ -8,14 +10,14 @@ Current Version: 1
 Function(s): (1) DNA encoding by DDYYC.
              (2) DNA decoding by DDYYC.
 
-Advantages: (1) high compressibility, maximum compressibility to 1/2 of the original data.
-            (2) preventing repetitive motifs, like ATCGATCG...
-            (3) increase the number of sequence changes (far exceed YYC, 5,566,277,615,616 cases), increasing data security.
+Advantages: (1) High compressibility, maximum compressibility to 1/2 of the original data.
+            (2) Prevent repetitive motifs, like ATCGATCG...
+            (3) Increase the number of sequence changes (far exceed YYC, 5,566,277,615,616 cases), increasing data security.
 """
 
 import sys
 
-import methods.yyc as yyc
+import methods.yin_yang as yyc
 import utils.log as log
 
 

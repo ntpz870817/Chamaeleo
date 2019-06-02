@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/ntpz870817/Chamaeleo/blob/master/logo.png" alt="Chamaeleo" title="Chamaeleo" width="646"/>
+<img src="https://github.com/ntpz870817/Chamaeleo/blob/master/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
 </p>
 
 ---
@@ -30,8 +30,9 @@ In addition, the packages we are calling now is as follows:
 ├── methods                           // Method module
 │    ├── property                     // Inherent property folder
 │    │    ├── inherent.py             // inherent property
-│    ├── yyc.py                       // YYC(Ying-Yang DNA Storage Code)
-│    ├── ddc.py                       // DDC(Double-Double DNA Storage Code)
+│    ├── double_double.py             // DDC (Double-Double DNA Storage Code)
+│    ├── simple.py                    // Simple (Simple DNA Storage Code)
+│    ├── yin_yang.py                  // YYC (Yin-Yang DNA Storage Code)
 ├── utils                             // Util module
 │    ├── data_handle.py               // Conversion of DNA motifs and binary document
 │    ├── log.py                       // Outputting the logs in console

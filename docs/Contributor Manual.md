@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/ntpz870817/Chamaeleo/blob/master/logo.png" alt="Chamaeleo" title="Chamaeleo" width="646"/>
+<img src="https://github.com/ntpz870817/Chamaeleo/blob/master/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
 </p>
 
 ---
@@ -41,8 +41,9 @@ In addition, some non-robust external packages may lead to instability or even c
 ├── methods                           // Method module
 │    ├── property                     // Inherent property folder
 │    │    ├── inherent.py             // inherent property
-│    ├── yyc.py                       // YYC(Ying-Yang DNA Storage Code)
-│    ├── ddc.py                       // DDC(Double-Double DNA Storage Code)
+│    ├── double_double.py             // DDC (Double-Double DNA Storage Code)
+│    ├── simple.py                    // Simple (Simple DNA Storage Code)
+│    ├── yin_yang.py                  // YYC (Yin-Yang DNA Storage Code)
 ├── test                              // Test module
 │    ├── generated_files              // DNA motif set file or binary file generated in the test
 │    │    ├── README.md               // Description document of generated files and the above folder
@@ -51,6 +52,7 @@ In addition, some non-robust external packages may lead to instability or even c
 │    │    ├── README.md               // Description document of the above folder
 │    ├── test_integrated              // Integrated test folder
 │    │    ├── st_ddc.py               // Symmetrical testing of DDC
+│    │    ├── st_simple.py            // Symmetrical testing of Simple
 │    │    ├── README.md               // Description document of the above folder
 ├── utils                             // Util module
 │    ├── data_handle.py               // Conversion of DNA motifs and binary document

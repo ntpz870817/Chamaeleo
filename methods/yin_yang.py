@@ -1,5 +1,7 @@
 """
-Name: YYC(Ying-Yang DNA Storage Code)
+Name: YYC (Yin-Yang DNA Storage Code)
+
+Reference: None
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
@@ -8,9 +10,9 @@ Current Version: 1
 Function(s): (1) DNA encoding by YYC.
              (2) DNA decoding by YYC.
 
-Advantages: (1) high compressibility, maximum compressibility to 1/2 of the original data.
-            (2) preventing repetitive motifs, like ATCGATCG...
-            (3) increase the number of sequence changes (1,536 cases), increasing data security.
+Advantages: (1) High compressibility, maximum compressibility to 1/2 of the original data.
+            (2) Prevent repetitive motifs, like ATCGATCG...
+            (3) Increase the number of sequence changes (1,536 cases), increasing data security.
 """
 
 import random
@@ -281,7 +283,7 @@ class YYC:
                         good_index = int(good_indexs.pop())
                         bad_index = int(bad_indexs.pop())
                         if motif_friendly.friendly_check(
-                                self.__lists_to_motif__(good_datas[good_index], bad_datas[bad_index])) \
+                                self.__list_to_motif__(good_datas[good_index], bad_datas[bad_index])) \
                                 or search_index == self.search_count - 1:
                             datas.append(good_datas[good_index])
                             datas.append(bad_datas[bad_index])
@@ -295,7 +297,7 @@ class YYC:
                         good_index1 = int(good_indexs.pop())
                         good_index2 = int(good_indexs.pop())
                         if motif_friendly.friendly_check(
-                                self.__lists_to_motif__(good_datas[good_index1], good_datas[good_index2])) \
+                                self.__list_to_motif__(good_datas[good_index1], good_datas[good_index2])) \
                                 or search_index == self.search_count - 1:
                             datas.append(good_datas[good_index1])
                             datas.append(good_datas[good_index2])
@@ -309,7 +311,7 @@ class YYC:
                         bad_index1 = int(bad_indexs.pop())
                         bad_index2 = int(bad_indexs.pop())
                         if motif_friendly.friendly_check(
-                                self.__lists_to_motif__(bad_datas[bad_index1], bad_datas[bad_index2]))\
+                                self.__list_to_motif__(bad_datas[bad_index1], bad_datas[bad_index2]))\
                                 or search_index == self.search_count - 1:
                             datas.append(bad_datas[bad_index1])
                             datas.append(bad_datas[bad_index2])
@@ -343,15 +345,15 @@ class YYC:
         for row in range(0, len(datas), 2):
             self.monitor.output(row, len(datas))
             if row < len(datas) - 1:
-                dna_motifs.append(self.__lists_to_motif__(datas[row], datas[row + 1]))
+                dna_motifs.append(self.__list_to_motif__(datas[row], datas[row + 1]))
             else:
-                dna_motifs.append(self.__lists_to_motif__(datas[row], None))
+                dna_motifs.append(self.__list_to_motif__(datas[row], None))
 
         del datas
 
         return dna_motifs
 
-    def __lists_to_motif__(self, upper_list, lower_list):
+    def __list_to_motif__(self, upper_list, lower_list):
         """
         introduction: from two binary list to DNA motif
 
