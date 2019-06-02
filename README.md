@@ -5,9 +5,8 @@
 ---
 
 **Chamaeleo** is a library for DNA storage.
-This kit is mainly developed and operated by Synthetic Platform of BGI-Research.
+This kit is mainly developed and operated by Synthetic Platform of BGI-Research, for a detailed list of authors, see [**\docs\Authors.md**](https://github.com/ntpz870817/Chamaeleo/blob/master/docs/Authors.md).
 It provides you a chance to use the classical DNA encoding and decoding methods to save files into DNA motifs or load them from DNA motifs.
-
 
 ---
 
