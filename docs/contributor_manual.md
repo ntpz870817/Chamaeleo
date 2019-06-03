@@ -5,9 +5,9 @@
 ---
 
 # Read Before You Want to Make a Contribution
-**Chamaeleo** is currently the only library focused on the coding and decoding methods for DNA storage.
-We hope to provide a readable, robust and high-performance learning and use framework for researchers and engineers.
-We very much welcome your participation and dedicate our strength to this community.
+**Chamaeleo** is currently the only collection focused on different codec methods for DNA storage.
+We hope to provide a readable, robust and high-performance learning and useful framework for researchers and engineers.
+We welcome your participation and dedicate strength to this community.
 
 ## Language in USE
 We use **Python3.5** to develop the kit.
@@ -27,9 +27,9 @@ The packages we are calling now is as follows:
 
 If you have other packages, Please add them here.
 
-When choosing the external package you need, you need to consider the problems caused by different systems and focus on the reliability of the source of the package.
+While choosing external packages, you need to consider the problems caused by different systems and focus on the reliability of the source of the package.
 For example, the Windows version of Python has no "termios" module.
-We do not want situations where we cannot develop or use this kit because of the external packages.
+Failures of development or usage caused by external packages should be avoid.
 In addition, some non-robust external packages may lead to instability or even collapse of the kit.
 
 
@@ -70,11 +70,11 @@ In addition, some non-robust external packages may lead to instability or even c
 
 ## Coding Specification
 ### Document Header Annotation Specification
-The beginning of the file needs to contain several information:
+Several information should be included in the beginning of the file:
 (1) Name, (2) Coder, (3) Current Version, and (4) Function(s).
 
-A macro overview of a document is necessary, which helps us to know what tasks this document has accomplished.
-Among them, the "Name" section can contain the papers we quoted or other references.
+An overview of a document is necessary, which helps us to know what tasks this document has accomplished.
+Among them, the "Name" section should contain citations including journal papers or other reference.
 This operation will help people with learning needs to trace back to the principles of methods.
 
 
@@ -94,12 +94,14 @@ Function(s): (1) DNA encoding by YYC.
 Advantages: (1) high compressibility, maximum compressibility to 1/2 of the original data.
             (2) preventing repetitive motifs, like ATCGATCG...
             (3) increase the number of sequence changes (1,536 cases), increasing data security.
+
+Reference: Z.Ping et al. Towards Practical and Robust DNA-based Data Archiving by Codec Named “Yin-Yang”. XXX. 2019
 """
 ```
 
 ### Function Header Annotation Specification
 Unless the construction and reading of the function is very simple, we need to complete the annotation of the function header.
-This is very important for cooperative development.
+It is important for cooperative development.
 Usually, the annotation includes the purpose of the function, the interpretation and constraints of the input parameters, and the necessary information of the return production.
 
 
@@ -150,8 +152,8 @@ introduction: Separate good and bad data from total data, and splice index and d
 ```
 
 ### Process Output Specification
-Part of the process may require a long loading time.
-We recommend that you be able to monitor the completion time using [**monitor.py**](https://github.com/ntpz870817/Chamaeleo/blob/master/utils/monitor.py) objects under folder **utils**.
+Part of the process may require  long loading time.
+We recommend that you to monitor the running time using [**monitor.py**](https://github.com/ntpz870817/Chamaeleo/blob/master/utils/monitor.py) objects under folder **utils**.
 
 The specific usage is as follows:
 
@@ -168,7 +170,7 @@ for index in range(length):
 
 ### Log Output Specification
 We want you to print each core step to the console through [**log.py**](https://github.com/ntpz870817/Chamaeleo/blob/master/utils/log.py)  in folder **utils**.
-This helps us understand what steps a macro approach takes.
+This helps us understand what procedure the kit takes.
 
 The specific usage is as follows:
 
@@ -207,7 +209,7 @@ The complete process of testing is as follows:
 We strongly recommend that you complete all the tests before submitting them.
 
 In addition, considering that using “print” or “log” functions for testing is irrational.
-We recommend that you use package [**"PySnooper"**](https://github.com/cool-RR/PySnooper) for testing.
+Package [**"PySnooper"**](https://github.com/cool-RR/PySnooper) would an option for testing.
 
 ## Other Requirements
 We strongly recommend that you update the **Contributor Manual** or **User Manual** as appropriate while completing the coding.
