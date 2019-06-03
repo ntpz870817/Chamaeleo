@@ -5,8 +5,8 @@
 ---
 
 # Read before you want to use it
-**Chamaeleo** is currently the only library focused on the coding and decoding methods for DNA storage.
-We hope to provide a readable, robust and high-performance learning and use framework for researchers and engineers.
+**Chamaeleo** is currently the only collection focused on different codec methods for DNA storage.
+We hope to provide a readable, robust and high-performance learning and useful framework for researchers and engineers.
 
 ## Environment Configuration
 The kit is developed by **Python3.5**.
