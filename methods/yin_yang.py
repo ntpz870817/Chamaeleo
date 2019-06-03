@@ -17,18 +17,17 @@ Advantages: (1) High compressibility, maximum compressibility to 1/2 of the orig
 
 import random
 import sys
-
 import numpy
 
 import methods.property.inherent as inherent
 import methods.property.motif_friendly as motif_friendly
+import methods.property.index_data as index_data
 import utils.log as log
 import utils.monitor as monitor
 
-
-# noinspection PyUnresolvedReferences,PyMethodMayBeStatic,PyUnusedLocal,PyProtectedMember,PyBroadException
+# noinspection PyUnresolvedReferences,PyMethodMayBeStatic
+# PyUnusedLocal,PyProtectedMember,PyBroadException, PyArgumentList
 class YYC:
-
     def __init__(self, base_reference=None, current_code_matrix=None, support_bases=None, support_spacing=0,
                  max_ratio=0.8, search_count=1):
         """
@@ -158,7 +157,7 @@ class YYC:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                        "Wrong max ratio (" + str(max_ratio) + ")!")
 
-# ================================================= encode part ========================================================
+        # ================================================= encode part ========================================================
 
     def encode(self, matrix, file_size):
         """
@@ -223,13 +222,13 @@ class YYC:
             good_datas = []
             for row in range(len(good_datas)):
                 self.monitor.output(row, len(good_datas))
-                good_datas.append(list(map(int, list(str(bin(row))[2:].zfill(self.index_binary_length)))) + matrix[row])
+                good_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
             return good_datas, None
         elif len(bad_indexs) == len(matrix):
             bad_datas = []
             for row in range(len(bad_datas)):
                 self.monitor.output(row, len(bad_datas))
-                bad_datas.append(list(map(int, list(str(bin(row))[2:].zfill(self.index_binary_length)))) + matrix[row])
+                bad_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
             return None, bad_datas
         else:
             good_datas = []
@@ -237,13 +236,12 @@ class YYC:
             for row in range(len(matrix)):
                 self.monitor.output(row, len(matrix))
                 if row in bad_indexs:
-                    bad_datas.append(list(map(int, list(str(bin(row))[2:].zfill(self.index_binary_length)))) + matrix[row])
+                    bad_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
                 else:
-                    good_datas.append(list(map(int, list(str(bin(row))[2:].zfill(self.index_binary_length)))) + matrix[row])
+                    good_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
 
             return good_datas, bad_datas
 
-    # noinspection PyArgumentList
     def __pairing__(self, good_datas, bad_datas):
         """
         introduction: Match good data with bad data, to ensure that the overall data is better.
@@ -311,7 +309,7 @@ class YYC:
                         bad_index1 = int(bad_indexs.pop())
                         bad_index2 = int(bad_indexs.pop())
                         if motif_friendly.friendly_check(
-                                self.__list_to_motif__(bad_datas[bad_index1], bad_datas[bad_index2]))\
+                                self.__list_to_motif__(bad_datas[bad_index1], bad_datas[bad_index2])) \
                                 or search_index == self.search_count - 1:
                             datas.append(bad_datas[bad_index1])
                             datas.append(bad_datas[bad_index2])
@@ -335,7 +333,7 @@ class YYC:
         introduction: Synthesis motifs by two-dimensional data set.
 
         :param datas: Original data from file.
-                      Type: Two-dimensional list(int).
+                       Type: Two-dimensional list(int).
 
         :return dna_motifs: The DNA motifs from the original data set
                              Type: One-dimensional list(string).
@@ -415,7 +413,7 @@ class YYC:
 
         return one_base
 
-# ================================================= decode part ========================================================
+    # ================================================= decode part ========================================================
 
     def decode(self, dna_motifs):
         """
@@ -440,12 +438,13 @@ class YYC:
         self.monitor.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Divide index and data from binary matrix.")
-        indexs, datas = self.__divide_indexs_datas__(temp_matrix)
+        # indexs, datas = self.__divide_indexs_datas__(temp_matrix)
+        indexs, datas = index_data.divide_all(temp_matrix, self.index_binary_length)
 
         self.monitor.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Restore the disrupted data order.")
-        matrix = self.__sort_order__(indexs, datas)
+        matrix = index_data.sort_order(indexs, datas)
 
         self.monitor.restore()
         return matrix
@@ -471,55 +470,6 @@ class YYC:
             matrix.append(lower_row_datas)
 
         del dna_motifs
-
-        return matrix
-
-    def __divide_indexs_datas__(self, matrix):
-        """
-        introduction: Separate data from indexes in binary strings.
-
-        :param matrix: The DNA motif of len(matrix) rows.
-                        Type: Two-dimensional list(int).
-
-        :returns index, datas: Obtained data sets and index sets in corresponding locations.
-                                Type: One-dimensional list(int), Two-dimensional list(int).
-        """
-
-        indexs = []
-        datas = []
-
-        for row in range(len(matrix)):
-            self.monitor.output(row, len(matrix))
-            # Convert binary index to decimal.
-            index = int("".join(list(map(str, matrix[row][:self.index_binary_length]))), 2)
-
-            indexs.append(index)
-            datas.append(matrix[row][self.index_binary_length:])
-
-        del matrix
-
-        return indexs, datas
-
-    def __sort_order__(self, indexs, datas):
-        """
-        introduction: Restore data in order of index.
-
-        :param indexs: The indexes of data set.
-
-        :param datas: The disordered data set, the locations of this are corresponding to parameter "index".
-
-        :returns matrix: Binary list in correct order.
-                          Type: Two-dimensional list(int).
-        """
-
-        matrix = [[0 for col in range(len(datas[0]))] for row in range(len(indexs))]
-
-        for row in range(len(indexs)):
-            self.monitor.output(row, len(indexs))
-            if 0 <= row < len(matrix):
-                matrix[indexs[row]] = datas[row]
-
-        del indexs, datas
 
         return matrix
 
