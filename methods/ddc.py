@@ -17,7 +17,7 @@ Advantages: (1) High compressibility, maximum compressibility to 1/2 of the orig
 
 import sys
 
-import methods.yin_yang as yyc
+import methods.yyc as yyc
 import utils.log as log
 
 

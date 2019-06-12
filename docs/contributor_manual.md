@@ -23,6 +23,7 @@ The packages we are calling now is as follows:
 - [x] datetime
 - [x] numpy
 - [x] pickle
+- [x] csv
 
 
 If you have other packages, Please add them here.
@@ -36,10 +37,11 @@ In addition, some non-robust external packages may lead to instability or even c
 ## Kit Tree Diagram
 ```html
 ├── docs                              // Description document folder
-│    ├── Contributor Manual.md        // Read Before You Want to Make a Contribution
-│    ├── User Manual.md               // Read before you want to use it
+│    ├── author.md                    //  Author catalogue
+│    ├── contributor_manual.md        // Read Before You Want to Make a Contribution
+│    ├── user_manual.md               // Read before you want to use it
 ├── methods                           // Method module
-│    ├── property                     // Inherent property folder
+│    ├── components                    // Inherent property folder
 │    │    ├── index_data.py           // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
 │    │    ├── motif_friendly.py       // Determining whether motif is friendly to sequencing and synthesis
@@ -62,7 +64,6 @@ In addition, some non-robust external packages may lead to instability or even c
 │    ├── model_saver.py               // Save model to file and load model from file
 │    ├── monitor.py                   // Getting the progress  situation and the time left
 ├── .gitignore                        // Upload Ignore File
-├── AUTHORS                           // Author catalogue
 ├── chamaeleo.py                      // Main calling function
 ├── LICENSE                           // Protocol of kit
 ├── logo.png                          // Logo of kit
@@ -213,4 +214,5 @@ In addition, considering that using “print” or “log” functions for testi
 Package [**"PySnooper"**](https://github.com/cool-RR/PySnooper) would an option for testing.
 
 ## Other Requirements
-We strongly recommend that you update the **Contributor Manual** or **User Manual** as appropriate while completing the coding.
+We strongly recommend that you update the [**Contributor Manual**](https://github.com/ntpz870817/Chamaeleo/blob/master/docs/contributor_manual.md)
+or [**User Manual**](https://github.com/ntpz870817/Chamaeleo/blob/master/docs/user_manual.md) as appropriate while completing the coding.

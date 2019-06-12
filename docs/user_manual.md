@@ -21,14 +21,16 @@ In addition, the packages we are calling now is as follows:
 - [x] datetime
 - [x] numpy
 - [x] pickle
+- [x] csv
 
 ## Kit Tree Diagram
 ```html
 ├── docs                              // Description document folder
-│    ├── Contributor Manual.md        // Read Before You Want to Make a Contribution
-│    ├── User Manual.md               // Read before you want to use it
+│    ├── author.md                    //  Author catalogue
+│    ├── contributor_manual.md        // Read Before You Want to Make a Contribution
+│    ├── user_manual.md               // Read before you want to use it
 ├── methods                           // Method module
-│    ├── property                     // Inherent property folder
+│    ├── components                   // Inherent property folder
 │    │    ├── index_data.py           // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
 │    │    ├── motif_friendly.py       // Determining whether motif is friendly to sequencing and synthesis

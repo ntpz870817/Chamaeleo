@@ -19,14 +19,16 @@ import random
 import sys
 import numpy
 
-import methods.property.inherent as inherent
-import methods.property.motif_friendly as motif_friendly
-import methods.property.index_data as index_data
+import methods.components.inherent as inherent
+import methods.components.motif_friendly as motif_friendly
+import methods.components.index_data as index_data
 import utils.log as log
 import utils.monitor as monitor
 
+
 # noinspection PyUnresolvedReferences,PyMethodMayBeStatic
 # PyUnusedLocal,PyProtectedMember,PyBroadException, PyArgumentList
+# noinspection PyProtectedMember
 class YYC:
     def __init__(self, base_reference=None, current_code_matrix=None, support_bases=None, support_spacing=0,
                  max_ratio=0.8, search_count=1):
@@ -85,8 +87,8 @@ class YYC:
         introduction: The verification of initialization parameters.
 
         :param base_reference: Correspondence between base and binary data (RULE 1).
-                                Make sure that the first and third, and the second and fourth are equal, so there are only two cases:
-                                [0, 0, 1, 1] or [1, 1, 0, 0].
+                                Make sure that the first and third, and the second and fourth are equal, so there are only 6 cases:
+                                Make sure that Two of the bases are 1 and the other two are 0..
 
         :param current_code_matrix: Conversion rule between base and binary data based on support base and current base (RULE 2).
                                      Label row is the support base, label col is the current base.
@@ -128,7 +130,7 @@ class YYC:
                 log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                            "Only 0 and 1 can be included in the base reference, "
                            "and base_reference[" + str(index) + "] has entered " + str(base_reference[index] + "!"))
-        if base_reference[0] != base_reference[1] or base_reference[2] != base_reference[3]:
+        if sum(base_reference) != 2:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                        "Wrong correspondence between base and binary data!")
 
@@ -150,16 +152,16 @@ class YYC:
                                "Wrong current code matrix, "
                                "the error locations are [" + str(row) + ", " + str(col) + "] and [" + str(
                                    row) + ", " + str(col) + "]! "
-                                                            "Rules are that they add up to 1 and multiply by 0.")
+                                                           "Rules are that they add up to 1 and multiply by 0.")
 
         # Check max ratio
         if max_ratio <= 0.5 or max_ratio >= 1:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                        "Wrong max ratio (" + str(max_ratio) + ")!")
 
-        # ================================================= encode part ========================================================
+# ================================================= encode part ========================================================
 
-    def encode(self, matrix, file_size):
+    def encode(self, matrix, file_size, need_index):
         """
         introduction: Encode DNA motifs from the data of binary file.
 
@@ -168,6 +170,8 @@ class YYC:
                         Type: int or bit.
 
         :param file_size: The size of the file corresponds to this matrix.
+
+        :param need_index: Declare whether the binary sequence indexes are required in the DNA motifs.
 
         :return dna_motifs: The DNA motif of len(matrix) rows.
                              Type: list.
@@ -179,7 +183,7 @@ class YYC:
         self.monitor.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Separate good data from bad data.")
-        good_datas, bad_datas = self.__divide_library__(matrix)
+        good_datas, bad_datas = self.__divide_library__(matrix, need_index)
 
         self.monitor.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
@@ -193,7 +197,7 @@ class YYC:
 
         return dna_motifs
 
-    def __divide_library__(self, matrix):
+    def __divide_library__(self, matrix, need_index):
         """
         introduction: Separate good and bad data from total data, and splice index and data as a list
 
@@ -222,13 +226,19 @@ class YYC:
             good_datas = []
             for row in range(len(good_datas)):
                 self.monitor.output(row, len(good_datas))
-                good_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
+                if need_index:
+                    good_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
+                else:
+                    good_datas.append(matrix[row])
             return good_datas, None
         elif len(bad_indexs) == len(matrix):
             bad_datas = []
             for row in range(len(bad_datas)):
                 self.monitor.output(row, len(bad_datas))
-                bad_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
+                if need_index:
+                    bad_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
+                else:
+                    bad_datas.append(matrix[row])
             return None, bad_datas
         else:
             good_datas = []
@@ -236,9 +246,15 @@ class YYC:
             for row in range(len(matrix)):
                 self.monitor.output(row, len(matrix))
                 if row in bad_indexs:
-                    bad_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
+                    if need_index:
+                        bad_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
+                    else:
+                        bad_datas.append(matrix[row])
                 else:
-                    good_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
+                    if need_index:
+                        good_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
+                    else:
+                        good_datas.append(matrix[row])
 
             return good_datas, bad_datas
 
@@ -413,14 +429,16 @@ class YYC:
 
         return one_base
 
-    # ================================================= decode part ========================================================
+# ================================================= decode part ========================================================
 
-    def decode(self, dna_motifs):
+    def decode(self, dna_motifs, has_index):
         """
         introduction: Decode DNA motifs to the data of binary file.
 
         :param dna_motifs: The DNA motif of len(matrix) rows.
                             Type: One-dimensional list(string).
+
+        :param has_index: Declare whether the DNA motifs contain binary sequence indexes.
 
         :return matrix: The binary matrix corresponding to the dna motifs.
                          Type: Two-dimensional list(int).
@@ -435,16 +453,18 @@ class YYC:
                    "Convert DNA motifs to binary matrix.")
         temp_matrix = self.__convert_binaries__(dna_motifs)
 
-        self.monitor.restore()
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Divide index and data from binary matrix.")
-        # indexs, datas = self.__divide_indexs_datas__(temp_matrix)
-        indexs, datas = index_data.divide_all(temp_matrix, self.index_binary_length)
+        if has_index:
+            self.monitor.restore()
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Divide index and data from binary matrix.")
+            indexs, datas = index_data.divide_all(temp_matrix, self.index_binary_length)
 
-        self.monitor.restore()
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Restore the disrupted data order.")
-        matrix = index_data.sort_order(indexs, datas)
+            self.monitor.restore()
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Restore the disrupted data order.")
+            matrix = index_data.sort_order(indexs, datas)
+        else:
+            matrix = temp_matrix
 
         self.monitor.restore()
         return matrix

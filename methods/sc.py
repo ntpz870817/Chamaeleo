@@ -1,5 +1,5 @@
 """
-Name: Simple (Simple DNA Storage Code)
+Name: Simple Codec (Simple DNA Storage Code)
 
 Reference: Church G M, Gao Y, Kosuri S. Next-generation digital information storage in DNA[J]. Science, 2012, 337(6102): 1628-1628.
 
@@ -16,12 +16,13 @@ import random
 
 import utils.monitor as monitor
 import utils.log as log
-import methods.property.inherent as inherent
-import methods.property.index_data as index_data
+import methods.components.inherent as inherent
+import methods.components.index_data as index_data
 
 
 # noinspection PyMethodMayBeStatic,PyProtectedMember
-class Simple:
+class SC:
+
     def __init__(self, mapping_rule=None):
         """
         introduction: The initialization method of Simple.
@@ -71,7 +72,7 @@ class Simple:
 
 # ================================================= encode part ========================================================
 
-    def encode(self, matrix, file_size):
+    def encode(self, matrix, file_size, need_index):
         """
         introduction: Encode DNA motifs from the data of binary file.
 
@@ -80,6 +81,8 @@ class Simple:
                         Type: int or bit.
 
         :param file_size: The size of the file corresponds to this matrix.
+
+        :param need_index: Declare whether the binary sequence indexes are required in the DNA motifs.
 
         :return dna_motifs: The DNA motif of len(matrix) rows.
                              Type: list(list(char)).
@@ -96,7 +99,10 @@ class Simple:
         dna_motifs = []
         for row in range(len(matrix)):
             self.m.output(row, len(matrix))
-            dna_motifs.append(self.__list_to_motif__(list(map(int, list(str(bin(row))[2:].zfill(self.index_binary_length)))) + matrix[row]))
+            if need_index:
+                dna_motifs.append(self.__list_to_motif__(index_data.connect(row, matrix[row], self.index_binary_length)))
+            else:
+                dna_motifs.append(self.__list_to_motif__(matrix[row]))
 
         return dna_motifs
 
@@ -125,12 +131,14 @@ class Simple:
 
 # ================================================= decode part ========================================================
 
-    def decode(self, dna_motifs):
+    def decode(self, dna_motifs, has_index):
         """
         introduction: Decode DNA motifs to the data of binary file.
 
         :param dna_motifs: The DNA motif of len(matrix) rows.
                             Type: One-dimensional list(string).
+
+        :param has_index: Declare whether the DNA motifs contain binary sequence indexes.
 
         :return matrix: The binary matrix corresponding to the dna motifs.
                          Type: Two-dimensional list(int).
@@ -144,16 +152,18 @@ class Simple:
             self.m.output(index, len(dna_motifs))
             temp_matrix.append(self.__motif_to_list__(dna_motifs[index]))
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Divide index and data from binary matrix.")
-        indexs, datas = index_data.divide_all(temp_matrix, self.index_binary_length)
+        if has_index:
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Divide index and data from binary matrix.")
+            indexs, datas = index_data.divide_all(temp_matrix, self.index_binary_length)
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Restore the disrupted data order.")
-        matrix = index_data.sort_order(indexs, datas)
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Restore the disrupted data order.")
+            matrix = index_data.sort_order(indexs, datas)
+        else:
+            matrix = temp_matrix
 
         self.m.restore()
-
         return matrix
 
     def __motif_to_list__(self, dna_motif):
