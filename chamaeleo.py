@@ -17,7 +17,7 @@ import utils.log as log
 
 
 # noinspection PyProtectedMember
-def encode(method, input_path, output_path, model_path=None):
+def encode(method, input_path, output_path, model_path=None, interval=None):
     """
     introduction: Use the selected method, convert the binary file to DNA motif set and output it.
 
@@ -32,6 +32,9 @@ def encode(method, input_path, output_path, model_path=None):
 
     :param model_path: The path of model file if you want to save
                         Type: String
+
+    :param interval: The cut length of DNA motif.
+                      Considering current DNA synthesis factors, we usually set 120 bases as a motif.
     """
 
     if input_path is None or len(input_path) == 0:
@@ -45,7 +48,7 @@ def encode(method, input_path, output_path, model_path=None):
     if model_path is not None:
         saver.save_model(model_path, method)
 
-    input_matrix, size = data_handle.read_binary_from_all(input_path)
+    input_matrix, size = data_handle.read_binary_from_all(input_path, interval=interval)
 
     dna_motifs = method.encode(input_matrix, size)
 

@@ -29,10 +29,10 @@ def read_binary_from_all(path, interval=120):
                       Considering current DNA synthesis factors, we usually set 120 bases as a motif.
 
     :return matrix: A corresponding DNA motif string in which each row acts as a motif.
-                    Type: two-dimensional list(int)
+                     Type: two-dimensional list(int)
 
     :return size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
-                  Type: int
+                   Type: int
     """
 
     m = monitor.Monitor()
