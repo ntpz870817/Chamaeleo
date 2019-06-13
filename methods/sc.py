@@ -83,6 +83,7 @@ class SC:
         :param file_size: The size of the file corresponds to this matrix.
 
         :param need_index: Declare whether the binary sequence indexes are required in the DNA motifs.
+                            Type: bool.
 
         :return dna_motifs: The DNA motif of len(matrix) rows.
                              Type: list(list(char)).
@@ -113,8 +114,8 @@ class SC:
         :param one_list: One binary list.
                           Type: int or bit.
 
-        :return: One DNA motif.
-                  Type: List(char).
+        :return dna_motif: One DNA motif.
+                            Type: List(char).
         """
         dna_motif = []
         if max(self.mapping_rule) == 3:
@@ -139,6 +140,7 @@ class SC:
                             Type: One-dimensional list(string).
 
         :param has_index: Declare whether the DNA motifs contain binary sequence indexes.
+                           Type: bool.
 
         :return matrix: The binary matrix corresponding to the dna motifs.
                          Type: Two-dimensional list(int).

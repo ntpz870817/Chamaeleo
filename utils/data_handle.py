@@ -18,15 +18,15 @@ import utils.monitor as monitor
 
 
 # noinspection PyUnresolvedReferences,PyBroadException,PyProtectedMember,PyUnusedLocal
-def read_binary_from_all(path, interval=120):
+def read_binary_from_all(path, segment_length=120):
     """
     introduction: Writing DNA motif set from documents.
 
     :param path: File path.
                   Type: string
 
-    :param interval: The cut length of DNA motif.
-                      Considering current DNA synthesis factors, we usually set 120 bases as a motif.
+    :param segment_length: The cut length of DNA motif.
+                            Considering current DNA synthesis factors, we usually set 120 bases as a motif.
 
     :return matrix: A corresponding DNA motif string in which each row acts as a motif.
                      Type: two-dimensional list(int)
@@ -47,7 +47,7 @@ def read_binary_from_all(path, interval=120):
             size = os.path.getsize(path)
 
             # Set init storage matrix
-            matrix = [[0 for col in range(interval)] for row in range(math.ceil(size * 8 / interval))]
+            matrix = [[0 for col in range(segment_length)] for row in range(math.ceil(size * 8 / segment_length))]
 
             row = 0
             col = 0
@@ -59,9 +59,14 @@ def read_binary_from_all(path, interval=120):
                 for bit_index in range(8):
                     matrix[row][col] = element[bit_index]
                     col += 1
-                    if col == interval:
+                    if col == segment_length:
                         col = 0
                         row += 1
+
+        if int(len(str(bin(len(matrix)))) - 2) * 7 > segment_length:
+            log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
+                       "The proportion of index may be high. "
+                       "It is recommended that the file be fragmented or the fragment length be increased.")
 
         return matrix, size
     except IOError:

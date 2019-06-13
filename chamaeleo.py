@@ -17,9 +17,9 @@ import utils.log as log
 
 
 # noinspection PyProtectedMember
-def encode(method, input_path, output_path, model_path=None, interval=None):
+def encode(method, input_path, output_path, model_path=None, need_index=True, segment_length=None):
     """
-    introduction: Use the selected method, convert the binary file to DNA motif set and output it.
+    introduction: Use the selected method, convert the binary file to DNA motif set and output the DNA motif set.
 
     :param method: Method under folder "methods/".
                     Type: Object.
@@ -33,7 +33,10 @@ def encode(method, input_path, output_path, model_path=None, interval=None):
     :param model_path: The path of model file if you want to save
                         Type: String
 
-    :param interval: The cut length of DNA motif.
+    :param need_index: Declare whether the binary sequence indexes are required in the DNA motifs.
+                        Type: bool.
+
+    :param segment_length: The cut length of DNA motif.
                       Considering current DNA synthesis factors, we usually set 120 bases as a motif.
     """
 
@@ -48,17 +51,17 @@ def encode(method, input_path, output_path, model_path=None, interval=None):
     if model_path is not None:
         saver.save_model(model_path, method)
 
-    input_matrix, size = data_handle.read_binary_from_all(input_path, interval=interval)
+    input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length=segment_length)
 
-    dna_motifs = method.encode(input_matrix, size)
+    dna_motifs = method.encode(input_matrix, size, need_index)
 
     data_handle.write_dna_file(output_path, dna_motifs)
 
 
 # noinspection PyProtectedMember
-def decode(method=None, model_path=None, input_path=None, output_path=None):
+def decode(method=None, model_path=None, input_path=None, output_path=None, has_index=True):
     """
-    introduction:
+    introduction: Use the selected method, convert DNA motif set to the binary file and output the binary file.
 
     :param method: Method under folder "methods/".
                     If you have model file, you can use this function with out method.
@@ -72,6 +75,9 @@ def decode(method=None, model_path=None, input_path=None, output_path=None):
 
     :param model_path: The path of model file if you want to save
                         Type: String
+
+    :param has_index: Declare whether the DNA motifs contain binary sequence indexes.
+                       Type: bool.
     """
 
     if method is None and model_path is None:
@@ -91,6 +97,6 @@ def decode(method=None, model_path=None, input_path=None, output_path=None):
 
         dna_motifs = data_handle.read_dna_file(input_path)
 
-        output_matrix = method.decode(dna_motifs)
+        output_matrix = method.decode(dna_motifs, has_index)
 
         data_handle.write_all_from_binary(output_path, output_matrix, method.file_size)

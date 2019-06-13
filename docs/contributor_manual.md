@@ -45,18 +45,22 @@ In addition, some non-robust external packages may lead to instability or even c
 │    │    ├── index_data.py           // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
 │    │    ├── motif_friendly.py       // Determining whether motif is friendly to sequencing and synthesis
-│    ├── double_double.py             // DDC (Double-Double DNA Storage Code)
-│    ├── simple.py                    // Simple (Simple DNA Storage Code)
-│    ├── yin_yang.py                  // YYC (Yin-Yang DNA Storage Code)
+│    ├── ddc.py                       // DDC (Double-Double DNA Storage Code)
+│    ├── hc.py                        // Huffman Codec (DNA Storage Code based on Huffman code)
+│    ├── sc.py                        // Simple (Simple DNA Storage Code)
+│    ├── yyc.py                       // YYC (Yin-Yang DNA Storage Code)
 ├── test                              // Test module
 │    ├── generated_files              // DNA motif set file or binary file generated in the test
 │    │    ├── README.md               // Description document of generated files and the above folder
 │    ├── test_files                   // Files for testing
 │    ├── test_functional              // Functional test folder
+│    │    ├── ft_hc_huff_trans.py     // Functional testing for HC (huffman code transformation)
+│    │    ├── ft_huffman_creator.py   // Functional testing for custom huffman tree creator
 │    │    ├── README.md               // Description document of the above folder
 │    ├── test_integrated              // Integrated test folder
 │    │    ├── st_ddc.py               // Symmetrical testing of DDC
-│    │    ├── st_simple.py            // Symmetrical testing of Simple
+│    │    ├── st_hc.py                // Symmetrical testing of HC
+│    │    ├── st_sc.py                // Symmetrical testing of SC
 │    │    ├── README.md               // Description document of the above folder
 ├── utils                             // Util module
 │    ├── data_handle.py               // Conversion of DNA motifs and binary document

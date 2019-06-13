@@ -34,9 +34,10 @@ In addition, the packages we are calling now is as follows:
 │    │    ├── index_data.py           // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
 │    │    ├── motif_friendly.py       // Determining whether motif is friendly to sequencing and synthesis
-│    ├── double_double.py             // DDC (Double-Double DNA Storage Code)
-│    ├── simple.py                    // Simple (Simple DNA Storage Code)
-│    ├── yin_yang.py                  // YYC (Yin-Yang DNA Storage Code)
+│    ├── ddc.py                       // DDC (Double-Double DNA Storage Code)
+│    ├── hc.py                        // Huffman Codec (DNA Storage Code based on Huffman code)
+│    ├── sc.py                        // Simple (Simple DNA Storage Code)
+│    ├── yyc.py                       // YYC (Yin-Yang DNA Storage Code)
 ├── utils                             // Util module
 │    ├── data_handle.py               // Conversion of DNA motifs and binary document
 │    ├── log.py                       // Outputting the logs in console

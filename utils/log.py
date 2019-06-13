@@ -46,6 +46,10 @@ def output(info_type=0, class_name=None, method_name=None, info=None):
     elif info_type == WARN:
         # Print yellow and high light.
         print("\033[1;32;0m" + string + "\033[0m")
+        # End the program based on user selection
+        choose = input("Please enter whether you want to continue, 1 to continue, 0 to terminate: ")
+        if int(choose) != 1:
+            exit(1)
     elif info_type == ERROR:
         # Print red and high light.
         print("\033[1;31;0m" + string + "\033[0m")
