@@ -18,17 +18,14 @@ Advantages: (1) High compressibility, maximum compressibility to 1/2 of the orig
 import random
 import sys
 import numpy
-
 import methods.components.inherent as inherent
 import methods.components.motif_friendly as motif_friendly
-import methods.components.index_data as index_data
+import methods.components.index_operator as index_data
 import utils.log as log
 import utils.monitor as monitor
 
 
-# noinspection PyUnresolvedReferences,PyMethodMayBeStatic
-# PyUnusedLocal,PyProtectedMember,PyBroadException, PyArgumentList
-# noinspection PyProtectedMember
+# noinspection PyProtectedMember, PyUnresolvedReferences,PyMethodMayBeStatic,PyUnusedLocal,PyBroadException,PyArgumentList
 class YYC:
     def __init__(self, base_reference=None, current_code_matrix=None, support_bases=None, support_spacing=0,
                  max_ratio=0.8, search_count=1):
@@ -77,9 +74,8 @@ class YYC:
         self.support_bases = support_bases
         self.support_spacing = support_spacing
         self.max_ratio = max_ratio
-        self.index_binary_length = 0
-        self.file_size = 0
         self.search_count = search_count
+        self.file_size = 0
         self.monitor = monitor.Monitor()
 
     def __init_check__(self, support_bases, support_spacing, base_reference, current_code_matrix, max_ratio):
@@ -152,7 +148,7 @@ class YYC:
                                "Wrong current code matrix, "
                                "the error locations are [" + str(row) + ", " + str(col) + "] and [" + str(
                                    row) + ", " + str(col) + "]! "
-                                                           "Rules are that they add up to 1 and multiply by 0.")
+                                                            "Rules are that they add up to 1 and multiply by 0.")
 
         # Check max ratio
         if max_ratio <= 0.5 or max_ratio >= 1:
@@ -161,7 +157,7 @@ class YYC:
 
 # ================================================= encode part ========================================================
 
-    def encode(self, matrix, file_size, need_index):
+    def encode(self, matrix):
         """
         introduction: Encode DNA motifs from the data of binary file.
 
@@ -169,22 +165,14 @@ class YYC:
                         The data of this matrix contains only 0 or 1 (non-char).
                         Type: int or bit.
 
-        :param file_size: The size of the file corresponds to this matrix.
-
-        :param need_index: Declare whether the binary sequence indexes are required in the DNA motifs.
-                            Type: bool.
-
         :return dna_motifs: The DNA motif of len(matrix) rows.
                              Type: list(list(char)).
         """
 
-        self.file_size = file_size
-        self.index_binary_length = int(len(str(bin(len(matrix)))) - 2)
-
         self.monitor.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Separate good data from bad data.")
-        good_datas, bad_datas = self.__divide_library__(matrix, need_index)
+        good_datas, bad_datas = self.__divide_library__(matrix)
 
         self.monitor.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
@@ -198,7 +186,7 @@ class YYC:
 
         return dna_motifs
 
-    def __divide_library__(self, matrix, need_index):
+    def __divide_library__(self, matrix):
         """
         introduction: Separate good and bad data from total data, and splice index and data as a list
 
@@ -227,19 +215,13 @@ class YYC:
             good_datas = []
             for row in range(len(good_datas)):
                 self.monitor.output(row, len(good_datas))
-                if need_index:
-                    good_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
-                else:
-                    good_datas.append(matrix[row])
+                good_datas.append(matrix[row])
             return good_datas, None
         elif len(bad_indexs) == len(matrix):
             bad_datas = []
             for row in range(len(bad_datas)):
                 self.monitor.output(row, len(bad_datas))
-                if need_index:
-                    bad_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
-                else:
-                    bad_datas.append(matrix[row])
+                bad_datas.append(matrix[row])
             return None, bad_datas
         else:
             good_datas = []
@@ -247,15 +229,9 @@ class YYC:
             for row in range(len(matrix)):
                 self.monitor.output(row, len(matrix))
                 if row in bad_indexs:
-                    if need_index:
-                        bad_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
-                    else:
-                        bad_datas.append(matrix[row])
+                    bad_datas.append(matrix[row])
                 else:
-                    if need_index:
-                        good_datas.append(index_data.connect(row, matrix[row], self.index_binary_length))
-                    else:
-                        good_datas.append(matrix[row])
+                    good_datas.append(matrix[row])
 
             return good_datas, bad_datas
 
@@ -394,10 +370,10 @@ class YYC:
                                                              self.support_bases[col]))
             else:
                 if col > self.support_spacing:
-                    dna_motif.append(self.__binary_to_base__(upper_list[col], random.randint(0, 1),
+                    dna_motif.append(self.__binary_to_base__(upper_list[col], upper_list[col],
                                                              dna_motif[col - (self.support_spacing + 1)]))
                 else:
-                    dna_motif.append(self.__binary_to_base__(upper_list[col], random.randint(0, 1),
+                    dna_motif.append(self.__binary_to_base__(upper_list[col], upper_list[col],
                                                              self.support_bases[col]))
         return dna_motif
 
@@ -432,15 +408,12 @@ class YYC:
 
 # ================================================= decode part ========================================================
 
-    def decode(self, dna_motifs, has_index):
+    def decode(self, dna_motifs):
         """
         introduction: Decode DNA motifs to the data of binary file.
 
         :param dna_motifs: The DNA motif of len(matrix) rows.
                             Type: One-dimensional list(string).
-
-        :param has_index: Declare whether the DNA motifs contain binary sequence indexes.
-                           Type: bool.
 
         :return matrix: The binary matrix corresponding to the dna motifs.
                          Type: Two-dimensional list(int).
@@ -453,20 +426,7 @@ class YYC:
         self.monitor.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Convert DNA motifs to binary matrix.")
-        temp_matrix = self.__convert_binaries__(dna_motifs)
-
-        if has_index:
-            self.monitor.restore()
-            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Divide index and data from binary matrix.")
-            indexs, datas = index_data.divide_all(temp_matrix, self.index_binary_length)
-
-            self.monitor.restore()
-            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Restore the disrupted data order.")
-            matrix = index_data.sort_order(indexs, datas)
-        else:
-            matrix = temp_matrix
+        matrix = self.__convert_binaries__(dna_motifs)
 
         self.monitor.restore()
         return matrix
@@ -489,7 +449,8 @@ class YYC:
             self.monitor.output(row, len(dna_motifs))
             upper_row_datas, lower_row_datas = self.__dna_motif_to_binaries__(dna_motifs[row])
             matrix.append(upper_row_datas)
-            matrix.append(lower_row_datas)
+            if upper_row_datas != lower_row_datas:
+                matrix.append(lower_row_datas)
 
         del dna_motifs
 

@@ -14,6 +14,7 @@ import sys
 import utils.model_saver as saver
 import utils.data_handle as data_handle
 import utils.log as log
+import methods.components.index_operator as index_operator
 
 
 # noinspection PyProtectedMember
@@ -51,9 +52,12 @@ def encode(method, input_path, output_path, model_path=None, need_index=True, se
     if model_path is not None:
         saver.save_model(model_path, method)
 
-    input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length=segment_length)
+    input_matrix = data_handle.read_binary_from_all(input_path, segment_length=segment_length)
 
-    dna_motifs = method.encode(input_matrix, size, need_index)
+    if need_index:
+        input_matrix = index_operator.connect_all(input_matrix)
+
+    dna_motifs = method.encode(input_matrix, size)
 
     data_handle.write_dna_file(output_path, dna_motifs)
 
@@ -99,4 +103,13 @@ def decode(method=None, model_path=None, input_path=None, output_path=None, has_
 
         output_matrix = method.decode(dna_motifs, has_index)
 
-        data_handle.write_all_from_binary(output_path, output_matrix, method.file_size)
+        if has_index:
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Divide index and data from binary matrix.")
+            indexs, datas = index_operator.divide_all(output_matrix)
+
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Restore the disrupted data order.")
+            output_matrix = index_operator.sort_order(indexs, datas)
+
+        data_handle.write_all_from_binary(output_path, output_matrix)

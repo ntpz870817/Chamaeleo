@@ -32,5 +32,3 @@ if __name__ == '__main__':
     # print()
     # print(output_list)
     # print(test_list1 == output_list)
-
-

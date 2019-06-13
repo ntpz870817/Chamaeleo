@@ -17,23 +17,21 @@ import os
 import utils.monitor as monitor
 import utils.log as log
 import methods.components.inherent as inherent
-import methods.components.index_data as index_data
+import methods.components.index_operator as index_data
 import methods.components.huffman_creator as tree_creator
 
 
 # noinspection PyProtectedMember,PyMethodMayBeStatic,PyTypeChecker,PyUnusedLocal
 class HC:
-    def __init__(self, fixed_huffman):
+    def __init__(self, fixed_huffman=True):
         self.huffman_tree = None
-        self.file_size = 0
         self.segment_length = 0
-        self.index_binary_length = 0
         self.fixed_huffman = fixed_huffman
         self.m = monitor.Monitor()
 
 # ================================================= encode part ========================================================
 
-    def encode(self, matrix, file_size, need_index):
+    def encode(self, matrix):
         """
         introduction: Encode DNA motifs from the data of binary file.
 
@@ -41,15 +39,9 @@ class HC:
                         The data of this matrix contains only 0 or 1 (non-char).
                         Type: int or bit.
 
-        :param file_size: The size of the file corresponds to this matrix.
-
-        :param need_index: Declare whether the binary sequence indexes are required in the DNA motifs.
-
         :return dna_motifs: The DNA motif of len(matrix) rows.
                              Type: list(list(char)).
         """
-        self.file_size = file_size
-        self.index_binary_length = int(len(str(bin(len(matrix)))) - 2)
         self.segment_length = len(matrix[0])
 
         self.m.restore()
@@ -63,7 +55,7 @@ class HC:
         self.m.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Change matrix to dna motif set.")
-        dna_motifs = self.__get_dna_motifs__(matrix, need_index)
+        dna_motifs = self.__get_dna_motifs__(matrix)
 
         return dna_motifs
 
@@ -82,21 +74,18 @@ class HC:
             for row in csv_reader:
                 tree.append(row[1])
         else:
-            tree = tree_creator.get_map(matrix, self.file_size, 3)
+            tree = tree_creator.get_map(matrix, 3)
 
         self.huffman_tree = tree
         print(self.huffman_tree)
 
-    def __get_dna_motifs__(self, matrix, need_index):
+    def __get_dna_motifs__(self, matrix):
         """
         introduction: Get dna motif set from matrix.
 
         :param matrix: Generated binary two-dimensional matrix.
                         The data of this matrix contains only 0 or 1 (non-char).
                         Type: int or bit.
-
-        :param need_index: Declare whether the binary sequence indexes are required in the DNA motifs.
-                            Type: bool.
 
         :return dna_motifs: The DNA motif of len(matrix) rows.
                              Type: list(list(char)).
@@ -105,12 +94,7 @@ class HC:
 
         for row in range(len(matrix)):
             self.m.output(row, len(matrix))
-            if need_index:
-                one_list = index_data.connect(row, matrix[row], self.index_binary_length)
-            else:
-                one_list = matrix[row]
-
-            dna_motifs.append(self.__list_to_motif__(self.__huffman_compressed__(one_list)))
+            dna_motifs.append(self.__list_to_motif__(self.__huffman_compressed__(matrix[row])))
 
         return dna_motifs
 
@@ -155,15 +139,12 @@ class HC:
 
 # ================================================= decode part ========================================================
 
-    def decode(self, dna_motifs, has_index):
+    def decode(self, dna_motifs):
         """
         introduction: Decode DNA motifs to the data of binary file.
 
         :param dna_motifs: The DNA motif of len(matrix) rows.
                             Type: One-dimensional list(string).
-
-        :param has_index: Declare whether the DNA motifs contain binary sequence indexes.
-                           Type: bool.
 
         :return matrix: The binary matrix corresponding to the dna motifs.
                          Type: Two-dimensional list(int).
@@ -172,18 +153,7 @@ class HC:
         self.m.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Convert DNA motifs to binary matrix.")
-        temp_matrix = self.__get_binaries__(dna_motifs)
-
-        if has_index:
-            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Divide index and data from binary matrix.")
-            indexs, datas = index_data.divide_all(temp_matrix, self.index_binary_length)
-
-            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Restore the disrupted data order.")
-            matrix = index_data.sort_order(indexs, datas)
-        else:
-            matrix = temp_matrix
+        matrix = self.__get_binaries__(dna_motifs)
 
         self.m.restore()
         return matrix
@@ -199,10 +169,11 @@ class HC:
                          Type: Two-dimensional list(int).
         """
         matrix = []
+        index_binary_length = int(len(str(bin(len(dna_motifs)))) - 2)
 
         for index in range(len(dna_motifs)):
             self.m.output(index, len(dna_motifs))
-            matrix.append(self.__huffman_decompressed__(self.__motif_to_list__(dna_motifs[index])))
+            matrix.append(self.__huffman_decompressed__(self.__motif_to_list__(dna_motifs[index]), index_binary_length))
 
         return matrix
 
@@ -225,7 +196,7 @@ class HC:
 
         return one_list
 
-    def __huffman_decompressed__(self, ternary_list):
+    def __huffman_decompressed__(self, ternary_list, index_binary_length):
         """
         introduction: Conversion of ternary Huffman coding to binary coding.
 
@@ -242,10 +213,10 @@ class HC:
 
             for tree_index in range(len(self.huffman_tree)):
                 if temp_ternary == self.huffman_tree[tree_index]:
-                    if len(binary_list) + 8 < self.segment_length + self.index_binary_length:
+                    if len(binary_list) + 8 < self.segment_length + index_binary_length:
                         binary_list += list(map(int, list(str(bin(tree_index))[2:].zfill(8))))
                     else:
-                        remaining_length = self.segment_length + self.index_binary_length - len(binary_list)
+                        remaining_length = self.segment_length + index_binary_length - len(binary_list)
                         binary_list += list(map(int, list(str(bin(tree_index))[2:].zfill(remaining_length))))
                     temp_ternary = ""
                     break

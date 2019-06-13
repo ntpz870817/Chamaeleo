@@ -30,9 +30,6 @@ def read_binary_from_all(path, segment_length=120):
 
     :return matrix: A corresponding DNA motif string in which each row acts as a motif.
                      Type: two-dimensional list(int)
-
-    :return size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
-                   Type: int
     """
 
     m = monitor.Monitor()
@@ -43,8 +40,6 @@ def read_binary_from_all(path, segment_length=120):
 
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                        "Read binary matrix from file: " + path)
-
-            size = os.path.getsize(path)
 
             # Set init storage matrix
             matrix = [[0 for col in range(segment_length)] for row in range(math.ceil(size * 8 / segment_length))]
@@ -68,14 +63,14 @@ def read_binary_from_all(path, segment_length=120):
                        "The proportion of index may be high. "
                        "It is recommended that the file be fragmented or the fragment length be increased.")
 
-        return matrix, size
+        return matrix
     except IOError:
         log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                    "The file selection operation was not performed correctly. Please complete the operation again!")
 
 
 # noinspection PyBroadException,PyProtectedMember
-def write_all_from_binary(path, matrix, size):
+def write_all_from_binary(path, matrix):
     """
     introduction: Writing binary matrix to document.
 
@@ -85,8 +80,8 @@ def write_all_from_binary(path, matrix, size):
     :param matrix: A corresponding DNA motif string in which each row acts as a motif.
                     Type: two-dimensional list(int)
 
-    :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
-                  Type: int
+    # :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
+    #               Type: int
 
     """
     m = monitor.Monitor()
@@ -106,9 +101,7 @@ def write_all_from_binary(path, matrix, size):
                     temp_byte *= 2
                     temp_byte += matrix[row][col]
                     if bit_index == 8:
-                        if size >= 0:
-                            file.write(struct.pack("B", int(temp_byte)))
-                            size -= 1
+                        file.write(struct.pack("B", int(temp_byte)))
                         bit_index = 0
                         temp_byte = 0
     except IOError:

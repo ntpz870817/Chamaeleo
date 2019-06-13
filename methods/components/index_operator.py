@@ -13,20 +13,18 @@ Function(s): (1) Connect index (to binary) to binary data, one or all.
 import utils.monitor as monitor
 
 
-def connect_all(matrix, index_binary_length):
+def connect_all(matrix):
     """
     introduction: Connect index and data from the two-dimensional matrix.
 
     :param matrix: Data from input.
                     Type: Two-dimensional list(int).
 
-    :param index_binary_length: Length of binary index.
-                                 Type: int.
-
     :return new_matrix: Data for output.
                          Type: Two-dimensional list(int).
     """
     m = monitor.Monitor()
+    index_binary_length = int(len(str(bin(len(matrix)))) - 2)
 
     new_matrix = []
     for row in range(len(matrix)):
@@ -62,20 +60,18 @@ def connect(index, data, index_binary_length):
     return one_list
 
 
-def divide_all(matrix, index_binary_length):
+def divide_all(matrix):
     """
     introduction: Separate data from indexes in binary strings.
 
     :param matrix: The DNA motif of len(matrix) rows.
                     Type: Two-dimensional list(int).
 
-    :param index_binary_length: Length of binary index.
-                                 Type: int.
-
     :returns index, datas: Obtained data sets and index sets in corresponding locations.
                             Type: One-dimensional list(int), Two-dimensional list(int).
     """
     m = monitor.Monitor()
+    index_binary_length = int(len(str(bin(len(matrix)))) - 2)
 
     indexs = []
     datas = []

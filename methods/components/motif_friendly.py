@@ -3,7 +3,7 @@ Name: Friendly Check Function
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
-Current Version: 1
+Current Version: 1.1
 
 Function(s): (1) Determine whether motif is friendly to sequencing and synthesis by multiple indicators.
 """
@@ -13,56 +13,54 @@ import sys
 from utils import log
 
 
-# noinspection PyProtectedMember
-def friendly_check(dna_motif, base_index=None, max_repeat=6, max_content=0.8):
+def friendly_check(dna_motif, max_base_repeat=6, max_motif_repeat=4, max_content=0.8, min_free_energy_value=-30):
     """
     introduction: Check DNA motif for friendliness.
 
     :param dna_motif: DNA motif for detection.
                        Type: string.
 
-    :param base_index: The relationship between base and index can be derived from the corresponding coding method.
+    :param max_base_repeat: The relationship between base and index can be derived from the corresponding coding method.
 
-    :param max_repeat: Maximum repetition times of single base repetition.
-                        Make sure that this parameter must more than zero.
+    :param max_motif_repeat: Maximum repetition times of single base repetition.
+                               Make sure that this parameter must more than zero.
 
     :param max_content: Maximum content of C/G or A/T.
                          Make sure that this parameter should belong to the open range of 0 to 1.
 
-    :return: friendly: If one of the conditions is not satisfied, we conclude that this DNA motif is unfriendly.
+    :param min_free_energy_value: The value of minimum free energy.
+
+    :return: If one of the conditions is not satisfied, we conclude that this DNA motif is unfriendly.
     """
-
-    if len(dna_motif) < max_repeat:
-        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                   "The maximum number of repeats in the single base should not be longer than the length of the DNA motif.")
-
-    if max_repeat < 0:
-        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                   "The value of max_repeat should more than 0.")
-
-    if max_content < 0.5 or max_content >= 1:
-        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                   "The value of max content should belong to the open range of 0 to 1.")
-
-    if max(repeat_single_base(dna_motif, base_index)) >= max_repeat:
-        # print("\n" + ''.join(dna_motif))
-        # print(repeat_single_base(dna_motif, base_index))
+    if base_repeat(dna_motif, max_base_repeat) is False:
         return False
-
-    if cg_content(dna_motif) < (1 - max_content) or cg_content(dna_motif) > max_content:
+    if motif_repeat(dna_motif, max_motif_repeat) is False:
         return False
-
-    if min_free_energy(dna_motif) > -30:
+    if dyad_motif_repeat(dna_motif, max_motif_repeat) is False:
+        return False
+    if inverse_motif_repeat(dna_motif, max_motif_repeat) is False:
+        return False
+    if cg_content(dna_motif, max_content) is False:
+        return False
+    if min_free_energy(dna_motif, min_free_energy_value) is False:
         return False
 
     return True
 
 
-def repeat_single_base(dna_motif, base_index=None):
+def base_repeat(dna_motif, max_repeat):
+    """
+    introduction: Compute the continuous single base repetition in a DNA motif.
 
-    if not base_index:
-        base_index = {'A': 0, 'T': 1, 'C': 2, 'G': 3}
+    :param dna_motif: DNA motif for detection.
+                       Type: string.
 
+    :param max_repeat: Maximum repetition times.
+                        More than that time, the DNA motif was considered unfriendly.
+
+    :return: Whether DNA motif conforms to the friendliness or not.
+    """
+    base_index = {'A': 0, 'T': 1, 'C': 2, 'G': 3}
     counts = [0, 0, 0, 0]
     last_base = None
     save_base = None
@@ -87,20 +85,72 @@ def repeat_single_base(dna_motif, base_index=None):
             last_base = dna_motif[index]
             save_base = last_base
 
-    return counts
+    return max(counts) <= max_repeat
 
 
-def cg_content(dna_motif):
+def motif_repeat(dna_motif, max_repeat):
+    """
+    introduction: Compute the continuous repetition of fragments in a DNA motif.
 
-    count = 0
+    :param dna_motif:  DNA motif for detection.
+                       Type: string.
 
-    for index in range(len(dna_motif)):
-        if dna_motif[index] == 'C' or dna_motif[index] == 'G':
-            count += 1
+    :param max_repeat: Maximum repetition times.
+                        More than that time, the DNA motif was considered unfriendly.
 
-    return count / len(dna_motif)
+    :return: Whether DNA motif conforms to the friendliness or not.
+    """
+    length = len(dna_motif) - 1
+    while length > max_repeat:
+        for index in range(len(dna_motif)):
+            if index + length < len(dna_motif):
+                sample = dna_motif[index: index + length]
+                if dna_motif.count(sample) > 0:
+                    return False
+        length -= 1
+
+    return True
 
 
-def min_free_energy(dna_motif):
+def inverse_motif_repeat(motif, max_repeat):
+    length = len(motif) - 1
+    while length > max_repeat:
+        for index in range(0, len(motif) - 2 * length):
+            sample = motif[index: index + length]
+            inverse_sample = sample[::-1]
+            if motif.count(inverse_sample) > 0:
+                return False
+        length -= 1
+
+    return True
+
+
+def dyad_motif_repeat(motif, max_repeat):
+    length = len(motif) - 1
+    while length > max_repeat:
+        for index in range(len(motif)):
+            if index + length < len(motif):
+                sample = motif[index: index + length]
+                if motif.count(sample[::-1]) > 0:
+                    return False
+        length -= 1
+
+    return True
+
+
+def cg_content(motif, max_content):
+    return (1 - max_content) < float(motif.count("C") + motif.count("G")) / len(motif) < max_content
+
+
+def min_free_energy(dna_motif, min_free_energy_value):
+    """
+    introduction:
+
+    :param dna_motif:
+
+    :param min_free_energy_value:
+
+    :return:
+    """
     # TODO It could be used the framework: rnafold.
-    return -30
+    return True

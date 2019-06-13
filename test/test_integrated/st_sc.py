@@ -19,16 +19,16 @@ write_file_path = "..\\..\\test\\generated_files\\target.mp4"
 
 dna_path = "..\\..\\test\\generated_files\\target.dna"
 
-model_path = "..\\..\\test\\generated_files\\simple.pkl"
+model_path = "..\\..\\test\\generated_files\\sc.pkl"
 
 if __name__ == '__main__':
     tool = simple.SC()
-    input_matrix, size = data_handle.read_binary_from_all(read_file_path)
-    dna_motifs = tool.encode(input_matrix, size, True)
+    input_matrix = data_handle.read_binary_from_all(read_file_path)
+    dna_motifs = tool.encode(input_matrix)
     data_handle.write_dna_file(dna_path, dna_motifs)
     saver.save_model(model_path, tool)
 
     tool = saver.load_model(model_path)
     dna_motifs = data_handle.read_dna_file(dna_path)
-    output_matrix = tool.decode(dna_motifs, True)
-    data_handle.write_all_from_binary(write_file_path, output_matrix, tool.file_size)
+    output_matrix = tool.decode(dna_motifs)
+    data_handle.write_all_from_binary(write_file_path, output_matrix)
