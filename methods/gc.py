@@ -30,6 +30,9 @@ class GC:
                              One-dimensional list containing all values of 1-47.
         """
 
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Create the Grass method.")
+
         temp_keys = []
         temp_values = []
         for index in range(len(base_values)):
@@ -68,6 +71,8 @@ class GC:
 
         dna_motifs = []
 
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Encode the file.")
         for row in range(len(matrix)):
             self.m.output(row, len(matrix))
             dna_motifs.append(self.__list_to_motif__(matrix[row]))
@@ -126,6 +131,8 @@ class GC:
 
         matrix = []
 
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Convert DNA motifs to binary matrix.")
         for index in range(len(dna_motifs)):
             self.m.output(index, len(dna_motifs))
             matrix.append(self.__motif_to_list__(dna_motifs[index]))

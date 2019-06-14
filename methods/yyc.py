@@ -28,6 +28,7 @@ import utils.monitor as monitor
 # noinspection PyProtectedMember, PyUnresolvedReferences,PyMethodMayBeStatic
 # noinspection PyUnusedLocal,PyBroadException,PyArgumentList
 class YYC:
+
     def __init__(self, base_reference=None, current_code_matrix=None, support_bases=None, support_spacing=0,
                  max_ratio=0.8, search_count=0):
         """
@@ -156,7 +157,7 @@ class YYC:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                        "Wrong max ratio (" + str(max_ratio) + ")!")
 
-            # ================================================= encode part ========================================================
+# ================================================= encode part ========================================================
 
     def encode(self, matrix, size):
         """

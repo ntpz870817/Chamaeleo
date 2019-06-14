@@ -55,7 +55,7 @@ class SC:
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Create the Simple method.")
 
-        if 0 <= max(mapping_rule) <= 1:
+        if 0 <= min(mapping_rule) and max(mapping_rule) <= 1:
             if len([position for position, value in enumerate(mapping_rule) if value == 0]) != 2 \
                     or [position for position, value in enumerate(mapping_rule) if value == 1] != 2:
                 log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),

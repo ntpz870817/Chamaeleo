@@ -27,6 +27,10 @@ class HC:
         :param fixed_huffman: Declare whether to use the Huffman dictionary in Goldman's paper.
                                In order to reduce the possible loss of function storage, we recommend using this dictionary.
         """
+
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Create the Huffman Codec method.")
+
         self.huffman_tree = None
         self.segment_length = 0
         self.fixed_huffman = fixed_huffman
