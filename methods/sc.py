@@ -25,7 +25,7 @@ class SC:
 
     def __init__(self, mapping_rule=None):
         """
-        introduction: The initialization method of Simple.
+        introduction: The initialization method of Simple Codec.
 
         :param mapping_rule: Mapping between bases and numbers.
                               There can be two settings:
@@ -39,6 +39,7 @@ class SC:
             self.__init_check__(mapping_rule)
 
         self.mapping_rule = mapping_rule
+        self.file_size = 0
         self.m = monitor.Monitor()
 
     def __init_check__(self, mapping_rule):
@@ -70,7 +71,7 @@ class SC:
 
 # ================================================= encode part ========================================================
 
-    def encode(self, matrix):
+    def encode(self, matrix, size):
         """
         introduction: Encode DNA motifs from the data of binary file.
 
@@ -78,15 +79,17 @@ class SC:
                         The data of this matrix contains only 0 or 1 (non-char).
                         Type: int or bit.
 
-        :return dna_motifs: The DNA motif of len(matrix) rows.
-                             Type: list(list(char)).
-        """
+        :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
+                      Type: int
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Encode the file.")
+        :return dna_motifs: The DNA motif of len(matrix) rows.
+                             Type: list(string).
+        """
+        self.file_size = size
 
         self.m.restore()
-
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Encode the file.")
         dna_motifs = []
         for row in range(len(matrix)):
             self.m.output(row, len(matrix))
@@ -128,6 +131,9 @@ class SC:
 
         :return matrix: The binary matrix corresponding to the dna motifs.
                          Type: Two-dimensional list(int).
+
+        :return file_size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
+                            Type: int
         """
         self.m.restore()
 
@@ -139,7 +145,7 @@ class SC:
             matrix.append(self.__motif_to_list__(dna_motifs[index]))
 
         self.m.restore()
-        return matrix
+        return matrix, self.file_size
 
     def __motif_to_list__(self, dna_motif):
         """

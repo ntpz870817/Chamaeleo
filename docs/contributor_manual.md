@@ -23,7 +23,6 @@ The packages we are calling now is as follows:
 - [x] datetime
 - [x] numpy
 - [x] pickle
-- [x] csv
 
 
 If you have other packages, Please add them here.
@@ -42,23 +41,25 @@ In addition, some non-robust external packages may lead to instability or even c
 │    ├── user_manual.md               // Read before you want to use it
 ├── methods                           // Method module
 │    ├── components                    // Inherent property folder
-│    │    ├── index_data.py           // Processing the relationship between index and data
+│    │    ├── index_operator.py       // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
 │    │    ├── motif_friendly.py       // Determining whether motif is friendly to sequencing and synthesis
 │    ├── ddc.py                       // DDC (Double-Double DNA Storage Code)
-│    ├── hc.py                        // Huffman Codec (DNA Storage Code based on Huffman code)
-│    ├── sc.py                        // Simple (Simple DNA Storage Code)
+│    ├── gc.py                        // GC (DNA Storage Code created by Grass)
+│    ├── hc.py                        // HC (DNA Storage Code based on Huffman code)
+│    ├── sc.py                        // SC (Simple DNA Storage Code)
 │    ├── yyc.py                       // YYC (Yin-Yang DNA Storage Code)
 ├── test                              // Test module
 │    ├── generated_files              // DNA motif set file or binary file generated in the test
 │    │    ├── README.md               // Description document of generated files and the above folder
 │    ├── test_files                   // Files for testing
 │    ├── test_functional              // Functional test folder
+│    │    ├── ft_gc_47_trans.py       // Functional testing for GC (256^2 and 47^3)
 │    │    ├── ft_hc_huff_trans.py     // Functional testing for HC (huffman code transformation)
-│    │    ├── ft_huffman_creator.py   // Functional testing for custom huffman tree creator
 │    │    ├── README.md               // Description document of the above folder
 │    ├── test_integrated              // Integrated test folder
 │    │    ├── st_ddc.py               // Symmetrical testing of DDC
+│    │    ├── st_gc.py                // Symmetrical testing of GC
 │    │    ├── st_hc.py                // Symmetrical testing of HC
 │    │    ├── st_sc.py                // Symmetrical testing of SC
 │    │    ├── README.md               // Description document of the above folder

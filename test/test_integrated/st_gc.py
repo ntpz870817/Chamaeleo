@@ -1,18 +1,19 @@
 """
-Name: Symmetrical testing for HC
+Name: Symmetrical testing for CC
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): The Feasibility of Testing the Whole Process of HC
+Function(s): The Feasibility of Testing the Whole Process of GC
 """
+import sys
 
-
-import methods.hc as hc
+import methods.gc as cc
 
 import utils.model_saver as saver
 import utils.data_handle as data_handle
+import utils.log as log
 
 
 read_file_path = "..\\..\\test\\test_files\\founding ceremony.mp4"
@@ -20,11 +21,12 @@ write_file_path = "..\\..\\test\\generated_files\\target.mp4"
 
 dna_path = "..\\..\\test\\generated_files\\target.dna"
 
-model_path = "..\\..\\test\\generated_files\\hc.pkl"
+model_path = "..\\..\\test\\generated_files\\cc.pkl"
 
+# noinspection PyProtectedMember
 if __name__ == '__main__':
-    tool = hc.HC(True)
-    input_matrix, size = data_handle.read_binary_from_all(read_file_path)
+    tool = cc.GC([index for index in range(0, 48)])
+    input_matrix, size = data_handle.read_binary_from_all(read_file_path, segment_length=160)
     dna_motifs = tool.encode(input_matrix, size)
     data_handle.write_dna_file(dna_path, dna_motifs)
     saver.save_model(model_path, tool)

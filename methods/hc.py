@@ -3,7 +3,7 @@ Name: Huffman Codec (DNA Storage Code based on Huffman code)
 
 Reference: Goldman N, Bertone P, Chen S, et al. Towards practical, high-capacity, low-maintenance information storage in synthesized DNA[J]. Nature, 2013, 494(7435): 77.
 
-Coder: HaoLing ZHANG (BGI-Research)[V1]
+Coder: HaoLing ZHANG (BGI-Research)[V1], QianLong ZHUANG (BGI-Research)
 
 Current Version: 1
 
@@ -11,27 +11,31 @@ Function(s): (1) DNA encoding by Huffman Codec.
              (2) DNA decoding by Huffman Codec.
 """
 
-import csv
 import sys
 import os
 import utils.monitor as monitor
 import utils.log as log
 import methods.components.inherent as inherent
-import methods.components.index_operator as index_data
-import methods.components.huffman_creator as tree_creator
 
 
 # noinspection PyProtectedMember,PyMethodMayBeStatic,PyTypeChecker,PyUnusedLocal
 class HC:
     def __init__(self, fixed_huffman=True):
+        """
+        introduction: The initialization method of Huffman Codec.
+
+        :param fixed_huffman: Declare whether to use the Huffman dictionary in Goldman's paper.
+                               In order to reduce the possible loss of function storage, we recommend using this dictionary.
+        """
         self.huffman_tree = None
         self.segment_length = 0
         self.fixed_huffman = fixed_huffman
+        self.file_size = 0
         self.m = monitor.Monitor()
 
 # ================================================= encode part ========================================================
 
-    def encode(self, matrix):
+    def encode(self, matrix, size):
         """
         introduction: Encode DNA motifs from the data of binary file.
 
@@ -39,9 +43,14 @@ class HC:
                         The data of this matrix contains only 0 or 1 (non-char).
                         Type: int or bit.
 
+        :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
+                      Type: int
+
         :return dna_motifs: The DNA motif of len(matrix) rows.
                              Type: list(list(char)).
         """
+        self.file_size = size
+
         self.segment_length = len(matrix[0])
 
         self.m.restore()
@@ -55,8 +64,13 @@ class HC:
         self.m.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Change matrix to dna motif set.")
-        dna_motifs = self.__get_dna_motifs__(matrix)
+        dna_motifs = []
 
+        for row in range(len(matrix)):
+            self.m.output(row, len(matrix))
+            dna_motifs.append(self.__list_to_motif__(self.__huffman_compressed__(matrix[row])))
+
+        self.m.restore()
         return dna_motifs
 
     def __huffman_dict__(self, matrix=None):
@@ -68,35 +82,9 @@ class HC:
                         Type: int or bit.
         """
         if matrix is None:
-            huff_dict = open(os.path.join(os.path.dirname(__file__), "components/huffman.dict"), "r")
-            csv_reader = csv.reader(huff_dict, delimiter=',')
-            tree = []
-            for row in csv_reader:
-                tree.append(row[1])
+            self.huffman_tree = inherent.goldman_dict
         else:
-            tree = tree_creator.get_map(matrix, 3)
-
-        self.huffman_tree = tree
-        print(self.huffman_tree)
-
-    def __get_dna_motifs__(self, matrix):
-        """
-        introduction: Get dna motif set from matrix.
-
-        :param matrix: Generated binary two-dimensional matrix.
-                        The data of this matrix contains only 0 or 1 (non-char).
-                        Type: int or bit.
-
-        :return dna_motifs: The DNA motif of len(matrix) rows.
-                             Type: list(list(char)).
-        """
-        dna_motifs = []
-
-        for row in range(len(matrix)):
-            self.m.output(row, len(matrix))
-            dna_motifs.append(self.__list_to_motif__(self.__huffman_compressed__(matrix[row])))
-
-        return dna_motifs
+            self.huffman_tree = self.__get_map__(matrix, 3)
 
     def __huffman_compressed__(self, binary_list):
         """
@@ -131,11 +119,108 @@ class HC:
         dna_motif = []
         last_base = "A"
         for col in range(len(one_list)):
-            current_base = inherent.rotate_code.get(last_base)[one_list[col]]
+            current_base = inherent.rotate_codes.get(last_base)[one_list[col]]
             dna_motif.append(current_base)
             last_base = current_base
 
         return dna_motif
+
+    def __get_map__(self, bit_matrix, size=None, multiple=3):
+        """
+        introduction: Customize Huffman tree based on the bit matrix.
+
+        :param bit_matrix: Bit matrix, containing only 0,1.
+                            Type: Two-dimensional list(int)
+
+        :param size: File size corresponding to the matrix.
+
+        :param multiple: Number of branches constructed (decimal semi-octets).
+
+        :return tree: Byte-based (256) Huffman tree.
+        """
+
+        if size is None:
+            size = len(bit_matrix) * len(bit_matrix[0])
+
+        # Replace the bit matrix with one-dimensional decimal byte list
+        decimal_list = self.__get_decimal_list__(bit_matrix, size)
+
+        # Store elements and their weights
+        weight = {}
+        # Store elements and their codes
+        code = {}
+        # Recorder, prepare for the following screening of valid keys
+        _node = lambda i: "_" + str(i).zfill(3)
+        for one_byte in decimal_list:
+            # Create weight values for each element
+            if _node(one_byte) in weight:
+                weight[_node(one_byte)] += 1
+            else:
+                # Set the initial value of the code
+                code[_node(one_byte)] = ""
+                weight[_node(one_byte)] = 1
+
+        for one_byte in range(1, multiple - 1):
+            # Add impossible elements to ensure normal combination and close as one element
+            if (len(weight) - 1) % (multiple - 1) == 0:
+                break
+            else:
+                weight['_' * one_byte] = 0
+        weight_list = list(weight.items())
+
+        for index in range(0, (len(weight) - 1) // (multiple - 1)):
+            weight_list = sorted(weight_list, key=lambda x: x[0])
+            weight_list = sorted(weight_list, key=lambda x: x[1])
+            # Combine the previous terms into one term
+            item = str(index).zfill(3)
+            weight = 0
+            # Add Huffman coding and form new combinations
+            for branch in range(0, multiple):
+                item += weight_list[branch][0]
+                weight += weight_list[branch][1]
+                # Add headers to each item of the previous items.
+                for index_item in re.findall(r"_\d{3}", weight_list[branch][0]):
+                    code[index_item] = str(multiple - branch - 1) + code[index_item]
+            new = [(item, weight)]
+            weight_list = weight_list[multiple:] + new
+
+        dictionary = dict([int(key[1:]), value] for key, value in code.items())
+
+        tree = []
+        for index in range(256):
+            tree.append(dictionary.get(index))
+
+        return tree
+
+    def __get_decimal_list__(self, bit_matrix, size):
+        """
+        introduction: Decimal list generated by the bit matrix.
+
+        :param bit_matrix: Bit matrix, containing only 0,1.
+                            Type: Two-dimensional list(int)
+
+        :param size: File size corresponding to the matrix.
+
+        :return decimal_list: Decimal list.
+                               Type: One-dimensional list(int)
+        """
+        decimal_list = []
+
+        bit_index = 0
+        temp_byte = 0
+        for row in range(len(bit_matrix)):
+            for col in range(len(bit_matrix[0])):
+                bit_index += 1
+                temp_byte *= 2
+                temp_byte += bit_matrix[row][col]
+                if bit_index == 8:
+                    if size >= 0:
+                        decimal_list.append(int(temp_byte))
+                        size -= 1
+                    bit_index = 0
+                    temp_byte = 0
+
+        return decimal_list
 
 # ================================================= decode part ========================================================
 
@@ -148,26 +233,15 @@ class HC:
 
         :return matrix: The binary matrix corresponding to the dna motifs.
                          Type: Two-dimensional list(int).
+
+        :return file_size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
+                            Type: int
         """
 
         self.m.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Convert DNA motifs to binary matrix.")
-        matrix = self.__get_binaries__(dna_motifs)
 
-        self.m.restore()
-        return matrix
-
-    def __get_binaries__(self, dna_motifs):
-        """
-        introduction: Decode DNA motifs to the data of binary file.
-
-        :param dna_motifs: The DNA motif of len(matrix) rows.
-                            Type: One-dimensional list(string).
-
-        :return matrix: The binary matrix corresponding to the dna motifs.
-                         Type: Two-dimensional list(int).
-        """
         matrix = []
         index_binary_length = int(len(str(bin(len(dna_motifs)))) - 2)
 
@@ -175,7 +249,9 @@ class HC:
             self.m.output(index, len(dna_motifs))
             matrix.append(self.__huffman_decompressed__(self.__motif_to_list__(dna_motifs[index]), index_binary_length))
 
-        return matrix
+        self.m.restore()
+
+        return matrix, self.file_size
 
     def __motif_to_list__(self, dna_motif):
         """
@@ -191,7 +267,7 @@ class HC:
         last_base = "A"
 
         for index in range(len(dna_motif)):
-            one_list.append(inherent.rotate_code.get(last_base).index(dna_motif[index]))
+            one_list.append(inherent.rotate_codes.get(last_base).index(dna_motif[index]))
             last_base = dna_motif[index]
 
         return one_list

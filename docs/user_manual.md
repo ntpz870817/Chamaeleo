@@ -21,7 +21,6 @@ In addition, the packages we are calling now is as follows:
 - [x] datetime
 - [x] numpy
 - [x] pickle
-- [x] csv
 
 ## Kit Tree Diagram
 ```html
@@ -31,12 +30,13 @@ In addition, the packages we are calling now is as follows:
 │    ├── user_manual.md               // Read before you want to use it
 ├── methods                           // Method module
 │    ├── components                   // Inherent property folder
-│    │    ├── index_data.py           // Processing the relationship between index and data
+│    │    ├── index_operator.py       // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
 │    │    ├── motif_friendly.py       // Determining whether motif is friendly to sequencing and synthesis
 │    ├── ddc.py                       // DDC (Double-Double DNA Storage Code)
-│    ├── hc.py                        // Huffman Codec (DNA Storage Code based on Huffman code)
-│    ├── sc.py                        // Simple (Simple DNA Storage Code)
+│    ├── gc.py                        // GC (DNA Storage Code created by Grass)
+│    ├── hc.py                        // HC (DNA Storage Code based on Huffman code)
+│    ├── sc.py                        // SC (Simple DNA Storage Code)
 │    ├── yyc.py                       // YYC (Yin-Yang DNA Storage Code)
 ├── utils                             // Util module
 │    ├── data_handle.py               // Conversion of DNA motifs and binary document

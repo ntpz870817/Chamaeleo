@@ -52,7 +52,7 @@ def encode(method, input_path, output_path, model_path=None, need_index=True, se
     if model_path is not None:
         saver.save_model(model_path, method)
 
-    input_matrix = data_handle.read_binary_from_all(input_path, segment_length=segment_length)
+    input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length=segment_length)
 
     if need_index:
         input_matrix = index_operator.connect_all(input_matrix)
@@ -112,4 +112,4 @@ def decode(method=None, model_path=None, input_path=None, output_path=None, has_
                        "Restore the disrupted data order.")
             output_matrix = index_operator.sort_order(indexs, datas)
 
-        data_handle.write_all_from_binary(output_path, output_matrix)
+        data_handle.write_all_from_binary(output_path, output_matrix, size)

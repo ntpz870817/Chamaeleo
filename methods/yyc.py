@@ -25,10 +25,11 @@ import utils.log as log
 import utils.monitor as monitor
 
 
-# noinspection PyProtectedMember, PyUnresolvedReferences,PyMethodMayBeStatic,PyUnusedLocal,PyBroadException,PyArgumentList
+# noinspection PyProtectedMember, PyUnresolvedReferences,PyMethodMayBeStatic
+# noinspection PyUnusedLocal,PyBroadException,PyArgumentList
 class YYC:
     def __init__(self, base_reference=None, current_code_matrix=None, support_bases=None, support_spacing=0,
-                 max_ratio=0.8, search_count=1):
+                 max_ratio=0.8, search_count=0):
         """
         introduction: The initialization method of YYC.
 
@@ -155,9 +156,9 @@ class YYC:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                        "Wrong max ratio (" + str(max_ratio) + ")!")
 
-# ================================================= encode part ========================================================
+            # ================================================= encode part ========================================================
 
-    def encode(self, matrix):
+    def encode(self, matrix, size):
         """
         introduction: Encode DNA motifs from the data of binary file.
 
@@ -165,9 +166,13 @@ class YYC:
                         The data of this matrix contains only 0 or 1 (non-char).
                         Type: int or bit.
 
+        :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
+                      Type: int
+
         :return dna_motifs: The DNA motif of len(matrix) rows.
                              Type: list(list(char)).
         """
+        self.file_size = size
 
         self.monitor.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
@@ -406,7 +411,7 @@ class YYC:
 
         return one_base
 
-# ================================================= decode part ========================================================
+    # ================================================= decode part ========================================================
 
     def decode(self, dna_motifs):
         """
@@ -417,6 +422,9 @@ class YYC:
 
         :return matrix: The binary matrix corresponding to the dna motifs.
                          Type: Two-dimensional list(int).
+
+        :return file_size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
+                            Type: int
         """
 
         if not dna_motifs:
@@ -429,7 +437,7 @@ class YYC:
         matrix = self.__convert_binaries__(dna_motifs)
 
         self.monitor.restore()
-        return matrix
+        return matrix, self.file_size
 
     def __convert_binaries__(self, dna_motifs):
         """

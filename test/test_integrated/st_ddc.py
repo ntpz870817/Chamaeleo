@@ -24,11 +24,12 @@ dna_path = "..\\..\\test\\generated_files\\target.dna"
 
 model_path = "..\\..\\test\\generated_files\\ddc.pkl"
 
+# noinspection PyProtectedMember
 if __name__ == '__main__':
     tool = ddc.DDC()
-    input_matrix = data_handle.read_binary_from_all(read_file_path)
+    input_matrix, size = data_handle.read_binary_from_all(read_file_path)
     input_matrix = index_operator.connect_all(input_matrix)
-    dna_motifs = tool.encode(input_matrix)
+    dna_motifs = tool.encode(input_matrix, size)
     data_handle.write_dna_file(dna_path, dna_motifs)
     saver.save_model(model_path, tool)
 
@@ -40,6 +41,5 @@ if __name__ == '__main__':
     indexs, datas = index_operator.divide_all(output_matrix)
     log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                "Restore the disrupted data order.")
-    output_matrix = index_operator.sort_order(indexs, datas)
-
-    data_handle.write_all_from_binary(write_file_path, output_matrix)
+    output_matrix, size = index_operator.sort_order(indexs, datas)
+    data_handle.write_all_from_binary(write_file_path, output_matrix, size)

@@ -1,5 +1,5 @@
 """
-Name: Symmetrical testing for Simple
+Name: Symmetrical testing for Simple Codec
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
@@ -23,12 +23,12 @@ model_path = "..\\..\\test\\generated_files\\sc.pkl"
 
 if __name__ == '__main__':
     tool = simple.SC()
-    input_matrix = data_handle.read_binary_from_all(read_file_path)
-    dna_motifs = tool.encode(input_matrix)
+    input_matrix, size = data_handle.read_binary_from_all(read_file_path)
+    dna_motifs = tool.encode(input_matrix, size)
     data_handle.write_dna_file(dna_path, dna_motifs)
     saver.save_model(model_path, tool)
 
     tool = saver.load_model(model_path)
     dna_motifs = data_handle.read_dna_file(dna_path)
-    output_matrix = tool.decode(dna_motifs)
-    data_handle.write_all_from_binary(write_file_path, output_matrix)
+    output_matrix, size = tool.decode(dna_motifs)
+    data_handle.write_all_from_binary(write_file_path, output_matrix, size)
