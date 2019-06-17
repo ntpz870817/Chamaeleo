@@ -72,7 +72,7 @@ class GC:
         dna_motifs = []
 
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Encode the file.")
+                   "Encode the matrix.")
         for row in range(len(matrix)):
             self.m.output(row, len(matrix))
             dna_motifs.append(self.__list_to_motif__(matrix[row]))

@@ -89,7 +89,7 @@ class SC:
 
         self.m.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Encode the file.")
+                   "Encode the matrix.")
         dna_motifs = []
         for row in range(len(matrix)):
             self.m.output(row, len(matrix))

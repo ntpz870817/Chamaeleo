@@ -21,7 +21,7 @@ if __name__ == '__main__':
     print(test_list)
     dna_motif = tool.__list_to_motif__(tool.__huffman_compressed__(test_list))
     print(dna_motif)
-    binary_list = tool.__huffman_decompressed__(tool.__motif_to_list__(dna_motif))
+    binary_list = tool.__huffman_decompressed__(tool.__motif_to_list__(dna_motif), 2)
     print(binary_list)
 
     # test_list1 = [[random.randint(0, 1) for col in range(160)] for row in range(3)]

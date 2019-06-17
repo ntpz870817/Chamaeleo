@@ -19,7 +19,7 @@ import random
 import sys
 import numpy
 import methods.components.inherent as inherent
-import methods.components.motif_friendly as motif_friendly
+import methods.components.motif_validity as motif_friendly
 import methods.components.index_operator as index_data
 import utils.log as log
 import utils.monitor as monitor

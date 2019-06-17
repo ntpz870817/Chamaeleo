@@ -1,5 +1,5 @@
 """
-Name: Friendly Check Function
+Name: Friendly Check
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
@@ -105,52 +105,88 @@ def motif_repeat(dna_motif, max_repeat):
         for index in range(len(dna_motif)):
             if index + length < len(dna_motif):
                 sample = dna_motif[index: index + length]
-                if dna_motif.count(sample) > 0:
+                if dna_motif.count(sample) > 1:
                     return False
         length -= 1
 
     return True
 
 
-def inverse_motif_repeat(motif, max_repeat):
-    length = len(motif) - 1
+def inverse_motif_repeat(dna_motif, max_repeat):
+    """
+    introduction: Compute the inverse repetition of fragments in a DNA motif.
+
+    :param dna_motif: DNA motif for detection.
+                       Type: string.
+
+    :param max_repeat: Maximum repetition times.
+                        More than that time, the DNA motif was considered unfriendly.
+
+    :return: Whether DNA motif conforms to the friendliness or not.
+    """
+    length = len(dna_motif) - 1
     while length > max_repeat:
-        for index in range(0, len(motif) - 2 * length):
-            sample = motif[index: index + length]
+        for index in range(0, len(dna_motif) - 2 * length):
+            sample = dna_motif[index: index + length]
             inverse_sample = sample[::-1]
-            if motif.count(inverse_sample) > 0:
+            if dna_motif.count(inverse_sample) > 0:
                 return False
         length -= 1
 
     return True
 
 
-def dyad_motif_repeat(motif, max_repeat):
-    length = len(motif) - 1
+def dyad_motif_repeat(dna_motif, max_repeat):
+    """
+    introduction: Compute the complementary repetition of fragments in a DNA motif.
+
+    :param dna_motif: DNA motif for detection.
+                       Type: string.
+
+    :param max_repeat: Maximum repetition times.
+                        More than that time, the DNA motif was considered unfriendly.
+
+    :return: Whether DNA motif conforms to the friendliness or not.
+    """
+    length = len(dna_motif) - 1
     while length > max_repeat:
-        for index in range(len(motif)):
-            if index + length < len(motif):
-                sample = motif[index: index + length]
-                if motif.count(sample[::-1]) > 0:
+        for index in range(len(dna_motif)):
+            if index + length < len(dna_motif):
+                sample = dna_motif[index: index + length]
+                if dna_motif.count(sample[::-1]) > 0:
                     return False
         length -= 1
 
     return True
 
 
-def cg_content(motif, max_content):
-    return (1 - max_content) < float(motif.count("C") + motif.count("G")) / len(motif) < max_content
+def cg_content(dna_motif, max_content):
+    """
+    introduction: Compute the complementary repetition of fragments in a DNA motif.
+
+    :param dna_motif: DNA motif for detection.
+                       Type: string.
+
+    :param max_content: CG or AT Maximum repetition content.
+                         More than that content, the DNA motif was considered unfriendly.
+
+    :return: Whether DNA motif conforms to the friendliness or not.
+    """
+    return (1 - max_content) < float(dna_motif.count("C") + dna_motif.count("G")) / len(dna_motif) < max_content
 
 
+# noinspection PyUnusedLocal
 def min_free_energy(dna_motif, min_free_energy_value):
     """
-    introduction:
+    introduction: Compute the continuous repetition of fragments in a DNA motif.
 
-    :param dna_motif:
+    :param dna_motif:  DNA motif for detection.
+                       Type: string.
 
-    :param min_free_energy_value:
+    :param min_free_energy_value: Min free energy value.
+                                   More than that value, the DNA motif was considered unfriendly.
 
-    :return:
+    :return: Whether DNA motif conforms to the friendliness or not.
     """
     # TODO It could be used the framework: rnafold.
     return True
