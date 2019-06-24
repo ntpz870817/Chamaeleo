@@ -18,10 +18,10 @@ def connect_all(matrix):
     introduction: Connect index and data from the two-dimensional matrix.
 
     :param matrix: Data from input.
-                    Type: Two-dimensional list(int).
+                   Type: Two-dimensional list(int).
 
     :return new_matrix: Data for output.
-                         Type: Two-dimensional list(int).
+                        Type: Two-dimensional list(int).
     """
     m = monitor.Monitor()
     index_binary_length = int(len(str(bin(len(matrix)))) - 2)
@@ -65,7 +65,7 @@ def divide_all(matrix):
     introduction: Separate data from indexes in binary strings.
 
     :param matrix: The DNA motif of len(matrix) rows.
-                    Type: Two-dimensional list(int).
+                   Type: Two-dimensional list(int).
 
     :returns index, datas: Obtained data sets and index sets in corresponding locations.
                             Type: One-dimensional list(int), Two-dimensional list(int).

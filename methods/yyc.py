@@ -138,8 +138,8 @@ class YYC:
                 if current_code_matrix[row][col] != 0 and current_code_matrix[row][col] != 1:
                     log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                                "Only 0 and 1 can be included in the current code matrix, "
-                               "and the current code matrix [" + str(index) + "] has entered " + str(
-                                   base_reference[index] + "!"))
+                               "and the current code matrix [" + str(row) + ", " + str(col) + "] has entered " + str(
+                                   current_code_matrix[row][col] + "!"))
         for row in range(len(current_code_matrix)):
             for col in range(0, len(current_code_matrix[row]) - 1, 2):
                 if current_code_matrix[row][col] + current_code_matrix[row][col + 1] == 1 \
@@ -178,17 +178,17 @@ class YYC:
         self.monitor.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Separate good data from bad data.")
-        good_datas, bad_datas = self.__divide_library__(matrix)
+        good_data_set, bad_data_set = self.__divide_library__(matrix)
 
         self.monitor.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Random pairing and friendly testing.")
-        datas = self.__pairing__(good_datas, bad_datas)
+        data_set = self.__pairing__(good_data_set, bad_data_set)
 
         self.monitor.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Convert to DNA motif string set.")
-        dna_motifs = self.__synthesis_motifs__(datas)
+        dna_motifs = self.__synthesis_motifs__(data_set)
 
         return dna_motifs
 
@@ -200,7 +200,7 @@ class YYC:
                        The data of this matrix contains only 0 or 1 (non-char).
                        Type: int or bit
 
-        :returns good_datas, bad datas: good and bad data from total data
+        :returns good_data_set, bad datas: good and bad data from total data
                                         Type: list(int)
         """
 
@@ -218,120 +218,120 @@ class YYC:
         if len(bad_indexs) == 0 and len(matrix) == 0:
             return None, None
         elif len(bad_indexs) == 0:
-            good_datas = []
-            for row in range(len(good_datas)):
-                self.monitor.output(row, len(good_datas))
-                good_datas.append(matrix[row])
-            return good_datas, None
+            good_data_set = []
+            for row in range(len(good_data_set)):
+                self.monitor.output(row, len(good_data_set))
+                good_data_set.append(matrix[row])
+            return good_data_set, None
         elif len(bad_indexs) == len(matrix):
-            bad_datas = []
-            for row in range(len(bad_datas)):
-                self.monitor.output(row, len(bad_datas))
-                bad_datas.append(matrix[row])
-            return None, bad_datas
+            bad_data_set = []
+            for row in range(len(bad_data_set)):
+                self.monitor.output(row, len(bad_data_set))
+                bad_data_set.append(matrix[row])
+            return None, bad_data_set
         else:
-            good_datas = []
-            bad_datas = []
+            good_data_set = []
+            bad_data_set = []
             for row in range(len(matrix)):
                 self.monitor.output(row, len(matrix))
                 if row in bad_indexs:
-                    bad_datas.append(matrix[row])
+                    bad_data_set.append(matrix[row])
                 else:
-                    good_datas.append(matrix[row])
+                    good_data_set.append(matrix[row])
 
-            return good_datas, bad_datas
+            return good_data_set, bad_data_set
 
-    def __pairing__(self, good_datas, bad_datas):
+    def __pairing__(self, good_data_set, bad_data_set):
         """
         introduction: Match good data with bad data, to ensure that the overall data is better.
                       If there are only good or bad data left, they will pair themselves up.
 
-        :param good_datas: Generated binary two-dimensional matrix, the repetition rate of 0 or 1 is related low.
+        :param good_data_set: Generated binary two-dimensional matrix, the repetition rate of 0 or 1 is related low.
                             Type: Two-dimensional list(int)
 
-        :param bad_datas: Generated binary two-dimensional matrix, the repetition rate of 0 or 1 is related high.
+        :param bad_data_set: Generated binary two-dimensional matrix, the repetition rate of 0 or 1 is related high.
                            Type: Two-dimensional list(int)
 
-        :returns datas: Matched results
+        :returns data_set: Matched results
                          Type: Two-dimensional list(int)
         """
 
-        datas = []
-        good_indexs = None
-        bad_indexs = None
-        if good_datas is not None and bad_datas is not None:
-            good_indexs = set(str(i) for i in range(len(good_datas)))
-            bad_indexs = set(str(i) for i in range(len(bad_datas)))
-        elif good_datas is None and bad_datas is not None:
-            good_indexs = set(str(i) for i in range(0))
-            bad_indexs = set(str(i) for i in range(len(bad_datas)))
-        elif good_datas is not None and bad_datas is None:
-            good_indexs = set(str(i) for i in range(len(good_datas)))
-            bad_indexs = set(str(i) for i in range(0))
+        data_set = []
+        good_indexes = None
+        bad_indexes = None
+        if good_data_set is not None and bad_data_set is not None:
+            good_indexes = set(str(i) for i in range(len(good_data_set)))
+            bad_indexes = set(str(i) for i in range(len(bad_data_set)))
+        elif good_data_set is None and bad_data_set is not None:
+            good_indexes = set(str(i) for i in range(0))
+            bad_indexes = set(str(i) for i in range(len(bad_data_set)))
+        elif good_data_set is not None and bad_data_set is None:
+            good_indexes = set(str(i) for i in range(len(good_data_set)))
+            bad_indexes = set(str(i) for i in range(0))
         else:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                        "YYC did not receive matrix data!")
 
-        for index in range(0, len(good_datas) + len(bad_datas), 2):
-            self.monitor.output(index, len(good_datas) + len(bad_datas))
-            if index < len(good_datas) + len(bad_datas) - 1:
-                if len(good_indexs) != 0 and len(bad_indexs) != 0:
+        for index in range(0, len(good_data_set) + len(bad_data_set), 2):
+            self.monitor.output(index, len(good_data_set) + len(bad_data_set))
+            if index < len(good_data_set) + len(bad_data_set) - 1:
+                if len(good_indexes) != 0 and len(bad_indexes) != 0:
                     for search_index in range(self.search_count):
-                        good_index = int(good_indexs.pop())
-                        bad_index = int(bad_indexs.pop())
+                        good_index = int(good_indexes.pop())
+                        bad_index = int(bad_indexes.pop())
                         if motif_friendly.friendly_check(
-                                self.__list_to_motif__(good_datas[good_index], bad_datas[bad_index])) \
+                                self.__list_to_motif__(good_data_set[good_index], bad_data_set[bad_index])) \
                                 or search_index == self.search_count - 1:
-                            datas.append(good_datas[good_index])
-                            datas.append(bad_datas[bad_index])
+                            data_set.append(good_data_set[good_index])
+                            data_set.append(bad_data_set[bad_index])
                             break
                         else:
-                            good_indexs.add(str(good_index))
-                            bad_indexs.add(str(bad_index))
+                            good_indexes.add(str(good_index))
+                            bad_indexes.add(str(bad_index))
                             index -= 1
-                elif len(bad_indexs) == 0:
+                elif len(bad_indexes) == 0:
                     for search_index in range(self.search_count):
-                        good_index1 = int(good_indexs.pop())
-                        good_index2 = int(good_indexs.pop())
+                        good_index1 = int(good_indexes.pop())
+                        good_index2 = int(good_indexes.pop())
                         if motif_friendly.friendly_check(
-                                self.__list_to_motif__(good_datas[good_index1], good_datas[good_index2])) \
+                                self.__list_to_motif__(good_data_set[good_index1], good_data_set[good_index2])) \
                                 or search_index == self.search_count - 1:
-                            datas.append(good_datas[good_index1])
-                            datas.append(good_datas[good_index2])
+                            data_set.append(good_data_set[good_index1])
+                            data_set.append(good_data_set[good_index2])
                             break
                         else:
-                            good_indexs.add(str(good_index1))
-                            good_indexs.add(str(good_index2))
+                            good_indexes.add(str(good_index1))
+                            good_indexes.add(str(good_index2))
                             index -= 1
-                elif len(good_indexs) == 0:
+                elif len(good_indexes) == 0:
                     for search_index in range(self.search_count):
-                        bad_index1 = int(bad_indexs.pop())
-                        bad_index2 = int(bad_indexs.pop())
+                        bad_index1 = int(bad_indexes.pop())
+                        bad_index2 = int(bad_indexes.pop())
                         if motif_friendly.friendly_check(
-                                self.__list_to_motif__(bad_datas[bad_index1], bad_datas[bad_index2])) \
+                                self.__list_to_motif__(bad_data_set[bad_index1], bad_data_set[bad_index2])) \
                                 or search_index == self.search_count - 1:
-                            datas.append(bad_datas[bad_index1])
-                            datas.append(bad_datas[bad_index2])
+                            data_set.append(bad_data_set[bad_index1])
+                            data_set.append(bad_data_set[bad_index2])
                         else:
-                            bad_indexs.add(str(bad_index1))
-                            bad_indexs.add(str(bad_index2))
+                            bad_indexes.add(str(bad_index1))
+                            bad_indexes.add(str(bad_index2))
                             index -= 1
                 else:
                     log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                                "Pairing wrong in YYC pairing!")
             else:
-                datas.append(
-                    good_datas[int(good_indexs.pop())] if len(good_indexs) != 0 else bad_datas[int(bad_indexs.pop())])
+                data_set.append(
+                    good_data_set[int(good_indexes.pop())] if len(good_indexes) != 0 else bad_data_set[int(bad_indexes.pop())])
 
-        del good_indexs, good_datas, bad_indexs, bad_datas
+        del good_indexes, good_data_set, bad_indexes, bad_data_set
 
-        return datas
+        return data_set
 
-    def __synthesis_motifs__(self, datas):
+    def __synthesis_motifs__(self, data_set):
         """
         introduction: Synthesis motifs by two-dimensional data set.
 
-        :param datas: Original data from file.
+        :param data_set: Original data from file.
                        Type: Two-dimensional list(int).
 
         :return dna_motifs: The DNA motifs from the original data set
@@ -339,14 +339,14 @@ class YYC:
         """
 
         dna_motifs = []
-        for row in range(0, len(datas), 2):
-            self.monitor.output(row, len(datas))
-            if row < len(datas) - 1:
-                dna_motifs.append(self.__list_to_motif__(datas[row], datas[row + 1]))
+        for row in range(0, len(data_set), 2):
+            self.monitor.output(row, len(data_set))
+            if row < len(data_set) - 1:
+                dna_motifs.append(self.__list_to_motif__(data_set[row], data_set[row + 1]))
             else:
-                dna_motifs.append(self.__list_to_motif__(datas[row], None))
+                dna_motifs.append(self.__list_to_motif__(data_set[row], None))
 
-        del datas
+        del data_set
 
         return dna_motifs
 
@@ -412,7 +412,7 @@ class YYC:
 
         return one_base
 
-    # ================================================= decode part ========================================================
+# ================================================= decode part ========================================================
 
     def decode(self, dna_motifs):
         """

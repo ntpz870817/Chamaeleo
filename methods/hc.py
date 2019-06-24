@@ -67,7 +67,7 @@ class HC:
 
         self.m.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Change matrix to dna motif set.")
+                   "Convert matrix to dna motif set.")
         dna_motifs = []
 
         for row in range(len(matrix)):
@@ -112,16 +112,15 @@ class HC:
 
     def __list_to_motif__(self, one_list):
         """
-        introduction: from one binary list to DNA motif.
+        introduction: Encode a DNA motif from one binary list.
 
         :param one_list: One binary list.
-                          Type: int or bit.
+                         Type: int or bit.
 
         :return dna_motif: One DNA motif.
-                            Type: List(char).
+                           Type: List(char).
         """
-        dna_motif = []
-        last_base = "A"
+        last_base, dna_motif = "A", []
         for col in range(len(one_list)):
             current_base = inherent.rotate_codes.get(last_base)[one_list[col]]
             dna_motif.append(current_base)
@@ -149,10 +148,8 @@ class HC:
         # Replace the bit matrix with one-dimensional decimal byte list
         decimal_list = self.__get_decimal_list__(bit_matrix, size)
 
-        # Store elements and their weights
-        weight = {}
-        # Store elements and their codes
-        code = {}
+        # Store elements and their weights, their codes
+        weight, code = {}, {}
         # Recorder, prepare for the following screening of valid keys
         _node = lambda i: "_" + str(i).zfill(3)
         for one_byte in decimal_list:
@@ -206,12 +203,9 @@ class HC:
         :param size: File size corresponding to the matrix.
 
         :return decimal_list: Decimal list.
-                               Type: One-dimensional list(int)
+                              Type: One-dimensional list(int)
         """
-        decimal_list = []
-
-        bit_index = 0
-        temp_byte = 0
+        bit_index, temp_byte, decimal_list =  0, 0, []
         for row in range(len(bit_matrix)):
             for col in range(len(bit_matrix[0])):
                 bit_index += 1
@@ -221,8 +215,7 @@ class HC:
                     if size >= 0:
                         decimal_list.append(int(temp_byte))
                         size -= 1
-                    bit_index = 0
-                    temp_byte = 0
+                    bit_index, temp_byte = 0, 0
 
         return decimal_list
 
@@ -265,11 +258,9 @@ class HC:
                            Type: List(char).
 
         :return one_list: One ternary Huffman coding list.
-                           Type: int
+                           Type: List(int)
         """
-        one_list = []
-        last_base = "A"
-
+        last_base, one_list = "A", []
         for index in range(len(dna_motif)):
             one_list.append(inherent.rotate_codes.get(last_base).index(dna_motif[index]))
             last_base = dna_motif[index]
@@ -285,9 +276,7 @@ class HC:
         :return binary_list: The binary list.
                               Type: list(int).
         """
-        binary_list = []
-
-        temp_ternary = ""
+        temp_ternary, binary_list = "", []
         for index in range(len(ternary_list)):
             temp_ternary += str(ternary_list[index])
 

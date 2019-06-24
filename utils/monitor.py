@@ -33,9 +33,9 @@ class Monitor:
                               Type: int
         """
         position = int(current_length / total_length * 100)
-        current_time = datetime.now()
 
         if self.position < position:
+            current_time = datetime.now()
             self.position = position
             string = "["
             for index in range(100):

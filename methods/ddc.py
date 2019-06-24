@@ -25,6 +25,7 @@ import utils.log as log
 class DDC(yyc.YYC):
 
     def __init_check__(self, support_bases, support_spacing, base_reference, current_code_matrix, max_ratio):
+        # TODO need update rules by Ping Zhi
         """
         introduction: The verification of initialization parameters in DDC.
 
@@ -81,11 +82,13 @@ class DDC(yyc.YYC):
                 if current_code_matrix[row][col] != 0 and current_code_matrix[row][col] != 1:
                     log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                                "Only 0 and 1 can be included in the current code matrix, "
-                               "and the current code matrix [" + str(index) + "] has entered " + str(base_reference[index] + "!"))
+                               "and the current code matrix [" + str(row) + ", " + str(col) + "] has entered " +
+                               str(current_code_matrix[row][col]) + "!")
         for row in range(len(current_code_matrix)):
             if base_reference[0] == base_reference[1]:
                 for col in range(0, len(current_code_matrix[row]) - 1, 2):
-                    if current_code_matrix[row][col] + current_code_matrix[row][col + 1] == 1 and current_code_matrix[row][col] * current_code_matrix[row][col + 1] == 0:
+                    if current_code_matrix[row][col] + current_code_matrix[row][col + 1] == 1 \
+                            and current_code_matrix[row][col] * current_code_matrix[row][col + 1] == 0:
                         continue
                     else:
                         log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
@@ -94,7 +97,8 @@ class DDC(yyc.YYC):
                                    "Rules are that they add up to 1 and multiply by 0.")
             elif base_reference[0] == base_reference[2]:
                 for col in range(len(current_code_matrix[row]) - 2):
-                    if current_code_matrix[row][col] + current_code_matrix[row][col + 2] == 1 and current_code_matrix[row][col] * current_code_matrix[row][col + 2] == 0:
+                    if current_code_matrix[row][col] + current_code_matrix[row][col + 2] == 1 \
+                            and current_code_matrix[row][col] * current_code_matrix[row][col + 2] == 0:
                         continue
                     else:
                         log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),

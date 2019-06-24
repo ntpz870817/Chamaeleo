@@ -2,6 +2,7 @@
 Name: Simple Codec (Simple DNA Storage Code)
 
 Reference: Church G M, Gao Y, Kosuri S. Next-generation digital information storage in DNA[J]. Science, 2012, 337(6102): 1628-1628.
+           Blawat M, Gaedke K, Huetter I, et al. Forward error correction for DNA data storage[J]. Procedia Computer Science, 2016, 80: 1011-1022.
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 

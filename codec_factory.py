@@ -18,7 +18,7 @@ import methods.components.index_operator as index_operator
 
 
 # noinspection PyProtectedMember
-def encode(method, input_path, output_path, model_path=None, need_index=True, segment_length=None):
+def encode(method, input_path, output_path, model_path=None, error_correction=None, need_index=True, segment_length=None):
     """
     introduction: Use the selected method, convert the binary file to DNA motif set and output the DNA motif set.
 
@@ -33,6 +33,8 @@ def encode(method, input_path, output_path, model_path=None, need_index=True, se
 
     :param model_path: The path of model file if you want to save
                         Type: String
+
+    :param error_correction:
 
     :param need_index: Declare whether the binary sequence indexes are required in the DNA motifs.
                         Type: bool.
@@ -55,7 +57,14 @@ def encode(method, input_path, output_path, model_path=None, need_index=True, se
     input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length=segment_length)
 
     if need_index:
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Add index in the binary matrix.")
         input_matrix = index_operator.connect_all(input_matrix)
+
+    if error_correction is not None:
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Remove the error correction.")
+        input_matrix = error_correction.add_for_matrix(input_matrix)
 
     dna_motifs = method.encode(input_matrix, size)
 
@@ -63,7 +72,7 @@ def encode(method, input_path, output_path, model_path=None, need_index=True, se
 
 
 # noinspection PyProtectedMember
-def decode(method=None, model_path=None, input_path=None, output_path=None, has_index=True):
+def decode(method=None, model_path=None, input_path=None, output_path=None, error_correction=None, has_index=True):
     """
     introduction: Use the selected method, convert DNA motif set to the binary file and output the binary file.
 
@@ -79,6 +88,8 @@ def decode(method=None, model_path=None, input_path=None, output_path=None, has_
 
     :param model_path: The path of model file if you want to save
                         Type: String
+
+    :param error_correction:
 
     :param has_index: Declare whether the DNA motifs contain binary sequence indexes.
                        Type: bool.
@@ -106,10 +117,18 @@ def decode(method=None, model_path=None, input_path=None, output_path=None, has_
         if has_index:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                        "Divide index and data from binary matrix.")
-            indexs, datas = index_operator.divide_all(output_matrix)
+            indexes, data_set = index_operator.divide_all(output_matrix)
 
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                        "Restore the disrupted data order.")
-            output_matrix = index_operator.sort_order(indexs, datas)
+            output_matrix = index_operator.sort_order(indexes, data_set)
+
+        if error_correction is not None:
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Verify and repair the matrix.")
+            output_matrix = error_correction.verify_for_matrix(output_matrix)
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Remove the error correction.")
+            output_matrix = error_correction.remove_for_matrix(output_matrix)
 
         data_handle.write_all_from_binary(output_path, output_matrix, size)
