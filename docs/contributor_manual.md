@@ -40,12 +40,13 @@ In addition, some non-robust external packages may lead to instability or even c
 │    ├── contributor_manual.md        // Read Before You Want to Make a Contribution
 │    ├── user_manual.md               // Read before you want to use it
 ├── methods                           // Method module
-│    ├── components                    // Inherent property folder
+│    ├── components                   // Inherent property folder
 │    │    ├── index_operator.py       // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
 │    │    ├── motif_validity.py       // Determining whether motif is friendly to sequencing and synthesis
-│    ├── verifies                    // Error-Correction Method
-│    │    ├── hamming.py              // Hamming error correction
+│    ├── verifies                     // Error-Correction Method
+│    │    ├── hm.py                   // Hamming error correction
+│    │    ├── rs.py                   // Reed-Solomon error correction
 │    ├── ddc.py                       // DDC (Double-Double DNA Storage Code)
 │    ├── gc.py                        // GC (DNA Storage Code created by Grass)
 │    ├── hc.py                        // HC (DNA Storage Code based on Huffman code)
