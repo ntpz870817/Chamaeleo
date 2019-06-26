@@ -56,16 +56,16 @@ def encode(method, input_path, output_path, model_path=None, verify=None, need_i
         saver.save_model(model_path, method)
 
     input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length=segment_length)
+    
+    if verify is not None:
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Add the error correction.")
+        input_matrix = verify.add_for_matrix(input_matrix)
 
     if need_index:
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Add index in the binary matrix.")
         input_matrix = index_operator.connect_all(input_matrix)
-
-    if verify is not None:
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Remove the error correction.")
-        input_matrix = verify.add_for_matrix(input_matrix)
 
     dna_motifs = method.encode(input_matrix, size)
 
