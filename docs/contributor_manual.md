@@ -40,10 +40,13 @@ In addition, some non-robust external packages may lead to instability or even c
 │    ├── contributor_manual.md        // Read Before You Want to Make a Contribution
 │    ├── user_manual.md               // Read before you want to use it
 ├── methods                           // Method module
-│    ├── components                    // Inherent property folder
+│    ├── components                   // Inherent property folder
 │    │    ├── index_operator.py       // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
-│    │    ├── motif_friendly.py       // Determining whether motif is friendly to sequencing and synthesis
+│    │    ├── motif_validity.py       // Determining whether motif is friendly to sequencing and synthesis
+│    ├── verifies                     // Error-Correction Method
+│    │    ├── hm.py                   // Hamming error correction
+│    │    ├── rs.py                   // Reed-Solomon error correction
 │    ├── ddc.py                       // DDC (Double-Double DNA Storage Code)
 │    ├── gc.py                        // GC (DNA Storage Code created by Grass)
 │    ├── hc.py                        // HC (DNA Storage Code based on Huffman code)
@@ -68,8 +71,8 @@ In addition, some non-robust external packages may lead to instability or even c
 │    ├── log.py                       // Outputting the logs in console
 │    ├── model_saver.py               // Save model to file and load model from file
 │    ├── monitor.py                   // Getting the progress  situation and the time left
-├── .gitignore                        // Upload Ignore File
-├── chamaeleo.py                      // Main calling function
+├── .gitignore                        // Upload ignore file
+├── codec_factory.py                  // Main calling function
 ├── LICENSE                           // Protocol of kit
 ├── logo.png                          // Logo of kit
 ├── README.md                         // Description document of kit

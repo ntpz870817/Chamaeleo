@@ -2,6 +2,7 @@
 Name: Simple Codec (Simple DNA Storage Code)
 
 Reference: Church G M, Gao Y, Kosuri S. Next-generation digital information storage in DNA[J]. Science, 2012, 337(6102): 1628-1628.
+           Blawat M, Gaedke K, Huetter I, et al. Forward error correction for DNA data storage[J]. Procedia Computer Science, 2016, 80: 1011-1022.
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
@@ -55,7 +56,7 @@ class SC:
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                    "Create the Simple method.")
 
-        if 0 <= max(mapping_rule) <= 1:
+        if 0 <= min(mapping_rule) and max(mapping_rule) <= 1:
             if len([position for position, value in enumerate(mapping_rule) if value == 0]) != 2 \
                     or [position for position, value in enumerate(mapping_rule) if value == 1] != 2:
                 log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
@@ -89,7 +90,7 @@ class SC:
 
         self.m.restore()
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Encode the file.")
+                   "Encode the matrix.")
         dna_motifs = []
         for row in range(len(matrix)):
             self.m.output(row, len(matrix))

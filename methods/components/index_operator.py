@@ -10,7 +10,10 @@ Function(s): (1) Connect index (to binary) to binary data, one or all.
              (3) Arrange the scrambled data by indexes.
 """
 
+import sys
+
 import utils.monitor as monitor
+import utils.log as log
 
 
 def connect_all(matrix):
@@ -18,13 +21,16 @@ def connect_all(matrix):
     introduction: Connect index and data from the two-dimensional matrix.
 
     :param matrix: Data from input.
-                    Type: Two-dimensional list(int).
+                   Type: Two-dimensional list(int).
 
     :return new_matrix: Data for output.
-                         Type: Two-dimensional list(int).
+                        Type: Two-dimensional list(int).
     """
     m = monitor.Monitor()
     index_binary_length = int(len(str(bin(len(matrix)))) - 2)
+
+    log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+               "Add index in the binary matrix.")
 
     new_matrix = []
     for row in range(len(matrix)):
@@ -65,13 +71,16 @@ def divide_all(matrix):
     introduction: Separate data from indexes in binary strings.
 
     :param matrix: The DNA motif of len(matrix) rows.
-                    Type: Two-dimensional list(int).
+                   Type: Two-dimensional list(int).
 
     :returns index, datas: Obtained data sets and index sets in corresponding locations.
                             Type: One-dimensional list(int), Two-dimensional list(int).
     """
     m = monitor.Monitor()
     index_binary_length = int(len(str(bin(len(matrix)))) - 2)
+
+    log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+               "Divide index and data from binary matrix.")
 
     indexs = []
     datas = []
@@ -109,29 +118,33 @@ def divide(one_list, index_binary_length):
     return index, data
 
 
-def sort_order(indexs, datas):
+# noinspection PyProtectedMember
+def sort_order(indexes, data_set):
     """
     introduction: Restore data in order of index.
 
-    :param indexs: The indexes of data set.
+    :param indexes: The indexes of data set.
 
-    :param datas: The disordered data set, the locations of this are corresponding to parameter "index".
+    :param data_set: The disordered data set, the locations of this are corresponding to parameter "index".
 
     :returns matrix: Binary list in correct order.
                       Type: Two-dimensional list(int).
     """
     m = monitor.Monitor()
 
-    # noinspection PyUnusedLocal
-    matrix = [[0 for col in range(len(datas[0]))] for row in range(len(indexs))]
+    log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+               "Restore the disrupted data order.")
 
-    for row in range(len(indexs)):
-        m.output(row, len(indexs))
+    # noinspection PyUnusedLocal
+    matrix = [[0 for col in range(len(data_set[0]))] for row in range(len(indexes))]
+
+    for row in range(len(indexes)):
+        m.output(row, len(indexes))
         if 0 <= row < len(matrix):
-            matrix[indexs[row]] = datas[row]
+            matrix[indexes[row]] = data_set[row]
 
     m.restore()
 
-    del indexs, datas, m
+    del indexes, data_set, m
 
     return matrix

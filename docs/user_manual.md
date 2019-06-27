@@ -32,7 +32,10 @@ In addition, the packages we are calling now is as follows:
 │    ├── components                   // Inherent property folder
 │    │    ├── index_operator.py       // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
-│    │    ├── motif_friendly.py       // Determining whether motif is friendly to sequencing and synthesis
+│    │    ├── motif_validity.py       // Determining whether motif is friendly to sequencing and synthesis
+│    ├── verifies                     // Error-Correction Method
+│    │    ├── hm.py                   // Hamming error correction
+│    │    ├── rs.py                   // Reed-Solomon error correction
 │    ├── ddc.py                       // DDC (Double-Double DNA Storage Code)
 │    ├── gc.py                        // GC (DNA Storage Code created by Grass)
 │    ├── hc.py                        // HC (DNA Storage Code based on Huffman code)
@@ -43,7 +46,7 @@ In addition, the packages we are calling now is as follows:
 │    ├── log.py                       // Outputting the logs in console
 │    ├── model_saver.py               // Save model to file and load model from file
 │    ├── monitor.py                   // Getting the progress  situation and the time left
-├── chamaeleo.py                      // Main calling function
+├── codec_factory.py                  // Main calling function
 ├── README.md                         // Description document of kit
 ```
 
@@ -57,7 +60,7 @@ from chamaeleo import *
 
 method = yyc.YYC()
 
-chamaeleo.encode(method, input_path="C:\\init.mp4", output_path="C:\\target.dna", model_path="C:\\yyc.pkl")
+codec_factory.encode(method, input_path="C:\\init.mp4", output_path="C:\\target.dna", model_path="C:\\yyc.pkl")
 ```
 
 In the decoding process, we first instantiate the method (init method or path of model file), and then pass the method and the necessary path into **chamaeleo**.
@@ -69,7 +72,7 @@ from chamaeleo import *
 
 method = yyc.YYC()
 
-chamaeleo.decode(method, input_path="C:\\target.dna", output_path="C:\\target.mp4")
+codec_factory.decode(method, input_path="C:\\target.dna", output_path="C:\\target.mp4")
 ```
 
 Taking Yin-Yang DNA Storage Code as an Example, the specific usage (using path of model file) is as follows:
@@ -77,5 +80,28 @@ Taking Yin-Yang DNA Storage Code as an Example, the specific usage (using path o
 ```python
 from chamaeleo import *
 
-chamaeleo.decode(input_path="C:\\target.dna", output_path="C:\\target.mp4", model_path="C:\\yyc.pkl")
+codec_factory.decode(input_path="C:\\target.dna", output_path="C:\\target.mp4", model_path="C:\\yyc.pkl")
+```
+
+Sometimes, we need to add error-correcting validation and serial numbers for each piece of data (for recovery).
+
+In the encoding process, we need to to instantiate the validation function:
+
+```python
+from chamaeleo import *
+
+method = yyc.YYC()
+verify = rs.RS(3)
+
+codec_factory.decode(method, input_path="C:\\target.dna", output_path="C:\\target.mp4", verify=verify, need_index=True)
+```
+
+Also in the decoding process:
+
+```python
+from chamaeleo import *
+
+verify = rs.RS(3)
+
+codec_factory.decode(input_path="C:\\target.dna", output_path="C:\\target.mp4", model_path="C:\\yyc.pkl", verify=verify, has_index=True)
 ```
