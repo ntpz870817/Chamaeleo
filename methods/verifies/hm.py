@@ -17,6 +17,7 @@ import sys
 import utils.log as log
 
 
+# noinspection PyProtectedMember
 class Hm:
 
     def __init__(self):
@@ -33,6 +34,8 @@ class Hm:
         :return verity_matrix: Verifiable matrix.
                                Type: Two-dimensional list(int).
         """
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Add the error correction for matrix.")
 
         # Calculate the length needed for detection site.
         detect_site_length = 0
@@ -110,6 +113,9 @@ class Hm:
         :return matrix: Origin matrix.
                         Type: Two-dimensional list(int).
         """
+
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Remove the error correction for matrix.")
         matrix = []
         for row in range(len(verity_matrix)):
             matrix.append(self.remove_for_list(verity_matrix[row]))
@@ -150,6 +156,8 @@ class Hm:
         :return matrix: Matrix that has been verified even repaired.
                         Type: Two-dimensional list(int).
         """
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Verify and repair the matrix.")
         matrix = []
         for row in range(len(verity_matrix)):
             matrix.append(self.verify_for_list(verity_matrix[row], row))
@@ -169,6 +177,9 @@ class Hm:
         :return output_list: List that has been verified even repaired.
                              Type: One-dimensional list(int).
         """
+        if row in None:
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Verify and repair the list.")
         input_list.reverse()
         detect_site, output_list, output_list_copy = 0, [], []
         for index in range(0, len(input_list)):

@@ -58,13 +58,9 @@ def encode(method, input_path, output_path, model_path=None, verify=None, need_i
     input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length=segment_length)
     
     if verify is not None:
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Add the error correction.")
         input_matrix = verify.add_for_matrix(input_matrix)
 
     if need_index:
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Add index in the binary matrix.")
         input_matrix = index_operator.connect_all(input_matrix)
 
     dna_motifs = method.encode(input_matrix, size)
@@ -117,20 +113,11 @@ def decode(method=None, model_path=None, input_path=None, output_path=None, veri
         output_matrix = method.decode(dna_motifs, has_index)
 
         if has_index:
-            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Divide index and data from binary matrix.")
             indexes, data_set = index_operator.divide_all(output_matrix)
-
-            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Restore the disrupted data order.")
             output_matrix = index_operator.sort_order(indexes, data_set)
 
         if verify is not None:
-            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Verify and repair the matrix.")
             output_matrix = verify.verify_for_matrix(output_matrix)
-            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Remove the error correction.")
             output_matrix = verify.remove_for_matrix(output_matrix)
 
         data_handle.write_all_from_binary(output_path, output_matrix, size)

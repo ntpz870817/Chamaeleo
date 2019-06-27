@@ -62,6 +62,9 @@ class RS:
         :return verity_matrix: Verifiable matrix.
                                Type: Two-dimensional list(int).
         """
+
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Add the error correction for matrix.")
         if len(matrix[0]) / 8 + self.check_size > 255:
             log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
                        "Data length is too long, encoding and decoding will take a lot of time.")
@@ -113,6 +116,9 @@ class RS:
         :return matrix: Origin matrix.
                         Type: Two-dimensional list(int).
         """
+
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Remove the error correction for matrix.")
         matrix = []
         for row in range(len(verity_matrix)):
             matrix.append(self.remove_for_list(verity_matrix[row]))
@@ -142,6 +148,9 @@ class RS:
         :return matrix: Matrix that has been verified even repaired.
                         Type: Two-dimensional list(int).
         """
+
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                   "Verify and repair the matrix.")
         matrix = []
         for row in range(len(verity_matrix)):
             matrix.append(self.verify_for_list(verity_matrix[row], row))
@@ -161,6 +170,10 @@ class RS:
         :return output_list: List that has been verified even repaired.
                              Type: One-dimensional list(int).
         """
+        if row in None:
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Verify and repair the list.")
+
         output_list = self.__binary_to_decimal__(input_list)
         # find erasures
         erasure_positions = []

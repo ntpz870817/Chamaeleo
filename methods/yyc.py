@@ -30,7 +30,7 @@ import utils.monitor as monitor
 class YYC:
 
     def __init__(self, base_reference=None, current_code_matrix=None, support_bases=None, support_spacing=0,
-                 max_ratio=0.8, search_count=0):
+                 max_ratio=0.8, search_count=1):
         """
         introduction: The initialization method of YYC.
 
@@ -204,26 +204,26 @@ class YYC:
                                         Type: list(int)
         """
 
-        bad_indexs = []
+        bad_indexes = []
         for row in range(len(matrix)):
             if numpy.sum(matrix[row]) > len(matrix[row]) * self.max_ratio or numpy.sum(matrix[row]) < len(
                     matrix[row]) * (1 - self.max_ratio):
-                bad_indexs.append(row)
+                bad_indexes.append(row)
 
-        if len(matrix) < len(bad_indexs) * 5:
+        if len(matrix) < len(bad_indexes) * 5:
             log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
                        "There may be a large number of motifs that are difficult to use. "
                        "We recommend stopping and modifying the rules.")
 
-        if len(bad_indexs) == 0 and len(matrix) == 0:
+        if len(bad_indexes) == 0 and len(matrix) == 0:
             return None, None
-        elif len(bad_indexs) == 0:
+        elif len(bad_indexes) == 0:
             good_data_set = []
             for row in range(len(good_data_set)):
                 self.monitor.output(row, len(good_data_set))
                 good_data_set.append(matrix[row])
             return good_data_set, None
-        elif len(bad_indexs) == len(matrix):
+        elif len(bad_indexes) == len(matrix):
             bad_data_set = []
             for row in range(len(bad_data_set)):
                 self.monitor.output(row, len(bad_data_set))
@@ -234,7 +234,7 @@ class YYC:
             bad_data_set = []
             for row in range(len(matrix)):
                 self.monitor.output(row, len(matrix))
-                if row in bad_indexs:
+                if row in bad_indexes:
                     bad_data_set.append(matrix[row])
                 else:
                     good_data_set.append(matrix[row])
@@ -279,9 +279,9 @@ class YYC:
                     for search_index in range(self.search_count):
                         good_index = int(good_indexes.pop())
                         bad_index = int(bad_indexes.pop())
-                        if motif_friendly.friendly_check(
-                                self.__list_to_motif__(good_data_set[good_index], bad_data_set[bad_index])) \
-                                or search_index == self.search_count - 1:
+                        if search_index >= self.search_count - 1 or \
+                            motif_friendly.friendly_check(self.__list_to_motif__(good_data_set[good_index],
+                                                                                 bad_data_set[bad_index])):
                             data_set.append(good_data_set[good_index])
                             data_set.append(bad_data_set[bad_index])
                             break
@@ -293,9 +293,9 @@ class YYC:
                     for search_index in range(self.search_count):
                         good_index1 = int(good_indexes.pop())
                         good_index2 = int(good_indexes.pop())
-                        if motif_friendly.friendly_check(
-                                self.__list_to_motif__(good_data_set[good_index1], good_data_set[good_index2])) \
-                                or search_index == self.search_count - 1:
+                        if search_index >= self.search_count - 1 or \
+                            motif_friendly.friendly_check(self.__list_to_motif__(good_data_set[good_index1],
+                                                                                 good_data_set[good_index2])):
                             data_set.append(good_data_set[good_index1])
                             data_set.append(good_data_set[good_index2])
                             break
@@ -307,9 +307,9 @@ class YYC:
                     for search_index in range(self.search_count):
                         bad_index1 = int(bad_indexes.pop())
                         bad_index2 = int(bad_indexes.pop())
-                        if motif_friendly.friendly_check(
-                                self.__list_to_motif__(bad_data_set[bad_index1], bad_data_set[bad_index2])) \
-                                or search_index == self.search_count - 1:
+                        if search_index >= self.search_count - 1 or \
+                                motif_friendly.friendly_check(self.__list_to_motif__(bad_data_set[bad_index1],
+                                                                                     bad_data_set[bad_index2])):
                             data_set.append(bad_data_set[bad_index1])
                             data_set.append(bad_data_set[bad_index2])
                         else:
@@ -320,8 +320,8 @@ class YYC:
                     log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                                "Pairing wrong in YYC pairing!")
             else:
-                data_set.append(
-                    good_data_set[int(good_indexes.pop())] if len(good_indexes) != 0 else bad_data_set[int(bad_indexes.pop())])
+                data_set.append(good_data_set[int(good_indexes.pop())]
+                                if len(good_indexes) != 0 else bad_data_set[int(bad_indexes.pop())])
 
         del good_indexes, good_data_set, bad_indexes, bad_data_set
 
