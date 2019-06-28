@@ -14,14 +14,9 @@ import methods.components.index_operator as index_operator
 
 import utils.model_saver as saver
 import utils.data_handle as data_handle
-import utils.log as log
 
-
-from datetime import datetime
-import math
-
-read_file_path = "..\\..\\test\\test_files\\founding ceremony.mp4"
-write_file_path = "..\\..\\test\\generated_files\\target.mp4"
+read_file_path = "..\\..\\test\\test_files\\books\\A Tale of Two Cities.pdf"
+write_file_path = "..\\..\\test\\generated_files\\target.pdf"
 
 dna_path = "..\\..\\test\\generated_files\\target.dna"
 

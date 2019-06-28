@@ -16,8 +16,8 @@ import utils.data_handle as data_handle
 import utils.log as log
 
 
-read_file_path = "..\\..\\test\\test_files\\founding ceremony.mp4"
-write_file_path = "..\\..\\test\\generated_files\\target.mp4"
+read_file_path = "..\\..\\test\\test_files\\books\\A Tale of Two Cities.pdf"
+write_file_path = "..\\..\\test\\generated_files\\target.pdf"
 
 dna_path = "..\\..\\test\\generated_files\\target.dna"
 
