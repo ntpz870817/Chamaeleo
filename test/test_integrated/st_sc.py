@@ -21,7 +21,7 @@ dna_path = "..\\..\\test\\generated_files\\target.dna"
 
 model_path = "..\\..\\test\\generated_files\\sc.pkl"
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     tool = simple.SC()
     input_matrix, size = data_handle.read_binary_from_all(read_file_path)
     dna_motifs = tool.encode(input_matrix, size)
