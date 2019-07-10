@@ -43,7 +43,7 @@ jobs:
           name: check style
           command: |
             . venv/bin/activate
-            pep8 *.py
+            pycodestyle *.py
 
       # run tests!
       # this example uses Django's built-in test-runner
