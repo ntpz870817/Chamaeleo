@@ -60,12 +60,12 @@ jobs:
           name: run scripts
           command: |
            . venv/bin/activate
-           python2 chamaeleo.py -f PZ_encoding/abc -encode simple > abc.simple
-           python2 chamaeleo.py -f abc.simple -decode simple
-           python2 chamaeleo.py -f PZ_encoding/abc -encode huffman > abs.huffman
-           python2 chamaeleo.py -f abs.huffman -decode huffman
-           python2 chamaeleo.py -f PZ_encoding/abc -encode rs > abs.rs
-           python2 chamaeleo.py -f abs.rs -decode rs
+           # python2 chamaeleo.py -f PZ_encoding/abc -encode simple > abc.simple
+           # python2 chamaeleo.py -f abc.simple -decode simple
+           # python2 chamaeleo.py -f PZ_encoding/abc -encode huffman > abs.huffman
+           # python2 chamaeleo.py -f abs.huffman -decode huffman
+           # python2 chamaeleo.py -f PZ_encoding/abc -encode rs > abs.rs
+           # python2 chamaeleo.py -f abs.rs -decode rs
 
       - store_artifacts:
           path: test-reports
