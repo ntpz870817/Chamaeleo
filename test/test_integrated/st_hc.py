@@ -23,7 +23,7 @@ dna_path = "..\\..\\test\\generated_files\\target.dna"
 model_path = "..\\..\\test\\generated_files\\hc.pkl"
 
 if __name__ == '__main__':
-    tool = hc.HC(True)
+    tool = hc.HC()
     input_matrix, size = data_handle.read_binary_from_all(read_file_path)
     dna_motifs = tool.encode(input_matrix, size)
     data_handle.write_dna_file(dna_path, dna_motifs)
