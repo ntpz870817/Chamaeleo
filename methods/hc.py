@@ -10,9 +10,8 @@ Current Version: 1
 Function(s): (1) DNA encoding by Huffman Codec.
              (2) DNA decoding by Huffman Codec.
 """
-
+import re
 import sys
-import os
 import utils.monitor as monitor
 import utils.log as log
 import methods.components.inherent as inherent
