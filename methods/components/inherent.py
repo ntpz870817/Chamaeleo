@@ -53,7 +53,7 @@ goldman_dict = ["22201", "00100", "11220", "00211", "20222", "00222", "02211", "
                 "12201", "11000", "02112", "01221", "00110", "11221", "01121", "12111",
                 "12020", "02020", "22020", "20000", "21110", "22120", "12202", "21122", "222020"]
 
-gc_codes = ['AAT', 'AAC', 'AAG', 'ATA', 'ATT', 'ATC', 'ATG', 'ACA', 'ACT', 'ACC', 'ACG', 'AGA', 'AGT', 'AGC', 'AGG',
-            'TAA', 'TAT', 'TAC', 'TAG', 'TTA', 'TTC', 'TTG', 'TCA', 'TCT', 'TCC', 'TCG', 'TGA', 'TGT', 'TGC', 'TGG',
-            'CAA', 'CAT', 'CAC', 'CAG', 'CTA', 'CTT', 'CTC', 'CTG', 'CCA', 'CCT', 'CCG', 'CGA', 'CGT', 'CGC', 'CGG',
-            'GAA', 'GAT', 'GAC', 'GAG', 'GTA', 'GTT', 'GTC', 'GTG', 'GCA', 'GCT', 'GCC', 'GCG', 'GGA', 'GGT', 'GGC']
+gc_codes = ['AAC', 'AAG', 'AAT', 'ACA', 'ACG', 'ACT', 'AGA', 'AGC', 'AGT', 'ATA', 'ATC', 'ATG',
+            'CAC', 'CAG', 'CAT', 'CCA', 'CCG', 'CCT', 'CGA', 'CGC', 'CGT', 'CTA', 'CTC', 'CTG',
+            'GAC', 'GAG', 'GAT', 'GCA', 'GCG', 'GCT', 'GGA', 'GGC', 'GGT', 'GTA', 'GTC', 'GTG',
+            'TAC', 'TAG', 'TAT', 'TCA', 'TCG', 'TCT', 'TGA', 'TGC', 'TGT', 'TTA', 'TTC', 'TTG']
