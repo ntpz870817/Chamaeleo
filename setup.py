@@ -10,7 +10,7 @@ setup(
     author_email="",
     url="",
     packages=["Chamaeleo", "Chamaeleo.methods", "Chamaeleo.utils"],
-    package_dir={"Chamaeleo": "Chamaeleo"},
+    package_dir={"Chamaeleo": "."},
     package_data={
         "Chamaeleo": [
             "test/test_files/binaries/DNA Fountain Input Files.tar",
