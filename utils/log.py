@@ -21,8 +21,9 @@ def output(info_type=0, class_name=None, method_name=None, info=None):
                   Format is: TIME CLASS_NAME -> METHOD_NAME: INFO.
 
     :param info_type: Type of information.
-                       We have declared three types available now: NORMAL, WARN, and ERROR.
-                       If the type is ERROR, we will end this program immediately.
+                      We have declared three types available now: NORMAL, WARN,
+                      and ERROR. If the type is ERROR, we will end this program
+                      immediately.
 
     :param class_name: Current class name, used to find the source of the information.
                         It is easy to get it by method "str(__name__)" in the classes you need to export logs to console.
@@ -47,7 +48,9 @@ def output(info_type=0, class_name=None, method_name=None, info=None):
         # Print yellow and high light.
         print("\033[1;32;0m" + string + "\033[0m")
         # End the program based on user selection
-        choose = input("Please enter whether you want to continue, 1 to continue, 0 to terminate: ")
+        choose = input(
+            "Please enter whether you want to continue, 1 to continue, 0 to terminate: "
+        )
         if int(choose) != 1:
             exit(1)
     elif info_type == ERROR:

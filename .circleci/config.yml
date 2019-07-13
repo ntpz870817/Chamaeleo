@@ -1,0 +1,72 @@
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
+      - image: circleci/python:3.6.1
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+      - run:
+          name: check style
+          command: |
+            . venv/bin/activate
+            pycodestyle *.py
+
+      # run tests!
+      # this example uses Django's built-in test-runner
+      # other common Python testing frameworks include pytest and nose
+      # https://pytest.org
+      # https://nose.readthedocs.io
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            nosetests -v
+
+      - run:
+          name: run scripts
+          command: |
+           . venv/bin/activate
+           # python2 chamaeleo.py -f PZ_encoding/abc -encode simple > abc.simple
+           # python2 chamaeleo.py -f abc.simple -decode simple
+           # python2 chamaeleo.py -f PZ_encoding/abc -encode huffman > abs.huffman
+           # python2 chamaeleo.py -f abs.huffman -decode huffman
+           # python2 chamaeleo.py -f PZ_encoding/abc -encode rs > abs.rs
+           # python2 chamaeleo.py -f abs.rs -decode rs
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports

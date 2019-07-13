@@ -30,8 +30,12 @@ def save_model(path, model):
                    i.e. YYC or DDC.
     """
 
-    log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-               "Save model to file: " + path)
+    log.output(
+        log.NORMAL,
+        str(__name__),
+        str(sys._getframe().f_code.co_name),
+        "Save model to file: " + path,
+    )
     with open(path, "wb") as file:
         pickle.dump(model, file)
 
@@ -48,7 +52,11 @@ def load_model(path):
               i.e. YYC or DDC.
     """
 
-    log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-               "Load model from file: " + path)
+    log.output(
+        log.NORMAL,
+        str(__name__),
+        str(sys._getframe().f_code.co_name),
+        "Load model from file: " + path,
+    )
     with open(path, "rb") as file:
         return pickle.load(file)
