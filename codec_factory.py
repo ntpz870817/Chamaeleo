@@ -12,10 +12,10 @@ Function(s): After initializing the encoding or decoding method,
 
 
 import sys
-import utils.model_saver as saver
-import utils.data_handle as data_handle
-import utils.log as log
-import methods.components.index_operator as index_operator
+import Chamaeleo.utils.model_saver as saver
+import Chamaeleo.utils.data_handle as data_handle
+import Chamaeleo.utils.log as log
+import Chamaeleo.methods.components.index_operator as index_operator
 
 
 # noinspection PyProtectedMember

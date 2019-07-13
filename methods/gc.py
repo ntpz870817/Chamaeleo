@@ -13,14 +13,13 @@ Function(s): (1) DNA encoding by Grass Codec.
 
 import sys
 
-import methods.components.inherent as inherent
-import utils.monitor as monitor
-import utils.log as log
+import Chamaeleo.methods.components.inherent as inherent
+import Chamaeleo.utils.monitor as monitor
+import Chamaeleo.utils.log as log
 
 
 # noinspection PyMethodMayBeStatic,PyProtectedMember,PyTypeChecker
 class GC:
-
     def __init__(self, base_values):
         """
         introduction: The initialization method of Grass Codec.
@@ -30,8 +29,12 @@ class GC:
                              One-dimensional list containing all values of 1-47.
         """
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Create the Grass method.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Create the Grass method.",
+        )
 
         temp_keys = []
         temp_values = []
@@ -44,7 +47,7 @@ class GC:
         self.file_size = 0
         self.m = monitor.Monitor()
 
-# ================================================= encode part ========================================================
+    # ================================================= encode part ========================================================
 
     def encode(self, matrix, size):
         """
@@ -66,13 +69,21 @@ class GC:
         self.m.restore()
 
         if len(matrix[0]) % 16 != 0:
-            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "The length of col should be a multiple of 16!")
+            log.output(
+                log.ERROR,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "The length of col should be a multiple of 16!",
+            )
 
         dna_motifs = []
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Encode the matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Encode the matrix.",
+        )
         for row in range(len(matrix)):
             self.m.output(row, len(matrix))
             dna_motifs.append(self.__list_to_motif__(matrix[row]))
@@ -94,7 +105,7 @@ class GC:
         dna_motif = []
 
         for col in range(0, len(one_list), 16):
-            decimal_number = int("".join(list(map(str, one_list[col: col + 16]))), 2)
+            decimal_number = int("".join(list(map(str, one_list[col : col + 16]))), 2)
             third = decimal_number % 47
 
             decimal_number -= third
@@ -110,7 +121,7 @@ class GC:
 
         return dna_motif
 
-# ================================================= decode part ========================================================
+    # ================================================= decode part ========================================================
 
     def decode(self, dna_motifs):
         """
@@ -131,8 +142,12 @@ class GC:
 
         matrix = []
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Convert DNA motifs to binary matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Convert DNA motifs to binary matrix.",
+        )
         for index in range(len(dna_motifs)):
             self.m.output(index, len(dna_motifs))
             matrix.append(self.__motif_to_list__(dna_motifs[index]))
@@ -154,15 +169,25 @@ class GC:
         """
 
         if len(dna_motif) % 3 != 0:
-            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "The length of dna_motif should be a multiple of 9!")
+            log.output(
+                log.ERROR,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "The length of dna_motif should be a multiple of 9!",
+            )
 
         one_list = []
 
         for index in range(0, len(dna_motif), 9):
-            first = self.mapping_rule[1][self.mapping_rule[0].index("".join(dna_motif[index: index + 3]))]
-            second = self.mapping_rule[1][self.mapping_rule[0].index("".join(dna_motif[index + 3: index + 6]))]
-            third = self.mapping_rule[1][self.mapping_rule[0].index("".join(dna_motif[index + 6: index + 9]))]
+            first = self.mapping_rule[1][
+                self.mapping_rule[0].index("".join(dna_motif[index : index + 3]))
+            ]
+            second = self.mapping_rule[1][
+                self.mapping_rule[0].index("".join(dna_motif[index + 3 : index + 6]))
+            ]
+            third = self.mapping_rule[1][
+                self.mapping_rule[0].index("".join(dna_motif[index + 6 : index + 9]))
+            ]
 
             decimal_number = first
             decimal_number = decimal_number * 47 + second

@@ -14,7 +14,7 @@ import pickle
 
 import sys
 
-from utils import log
+from Chamaeleo.utils import log
 
 
 # noinspection PyProtectedMember

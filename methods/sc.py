@@ -15,15 +15,13 @@ Function(s): (1) DNA encoding by Simple.
 import sys
 import random
 
-import utils.monitor as monitor
-import utils.log as log
-import methods.components.inherent as inherent
-import methods.components.index_operator as index_data
+import Chamaeleo.utils.monitor as monitor
+import Chamaeleo.utils.log as log
+import Chamaeleo.methods.components.inherent as inherent
 
 
 # noinspection PyMethodMayBeStatic,PyProtectedMember
 class SC:
-
     def __init__(self, mapping_rule=None):
         """
         introduction: The initialization method of Simple Codec.
@@ -53,24 +51,55 @@ class SC:
                               (2) Each base corresponds to a number: i.e. A-00, T-01, C-10, G-11.
         """
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Create the Simple method.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Create the Simple method.",
+        )
 
         if 0 <= min(mapping_rule) and max(mapping_rule) <= 1:
-            if len([position for position, value in enumerate(mapping_rule) if value == 0]) != 2 \
-                    or [position for position, value in enumerate(mapping_rule) if value == 1] != 2:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "mapping rule is wrong!")
+            if (
+                len(
+                    [
+                        position
+                        for position, value in enumerate(mapping_rule)
+                        if value == 0
+                    ]
+                )
+                != 2
+                or [
+                    position
+                    for position, value in enumerate(mapping_rule)
+                    if value == 1
+                ]
+                != 2
+            ):
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "mapping rule is wrong!",
+                )
             else:
                 pass
         else:
-            if (0 in mapping_rule) and (1 in mapping_rule) and (2 in mapping_rule) and (3 in mapping_rule):
+            if (
+                (0 in mapping_rule)
+                and (1 in mapping_rule)
+                and (2 in mapping_rule)
+                and (3 in mapping_rule)
+            ):
                 pass
             else:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "mapping rule is wrong!")
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "mapping rule is wrong!",
+                )
 
-# ================================================= encode part ========================================================
+    # ================================================= encode part ========================================================
 
     def encode(self, matrix, size):
         """
@@ -89,8 +118,12 @@ class SC:
         self.file_size = size
 
         self.m.restore()
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Encode the matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Encode the matrix.",
+        )
         dna_motifs = []
         for row in range(len(matrix)):
             self.m.output(row, len(matrix))
@@ -111,17 +144,31 @@ class SC:
         dna_motif = []
         if max(self.mapping_rule) == 3:
             if len(one_list) % 2 != 0:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Data length cannot be odd number!")
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Data length cannot be odd number!",
+                )
             for index in range(len(one_list)):
-                dna_motif.append(inherent.index_base.get(self.mapping_rule.index(one_list[index] * 2 + one_list[index + 1])))
+                dna_motif.append(
+                    inherent.index_base.get(
+                        self.mapping_rule.index(
+                            one_list[index] * 2 + one_list[index + 1]
+                        )
+                    )
+                )
         else:
             for index in range(len(one_list)):
-                options = [position for position, value in enumerate(self.mapping_rule) if value == one_list[index]]
+                options = [
+                    position
+                    for position, value in enumerate(self.mapping_rule)
+                    if value == one_list[index]
+                ]
                 dna_motif.append(inherent.index_base.get(random.choice(options)))
         return dna_motif
 
-# ================================================= decode part ========================================================
+    # ================================================= decode part ========================================================
 
     def decode(self, dna_motifs):
         """
@@ -138,8 +185,12 @@ class SC:
         """
         self.m.restore()
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Convert DNA motifs to binary matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Convert DNA motifs to binary matrix.",
+        )
         matrix = []
         for index in range(len(dna_motifs)):
             self.m.output(index, len(dna_motifs))
@@ -166,6 +217,8 @@ class SC:
                 one_list.append(1 if number % 2 == 1 else 0)
         else:
             for index in range(len(dna_motif)):
-                one_list.append(self.mapping_rule[inherent.base_index.get(dna_motif[index])])
+                one_list.append(
+                    self.mapping_rule[inherent.base_index.get(dna_motif[index])]
+                )
 
         return one_list

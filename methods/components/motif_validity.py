@@ -8,12 +8,18 @@ Current Version: 1.1
 Function(s): (1) Determine whether motif is friendly to sequencing and synthesis by multiple indicators.
 """
 
-import sys
+# import sys
 
-from utils import log
+# from Chamaeleo.utils import log
 
 
-def friendly_check(dna_motif, max_base_repeat=6, max_motif_repeat=4, max_content=0.8, min_free_energy_value=-30):
+def friendly_check(
+    dna_motif,
+    max_base_repeat=6,
+    max_motif_repeat=4,
+    max_content=0.8,
+    min_free_energy_value=-30,
+):
     """
     introduction: Check DNA motif for friendliness.
 
@@ -60,7 +66,7 @@ def base_repeat(dna_motif, max_repeat):
 
     :return: Whether DNA motif conforms to the friendliness or not.
     """
-    base_index = {'A': 0, 'T': 1, 'C': 2, 'G': 3}
+    base_index = {"A": 0, "T": 1, "C": 2, "G": 3}
     counts = [0, 0, 0, 0]
     last_base = None
     save_base = None
@@ -104,7 +110,7 @@ def motif_repeat(dna_motif, max_repeat):
     while length > max_repeat:
         for index in range(len(dna_motif)):
             if index + length < len(dna_motif):
-                sample = dna_motif[index: index + length]
+                sample = dna_motif[index : index + length]
                 if dna_motif.count(sample) > 1:
                     return False
         length -= 1
@@ -127,7 +133,7 @@ def inverse_motif_repeat(dna_motif, max_repeat):
     length = len(dna_motif) - 1
     while length > max_repeat:
         for index in range(0, len(dna_motif) - 2 * length):
-            sample = dna_motif[index: index + length]
+            sample = dna_motif[index : index + length]
             inverse_sample = sample[::-1]
             if dna_motif.count(inverse_sample) > 0:
                 return False
@@ -152,7 +158,7 @@ def dyad_motif_repeat(dna_motif, max_repeat):
     while length > max_repeat:
         for index in range(len(dna_motif)):
             if index + length < len(dna_motif):
-                sample = dna_motif[index: index + length]
+                sample = dna_motif[index : index + length]
                 if dna_motif.count(sample[::-1]) > 0:
                     return False
         length -= 1
@@ -172,7 +178,11 @@ def cg_content(dna_motif, max_content):
 
     :return: Whether DNA motif conforms to the friendliness or not.
     """
-    return (1 - max_content) < float(dna_motif.count("C") + dna_motif.count("G")) / len(dna_motif) < max_content
+    return (
+        (1 - max_content)
+        < float(dna_motif.count("C") + dna_motif.count("G")) / len(dna_motif)
+        < max_content
+    )
 
 
 # noinspection PyUnusedLocal

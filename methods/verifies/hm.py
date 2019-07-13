@@ -14,12 +14,11 @@ Function(s): (1) Add Hamming error correction for origin matrix or origin list.
 
 import sys
 
-import utils.log as log
+import Chamaeleo.utils.log as log
 
 
 # noinspection PyProtectedMember
 class Hm:
-
     def __init__(self):
         pass
 
@@ -34,8 +33,12 @@ class Hm:
         :return verity_matrix: Verifiable matrix.
                                Type: Two-dimensional list(int).
         """
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Add the error correction for matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Add the error correction for matrix.",
+        )
 
         # Calculate the length needed for detection site.
         detect_site_length = 0
@@ -64,7 +67,9 @@ class Hm:
         if detect_site_length is None:
             # Calculate the length needed for detection site.
             detect_site_length = 0
-            while (len(input_list) + detect_site_length + 1) > (pow(2, detect_site_length)):
+            while (len(input_list) + detect_site_length + 1) > (
+                pow(2, detect_site_length)
+            ):
                 detect_site_length += 1
 
         input_list.reverse()
@@ -91,7 +96,7 @@ class Hm:
                 xor = []
 
                 while index < len(output_list):
-                    xor.extend(output_list[index:index + pow(2, detect_site)])
+                    xor.extend(output_list[index : index + pow(2, detect_site)])
                     index += pow(2, detect_site + 1)
 
                 for xor_index in range(1, len(xor)):
@@ -114,8 +119,12 @@ class Hm:
                         Type: Two-dimensional list(int).
         """
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Remove the error correction for matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Remove the error correction for matrix.",
+        )
         matrix = []
         for row in range(len(verity_matrix)):
             matrix.append(self.remove_for_list(verity_matrix[row]))
@@ -156,8 +165,12 @@ class Hm:
         :return matrix: Matrix that has been verified even repaired.
                         Type: Two-dimensional list(int).
         """
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Verify and repair the matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Verify and repair the matrix.",
+        )
         matrix = []
         for row in range(len(verity_matrix)):
             matrix.append(self.verify_for_list(verity_matrix[row], row))
@@ -178,8 +191,12 @@ class Hm:
                              Type: One-dimensional list(int).
         """
         if row in None:
-            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Verify and repair the list.")
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Verify and repair the list.",
+            )
         input_list.reverse()
         detect_site, output_list, output_list_copy = 0, [], []
         for index in range(0, len(input_list)):
@@ -196,7 +213,7 @@ class Hm:
                 xor = []
 
                 while index < len(output_list):
-                    block = output_list[index:index + pow(2, detect_site)]
+                    block = output_list[index : index + pow(2, detect_site)]
                     xor.extend(block)
                     index += pow(2, detect_site + 1)
 
@@ -205,21 +222,40 @@ class Hm:
                 parity_list.append(output_list[parity])
                 detect_site += 1
         parity_list.reverse()
-        error = sum(int(parity_list) * pow(2, index) for index, parity_list in enumerate(parity_list[::-1]))
+        error = sum(
+            int(parity_list) * pow(2, index)
+            for index, parity_list in enumerate(parity_list[::-1])
+        )
 
         if error == 0:
             input_list.reverse()
             return input_list
         elif error >= len(output_list_copy):
-            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Error cannot be detected.")
+            log.output(
+                log.ERROR,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Error cannot be detected.",
+            )
         else:
             if row is not None:
-                log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Error is no. " + str(error) + "bit, in " + str(row + 1) + " of matrix, and it is repaired.")
+                log.output(
+                    log.WARN,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Error is no. "
+                    + str(error)
+                    + "bit, in "
+                    + str(row + 1)
+                    + " of matrix, and it is repaired.",
+                )
             else:
-                log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Error is no. " + str(error) + "bit, and it is repaired.")
-            output_list_copy[error - 1] = int(output_list_copy[error - 1] == False)
+                log.output(
+                    log.WARN,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Error is no. " + str(error) + "bit, and it is repaired.",
+                )
+            output_list_copy[error - 1] = int(output_list_copy[error - 1] is False)
             output_list_copy.reverse()
             return output_list_copy

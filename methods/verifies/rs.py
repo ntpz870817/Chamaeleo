@@ -16,12 +16,11 @@ Function(s): (1) Add Reed-Solomon error correction for origin matrix or origin l
 
 import sys
 
-import utils.log as log
+import Chamaeleo.utils.log as log
 
 
 # noinspection PyProtectedMember,PyMethodMayBeStatic,PyTypeChecker,PyUnresolvedReferences
 class RS:
-
     def __init__(self, check_size=3):
         """
         introduction: The initialization method of Reed-Solomon Codec.
@@ -43,7 +42,7 @@ class RS:
         for index in range(1, 255):
             value <<= 1
             if value & 0x100:
-                value ^= 0x11d
+                value ^= 0x11D
             galois_field_exp[index] = value
             galois_field_log[value] = index
         for index in range(255, 512):
@@ -63,11 +62,19 @@ class RS:
                                Type: Two-dimensional list(int).
         """
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Add the error correction for matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Add the error correction for matrix.",
+        )
         if len(matrix[0]) / 8 + self.check_size > 255:
-            log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Data length is too long, encoding and decoding will take a lot of time.")
+            log.output(
+                log.WARN,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Data length is too long, encoding and decoding will take a lot of time.",
+            )
         self.length_examine = True
 
         verify_matrix = []
@@ -89,19 +96,26 @@ class RS:
         """
         if len(input_list) / 8 + self.check_size > 255:
             if self.length_examine is False:
-                log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Data length is too long, encoding and decoding will take a lot of time.")
+                log.output(
+                    log.WARN,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Data length is too long, encoding and decoding will take a lot of time.",
+                )
 
         input_list = self.__binary_to_decimal__(input_list)
         output_list = [0] * (len(input_list) + self.check_size)
-        output_list[:len(input_list)] = input_list
+        output_list[: len(input_list)] = input_list
         for data_index in range(len(input_list)):
             coefficient = output_list[data_index]
             if coefficient != 0:
                 for rs_index in range(len(self.rs_generator)):
-                    output_list[data_index + rs_index] ^= self.__galois_field_multiply__(self.rs_generator[rs_index],
-                                                                                         coefficient)
-        output_list[:len(input_list)] = input_list
+                    output_list[
+                        data_index + rs_index
+                    ] ^= self.__galois_field_multiply__(
+                        self.rs_generator[rs_index], coefficient
+                    )
+        output_list[: len(input_list)] = input_list
         output_list = self.__decimal_to_binary__(output_list)
         return output_list
 
@@ -117,8 +131,12 @@ class RS:
                         Type: Two-dimensional list(int).
         """
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Remove the error correction for matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Remove the error correction for matrix.",
+        )
         matrix = []
         for row in range(len(verity_matrix)):
             matrix.append(self.remove_for_list(verity_matrix[row]))
@@ -135,7 +153,7 @@ class RS:
         :return output_list: Origin list.
                              Type: One-dimensional list(int).
         """
-        output_list = input_list[:-self.check_size * 8]
+        output_list = input_list[: -self.check_size * 8]
         return output_list
 
     def verify_for_matrix(self, verity_matrix):
@@ -149,8 +167,12 @@ class RS:
                         Type: Two-dimensional list(int).
         """
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Verify and repair the matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Verify and repair the matrix.",
+        )
         matrix = []
         for row in range(len(verity_matrix)):
             matrix.append(self.verify_for_list(verity_matrix[row], row))
@@ -171,8 +193,12 @@ class RS:
                              Type: One-dimensional list(int).
         """
         if row in None:
-            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Verify and repair the list.")
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Verify and repair the list.",
+            )
 
         output_list = self.__binary_to_decimal__(input_list)
         # find erasures
@@ -183,37 +209,68 @@ class RS:
                 erasure_positions.append(index)
         if len(erasure_positions) > self.check_size:
             if row is not None:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Row" + str(row) + " has too many erasures to correct!")
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Row" + str(row) + " has too many erasures to correct!",
+                )
             else:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Too many erasures to correct!")
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Too many erasures to correct!",
+                )
 
-        syndromes = [self.__galois_field_evaluate__(output_list,
-                                                    self.galois_field_exp[i]) for i in range(self.check_size)]
+        syndromes = [
+            self.__galois_field_evaluate__(output_list, self.galois_field_exp[i])
+            for i in range(self.check_size)
+        ]
         if max(syndromes) == 0:
             output_list = self.__decimal_to_binary__(output_list)
             return output_list
 
-        forney_syndromes = self.__forney_syndromes__(syndromes, erasure_positions, len(output_list))
+        forney_syndromes = self.__forney_syndromes__(
+            syndromes, erasure_positions, len(output_list)
+        )
         error_positions = self.__find_errors__(forney_syndromes, len(output_list), row)
         if erasure_positions is None:
             output_list = self.__decimal_to_binary__(output_list)
             return output_list
 
-        output_list = self.__correct_errata__(output_list, syndromes, erasure_positions + error_positions)
-        if max([self.__galois_field_evaluate__(output_list, self.galois_field_exp[i])
-                for i in range(self.check_size)]) > 0:
+        output_list = self.__correct_errata__(
+            output_list, syndromes, erasure_positions + error_positions
+        )
+        if (
+            max(
+                [
+                    self.__galois_field_evaluate__(
+                        output_list, self.galois_field_exp[i]
+                    )
+                    for i in range(self.check_size)
+                ]
+            )
+            > 0
+        ):
             if row is not None:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Row" + str(row) + "could not be correct!")
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Row" + str(row) + "could not be correct!",
+                )
             else:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Could not be correct!")
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Could not be correct!",
+                )
         output_list = self.__decimal_to_binary__(output_list)
         return output_list
 
-# ================================================= other parts ========================================================
+    # ================================================= other parts ========================================================
 
     def __binary_to_decimal__(self, binary):
         """
@@ -228,7 +285,7 @@ class RS:
         """
         decimal = []
         for index in range(0, len(binary), 8):
-            decimal.append(int("".join(list(map(str, binary[index: index + 8]))), 2))
+            decimal.append(int("".join(list(map(str, binary[index : index + 8]))), 2))
         return decimal
 
     def __decimal_to_binary__(self, decimal):
@@ -256,7 +313,9 @@ class RS:
         """
         generator = [1]
         for index in range(self.check_size):
-            generator = self.__galois_field_polynomial_multiply__(generator, [1, self.galois_field_exp[index]])
+            generator = self.__galois_field_polynomial_multiply__(
+                generator, [1, self.galois_field_exp[index]]
+            )
         return generator
 
     def __forney_syndromes__(self, syndromes, erasure_positions, length):
@@ -275,8 +334,12 @@ class RS:
         for index in range(len(erasure_positions)):
             value = self.galois_field_exp[length - 1 - erasure_positions[index]]
             for j in range(len(forney_syndromes) - 1):
-                forney_syndromes[j] = self.__galois_field_polynomial_multiply__(forney_syndromes[j], value) \
-                                      ^ forney_syndromes[j + 1]
+                forney_syndromes[j] = (
+                    self.__galois_field_polynomial_multiply__(
+                        forney_syndromes[j], value
+                    )
+                    ^ forney_syndromes[j + 1]
+                )
             forney_syndromes.pop()
 
         return forney_syndromes
@@ -297,29 +360,46 @@ class RS:
             old_polynomial.append(0)
             delta = syndromes[index]
             for position in range(1, len(error_polynomial)):
-                delta ^= self.__galois_field_multiply__(error_polynomial[len(error_polynomial) - 1 - position],
-                                                        syndromes[index - position])
+                delta ^= self.__galois_field_multiply__(
+                    error_polynomial[len(error_polynomial) - 1 - position],
+                    syndromes[index - position],
+                )
             if delta != 0:
                 if len(old_polynomial) > len(error_polynomial):
                     new_polynomial = self.__galois_field_scale__(old_polynomial, delta)
-                    old_polynomial = self.__galois_field_scale__(error_polynomial,
-                                                                 self.__galois_field_division__(1, delta))
+                    old_polynomial = self.__galois_field_scale__(
+                        error_polynomial, self.__galois_field_division__(1, delta)
+                    )
                     error_polynomial = new_polynomial
-                error_polynomial = self.__galois_field_add__(error_polynomial,
-                                                             self.__galois_field_scale__(old_polynomial, delta))
+                error_polynomial = self.__galois_field_add__(
+                    error_polynomial, self.__galois_field_scale__(old_polynomial, delta)
+                )
 
         errors = len(error_polynomial) - 1
         if errors * 2 > len(syndromes):
             if row is not None:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Row" + str(row) + " has too many erasures to correct!")
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Row" + str(row) + " has too many erasures to correct!",
+                )
             else:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Too many erasures to correct!")
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Too many erasures to correct!",
+                )
         # find zeros of error polynomial
         error_positions = []
         for index in range(length):
-            if self.__galois_field_evaluate__(error_polynomial, self.galois_field_exp[255 - index]) == 0:
+            if (
+                self.__galois_field_evaluate__(
+                    error_polynomial, self.galois_field_exp[255 - index]
+                )
+                == 0
+            ):
                 error_positions.append(length - 1 - index)
         if len(error_positions) != errors:
             # couldn't find error locations
@@ -344,20 +424,24 @@ class RS:
             locators = self.__galois_field_polynomial_multiply__(locators, [value, 1])
 
         # calculate error evaluator polynomial
-        polynomial = syndromes[0:len(positions)]
+        polynomial = syndromes[0 : len(positions)]
         polynomial.reverse()
         polynomial = self.__galois_field_polynomial_multiply__(polynomial, locators)
-        polynomial = polynomial[len(polynomial) - len(positions):len(polynomial)]
+        polynomial = polynomial[len(polynomial) - len(positions) : len(polynomial)]
 
         # formal derivative of error locator eliminates even terms
-        locators = locators[len(locators) & 1:len(locators):2]
+        locators = locators[len(locators) & 1 : len(locators) : 2]
         # compute corrections
         for index in range(0, len(positions)):
             value1 = self.galois_field_exp[positions[index] + 256 - len(input_list)]
             value2 = self.__galois_field_evaluate__(polynomial, value1)
-            value3 = self.__galois_field_evaluate__(locators, self.__galois_field_multiply__(value1, value1))
+            value3 = self.__galois_field_evaluate__(
+                locators, self.__galois_field_multiply__(value1, value1)
+            )
             value4 = self.__galois_field_multiply__(value1, value3)
-            input_list[positions[index]] ^= self.__galois_field_division__(value2, value4)
+            input_list[positions[index]] ^= self.__galois_field_division__(
+                value2, value4
+            )
 
         return input_list
 
@@ -390,7 +474,9 @@ class RS:
         """
         if value1 == 0 or value2 == 0:
             return 0
-        return self.galois_field_exp[self.galois_field_log[value1] + self.galois_field_log[value2]]
+        return self.galois_field_exp[
+            self.galois_field_log[value1] + self.galois_field_log[value2]
+        ]
 
     def __galois_field_polynomial_multiply__(self, galois_field_1, galois_field_2):
         result = [0] * (len(galois_field_1) + len(galois_field_2) - 1)
@@ -399,8 +485,9 @@ class RS:
                 if galois_field_1[index_1] == 0 or galois_field_2[index_2] == 0:
                     result[index_1 + index_2] ^= 0
                 else:
-                    result[index_1 + index_2] ^= self.__galois_field_multiply__(galois_field_1[index_1],
-                                                                                galois_field_2[index_2])
+                    result[index_1 + index_2] ^= self.__galois_field_multiply__(
+                        galois_field_1[index_1], galois_field_2[index_2]
+                    )
         return result
 
     def __galois_field_division__(self, value1, value2):  # x / y on gf_exp
@@ -417,8 +504,9 @@ class RS:
             raise ZeroDivisionError()
         if value1 == 0:
             return 0
-        return self.galois_field_exp[self.galois_field_log[value1] + 255 -
-                                     self.galois_field_log[value2]]
+        return self.galois_field_exp[
+            self.galois_field_log[value1] + 255 - self.galois_field_log[value2]
+        ]
 
     def __galois_field_scale__(self, galois_field, value):
         """
@@ -431,7 +519,10 @@ class RS:
         :return result:
         """
         # p_list * x on gf_exp # [(p[0] * x), (p[1] * x), ...]
-        return [self.__galois_field_multiply__(galois_field[i], value) for i in range(0, len(galois_field))]
+        return [
+            self.__galois_field_multiply__(galois_field[i], value)
+            for i in range(0, len(galois_field))
+        ]
 
     def __galois_field_evaluate__(self, galois_field, value):
         """
@@ -445,6 +536,8 @@ class RS:
         """
         new_galois_field = galois_field[0]
         for index in range(1, len(galois_field)):
-            new_value = self.galois_field_exp[self.galois_field_log[new_galois_field] + self.galois_field_log[value]]
+            new_value = self.galois_field_exp[
+                self.galois_field_log[new_galois_field] + self.galois_field_log[value]
+            ]
             new_galois_field = new_value ^ galois_field[index]
         return new_galois_field

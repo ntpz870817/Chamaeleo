@@ -8,10 +8,10 @@ Current Version: 1
 Function(s): The Feasibility of Testing the Whole Process of Simple
 """
 
-import methods.sc as simple
+import Chamaeleo.methods.sc as simple
 
-import utils.model_saver as saver
-import utils.data_handle as data_handle
+import Chamaeleo.utils.model_saver as saver
+import Chamaeleo.utils.data_handle as data_handle
 
 
 read_file_path = "..\\..\\test\\test_files\\books\\A Tale of Two Cities.pdf"
