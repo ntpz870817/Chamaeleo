@@ -1,6 +1,3 @@
-math
-struct
-datetime
 numpy
 pickle
 virtualenv==16.6.0
