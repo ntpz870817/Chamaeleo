@@ -172,7 +172,7 @@ def cg_content(dna_motif, max_content):
 
     :return: Whether DNA motif conforms to the friendliness or not.
     """
-    return (1 - max_content) < float(dna_motif.count("C") + dna_motif.count("G")) / len(dna_motif) < max_content
+    return (1 - max_content) <= float(dna_motif.count("C") + dna_motif.count("G")) / len(dna_motif) <= max_content
 
 
 # noinspection PyUnusedLocal
