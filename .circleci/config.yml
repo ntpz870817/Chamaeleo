@@ -44,7 +44,7 @@ jobs:
           name: check style
           command: |
             . venv/bin/activate
-            pycodestyle *.py —-ignore=E501
+            pycodestyle —-ignore=E501 *.py
 
       # run tests!
       # this example uses Django's built-in test-runner
