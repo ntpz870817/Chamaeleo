@@ -19,7 +19,7 @@ import sys
 import numpy
 
 import Chamaeleo.methods.components.inherent as inherent
-import Chamaeleo.methods.components.validity as motif_friendly
+import Chamaeleo.methods.components.motif_validity as motif_friendly
 import Chamaeleo.utils.log as log
 import Chamaeleo.utils.monitor as monitor
 
