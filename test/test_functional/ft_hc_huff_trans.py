@@ -10,9 +10,9 @@ Function(s): The reliability of Huffman code transformation
 
 import random
 
-import methods.hc as hc
+import Chamaeleo.methods.hc as hc
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     tool = hc.HC()
     tool.__huffman_dict__()
     tool.segment_length = 120

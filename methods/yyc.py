@@ -15,22 +15,27 @@ Advantages: (1) High compressibility, maximum compressibility to 1/2 of the orig
             (3) Increase the number of sequence changes (1,536 cases), increasing data security.
 """
 
-import random
 import sys
 import numpy
-import methods.components.inherent as inherent
-import methods.components.validity as motif_friendly
-import methods.components.index_operator as index_data
-import utils.log as log
-import utils.monitor as monitor
+
+import Chamaeleo.methods.components.inherent as inherent
+import Chamaeleo.methods.components.validity as motif_friendly
+import Chamaeleo.utils.log as log
+import Chamaeleo.utils.monitor as monitor
 
 
 # noinspection PyProtectedMember, PyUnresolvedReferences,PyMethodMayBeStatic
 # noinspection PyUnusedLocal,PyBroadException,PyArgumentList
 class YYC:
-
-    def __init__(self, base_reference=None, current_code_matrix=None, support_bases=None, support_spacing=0,
-                 max_ratio=0.8, search_count=1):
+    def __init__(
+        self,
+        base_reference=None,
+        current_code_matrix=None,
+        support_bases=None,
+        support_spacing=0,
+        max_ratio=0.8,
+        search_count=1,
+    ):
         """
         introduction: The initialization method of YYC.
 
@@ -63,12 +68,23 @@ class YYC:
         if not base_reference:
             base_reference = [0, 0, 1, 1]
         if not current_code_matrix:
-            current_code_matrix = [[1, 0, 1, 0], [1, 0, 1, 0], [0, 1, 0, 1], [0, 1, 0, 1]]
+            current_code_matrix = [
+                [1, 0, 1, 0],
+                [1, 0, 1, 0],
+                [0, 1, 0, 1],
+                [0, 1, 0, 1],
+            ]
         if not support_bases:
             support_bases = [inherent.index_base.get(0)]
 
         # Detect parameters correctness
-        self.__init_check__(support_bases, support_spacing, base_reference, current_code_matrix, max_ratio)
+        self.__init_check__(
+            support_bases,
+            support_spacing,
+            base_reference,
+            current_code_matrix,
+            max_ratio,
+        )
 
         # Assign input data to class variables
         self.base_reference = base_reference
@@ -80,7 +96,14 @@ class YYC:
         self.file_size = 0
         self.monitor = monitor.Monitor()
 
-    def __init_check__(self, support_bases, support_spacing, base_reference, current_code_matrix, max_ratio):
+    def __init_check__(
+        self,
+        support_bases,
+        support_spacing,
+        base_reference,
+        current_code_matrix,
+        max_ratio,
+    ):
         """
         introduction: The verification of initialization parameters.
 
@@ -108,56 +131,117 @@ class YYC:
                            Make sure that max ratio must more than 50% and less than 100%..
 
         """
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Create the YYC method.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Create the YYC method.",
+        )
 
         # Check support bases
         for index in range(len(support_bases)):
-            if support_bases[index] != 'A' and support_bases[index] != 'T' and support_bases[index] != 'C' and \
-                            support_bases[index] != 'G':
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Only A, T, C, and G can be included in the support bases, "
-                           "and the support bases[" + str(index) + "] has entered " + str(support_bases[index] + "!"))
+            if (
+                support_bases[index] != "A"
+                and support_bases[index] != "T"
+                and support_bases[index] != "C"
+                and support_bases[index] != "G"
+            ):
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Only A, T, C, and G can be included in the support bases, "
+                    "and the support bases["
+                    + str(index)
+                    + "] has entered "
+                    + str(support_bases[index] + "!"),
+                )
         if len(support_bases) < support_spacing + 1:
-            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "The count of support base needs more than support spacing!")
+            log.output(
+                log.ERROR,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "The count of support base needs more than support spacing!",
+            )
 
         # Check base reference (rule 1)
         for index in range(len(base_reference)):
             if base_reference[index] != 0 and base_reference[index] != 1:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Only 0 and 1 can be included in the base reference, "
-                           "and base_reference[" + str(index) + "] has entered " + str(base_reference[index] + "!"))
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Only 0 and 1 can be included in the base reference, "
+                    "and base_reference["
+                    + str(index)
+                    + "] has entered "
+                    + str(base_reference[index] + "!"),
+                )
         if sum(base_reference) != 2:
-            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Wrong correspondence between base and binary data!")
+            log.output(
+                log.ERROR,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Wrong correspondence between base and binary data!",
+            )
 
         # Check current code matrix (rule 2)
         for row in range(len(current_code_matrix)):
             for col in range(len(current_code_matrix[row])):
-                if current_code_matrix[row][col] != 0 and current_code_matrix[row][col] != 1:
-                    log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                               "Only 0 and 1 can be included in the current code matrix, "
-                               "and the current code matrix [" + str(row) + ", " + str(col) + "] has entered " + str(
-                                   current_code_matrix[row][col] + "!"))
+                if (
+                    current_code_matrix[row][col] != 0
+                    and current_code_matrix[row][col] != 1
+                ):
+                    log.output(
+                        log.ERROR,
+                        str(__name__),
+                        str(sys._getframe().f_code.co_name),
+                        "Only 0 and 1 can be included in the current code matrix, "
+                        "and the current code matrix ["
+                        + str(row)
+                        + ", "
+                        + str(col)
+                        + "] has entered "
+                        + str(current_code_matrix[row][col] + "!"),
+                    )
         for row in range(len(current_code_matrix)):
             for col in range(0, len(current_code_matrix[row]) - 1, 2):
-                if current_code_matrix[row][col] + current_code_matrix[row][col + 1] == 1 \
-                        and current_code_matrix[row][col] * current_code_matrix[row][col + 1] == 0:
+                if (
+                    current_code_matrix[row][col] + current_code_matrix[row][col + 1]
+                    == 1
+                    and current_code_matrix[row][col]
+                    * current_code_matrix[row][col + 1]
+                    == 0
+                ):
                     continue
                 else:
-                    log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                               "Wrong current code matrix, "
-                               "the error locations are [" + str(row) + ", " + str(col) + "] and [" + str(
-                                   row) + ", " + str(col) + "]! "
-                                                            "Rules are that they add up to 1 and multiply by 0.")
+                    log.output(
+                        log.ERROR,
+                        str(__name__),
+                        str(sys._getframe().f_code.co_name),
+                        "Wrong current code matrix, "
+                        "the error locations are ["
+                        + str(row)
+                        + ", "
+                        + str(col)
+                        + "] and ["
+                        + str(row)
+                        + ", "
+                        + str(col)
+                        + "]! "
+                        "Rules are that they add up to 1 and multiply by 0.",
+                    )
 
         # Check max ratio
         if max_ratio <= 0.5 or max_ratio >= 1:
-            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Wrong max ratio (" + str(max_ratio) + ")!")
+            log.output(
+                log.ERROR,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Wrong max ratio (" + str(max_ratio) + ")!",
+            )
 
-# ================================================= encode part ========================================================
+    # ================================================= encode part ========================================================
 
     def encode(self, matrix, size):
         """
@@ -176,18 +260,30 @@ class YYC:
         self.file_size = size
 
         self.monitor.restore()
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Separate good data from bad data.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Separate good data from bad data.",
+        )
         good_data_set, bad_data_set = self.__divide_library__(matrix)
 
         self.monitor.restore()
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Random pairing and friendly testing.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Random pairing and friendly testing.",
+        )
         data_set = self.__pairing__(good_data_set, bad_data_set)
 
         self.monitor.restore()
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Convert to DNA motif string set.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Convert to DNA motif string set.",
+        )
         dna_motifs = self.__synthesis_motifs__(data_set)
 
         return dna_motifs
@@ -206,14 +302,19 @@ class YYC:
 
         bad_indexes = []
         for row in range(len(matrix)):
-            if numpy.sum(matrix[row]) > len(matrix[row]) * self.max_ratio or numpy.sum(matrix[row]) < len(
-                    matrix[row]) * (1 - self.max_ratio):
+            if numpy.sum(matrix[row]) > len(matrix[row]) * self.max_ratio or numpy.sum(
+                matrix[row]
+            ) < len(matrix[row]) * (1 - self.max_ratio):
                 bad_indexes.append(row)
 
         if len(matrix) < len(bad_indexes) * 5:
-            log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
-                       "There may be a large number of motifs that are difficult to use. "
-                       "We recommend stopping and modifying the rules.")
+            log.output(
+                log.WARN,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "There may be a large number of motifs that are difficult to use. "
+                "We recommend stopping and modifying the rules.",
+            )
 
         if len(bad_indexes) == 0 and len(matrix) == 0:
             return None, None
@@ -269,8 +370,12 @@ class YYC:
             good_indexes = set(str(i) for i in range(len(good_data_set)))
             bad_indexes = set(str(i) for i in range(0))
         else:
-            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "YYC did not receive matrix data!")
+            log.output(
+                log.ERROR,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "YYC did not receive matrix data!",
+            )
 
         for index in range(0, len(good_data_set) + len(bad_data_set), 2):
             self.monitor.output(index, len(good_data_set) + len(bad_data_set))
@@ -279,9 +384,14 @@ class YYC:
                     for search_index in range(self.search_count):
                         good_index = int(good_indexes.pop())
                         bad_index = int(bad_indexes.pop())
-                        if search_index >= self.search_count - 1 or \
-                            motif_friendly.friendly_check(self.__list_to_motif__(good_data_set[good_index],
-                                                                                 bad_data_set[bad_index])):
+                        if (
+                            search_index >= self.search_count - 1
+                            or motif_friendly.friendly_check(
+                                self.__list_to_motif__(
+                                    good_data_set[good_index], bad_data_set[bad_index]
+                                )
+                            )
+                        ):
                             data_set.append(good_data_set[good_index])
                             data_set.append(bad_data_set[bad_index])
                             break
@@ -293,9 +403,15 @@ class YYC:
                     for search_index in range(self.search_count):
                         good_index1 = int(good_indexes.pop())
                         good_index2 = int(good_indexes.pop())
-                        if search_index >= self.search_count - 1 or \
-                            motif_friendly.friendly_check(self.__list_to_motif__(good_data_set[good_index1],
-                                                                                 good_data_set[good_index2])):
+                        if (
+                            search_index >= self.search_count - 1
+                            or motif_friendly.friendly_check(
+                                self.__list_to_motif__(
+                                    good_data_set[good_index1],
+                                    good_data_set[good_index2],
+                                )
+                            )
+                        ):
                             data_set.append(good_data_set[good_index1])
                             data_set.append(good_data_set[good_index2])
                             break
@@ -307,9 +423,14 @@ class YYC:
                     for search_index in range(self.search_count):
                         bad_index1 = int(bad_indexes.pop())
                         bad_index2 = int(bad_indexes.pop())
-                        if search_index >= self.search_count - 1 or \
-                                motif_friendly.friendly_check(self.__list_to_motif__(bad_data_set[bad_index1],
-                                                                                     bad_data_set[bad_index2])):
+                        if (
+                            search_index >= self.search_count - 1
+                            or motif_friendly.friendly_check(
+                                self.__list_to_motif__(
+                                    bad_data_set[bad_index1], bad_data_set[bad_index2]
+                                )
+                            )
+                        ):
                             data_set.append(bad_data_set[bad_index1])
                             data_set.append(bad_data_set[bad_index2])
                         else:
@@ -317,11 +438,18 @@ class YYC:
                             bad_indexes.add(str(bad_index2))
                             index -= 1
                 else:
-                    log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                               "Pairing wrong in YYC pairing!")
+                    log.output(
+                        log.ERROR,
+                        str(__name__),
+                        str(sys._getframe().f_code.co_name),
+                        "Pairing wrong in YYC pairing!",
+                    )
             else:
-                data_set.append(good_data_set[int(good_indexes.pop())]
-                                if len(good_indexes) != 0 else bad_data_set[int(bad_indexes.pop())])
+                data_set.append(
+                    good_data_set[int(good_indexes.pop())]
+                    if len(good_indexes) != 0
+                    else bad_data_set[int(bad_indexes.pop())]
+                )
 
         del good_indexes, good_data_set, bad_indexes, bad_data_set
 
@@ -342,7 +470,9 @@ class YYC:
         for row in range(0, len(data_set), 2):
             self.monitor.output(row, len(data_set))
             if row < len(data_set) - 1:
-                dna_motifs.append(self.__list_to_motif__(data_set[row], data_set[row + 1]))
+                dna_motifs.append(
+                    self.__list_to_motif__(data_set[row], data_set[row + 1])
+                )
             else:
                 dna_motifs.append(self.__list_to_motif__(data_set[row], None))
 
@@ -369,18 +499,34 @@ class YYC:
         for col in range(len(upper_list)):
             if lower_list is not None:
                 if col > self.support_spacing:
-                    dna_motif.append(self.__binary_to_base__(upper_list[col], lower_list[col],
-                                                             dna_motif[col - (self.support_spacing + 1)]))
+                    dna_motif.append(
+                        self.__binary_to_base__(
+                            upper_list[col],
+                            lower_list[col],
+                            dna_motif[col - (self.support_spacing + 1)],
+                        )
+                    )
                 else:
-                    dna_motif.append(self.__binary_to_base__(upper_list[col], lower_list[col],
-                                                             self.support_bases[col]))
+                    dna_motif.append(
+                        self.__binary_to_base__(
+                            upper_list[col], lower_list[col], self.support_bases[col]
+                        )
+                    )
             else:
                 if col > self.support_spacing:
-                    dna_motif.append(self.__binary_to_base__(upper_list[col], upper_list[col],
-                                                             dna_motif[col - (self.support_spacing + 1)]))
+                    dna_motif.append(
+                        self.__binary_to_base__(
+                            upper_list[col],
+                            upper_list[col],
+                            dna_motif[col - (self.support_spacing + 1)],
+                        )
+                    )
                 else:
-                    dna_motif.append(self.__binary_to_base__(upper_list[col], upper_list[col],
-                                                             self.support_bases[col]))
+                    dna_motif.append(
+                        self.__binary_to_base__(
+                            upper_list[col], upper_list[col], self.support_bases[col]
+                        )
+                    )
         return dna_motif
 
     def __binary_to_base__(self, upper_bit, lower_bit, support_base):
@@ -405,14 +551,16 @@ class YYC:
                 current_options.append(index)
 
         one_base = None
-        if self.current_code_matrix[inherent.base_index.get(support_base)][current_options[0]] == int(lower_bit):
+        if self.current_code_matrix[inherent.base_index.get(support_base)][
+            current_options[0]
+        ] == int(lower_bit):
             one_base = inherent.index_base[current_options[0]]
         else:
             one_base = inherent.index_base[current_options[1]]
 
         return one_base
 
-# ================================================= decode part ========================================================
+    # ================================================= decode part ========================================================
 
     def decode(self, dna_motifs):
         """
@@ -429,12 +577,20 @@ class YYC:
         """
 
         if not dna_motifs:
-            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "DNA motif string set is None")
+            log.output(
+                log.ERROR,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "DNA motif string set is None",
+            )
 
         self.monitor.restore()
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Convert DNA motifs to binary matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Convert DNA motifs to binary matrix.",
+        )
         matrix = self.__convert_binaries__(dna_motifs)
 
         self.monitor.restore()
@@ -456,7 +612,9 @@ class YYC:
 
         for row in range(len(dna_motifs)):
             self.monitor.output(row, len(dna_motifs))
-            upper_row_datas, lower_row_datas = self.__dna_motif_to_binaries__(dna_motifs[row])
+            upper_row_datas, lower_row_datas = self.__dna_motif_to_binaries__(
+                dna_motifs[row]
+            )
             matrix.append(upper_row_datas)
             if upper_row_datas != lower_row_datas:
                 matrix.append(lower_row_datas)
@@ -481,12 +639,15 @@ class YYC:
 
         for col in range(len(dna_motif)):
             if col > self.support_spacing:
-                upper_binary, lower_binary = self.__base_to_binary__(dna_motif[col],
-                                                                     dna_motif[col - (self.support_spacing + 1)])
+                upper_binary, lower_binary = self.__base_to_binary__(
+                    dna_motif[col], dna_motif[col - (self.support_spacing + 1)]
+                )
                 upper_row_list.append(upper_binary)
                 lower_row_list.append(lower_binary)
             else:
-                upper_binary, lower_binary = self.__base_to_binary__(dna_motif[col], self.support_bases[col])
+                upper_binary, lower_binary = self.__base_to_binary__(
+                    dna_motif[col], self.support_bases[col]
+                )
                 upper_row_list.append(upper_binary)
                 lower_row_list.append(lower_binary)
 
@@ -505,5 +666,7 @@ class YYC:
                                        Type: int, int
         """
         upper_bit = self.base_reference[inherent.base_index[current_base]]
-        lower_bit = self.current_code_matrix[inherent.base_index[support_base]][inherent.base_index[current_base]]
+        lower_bit = self.current_code_matrix[inherent.base_index[support_base]][
+            inherent.base_index[current_base]
+        ]
         return upper_bit, lower_bit

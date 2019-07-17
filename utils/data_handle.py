@@ -13,8 +13,8 @@ import struct
 import math
 import sys
 
-import utils.log as log
-import utils.monitor as monitor
+import Chamaeleo.utils.log as log
+import Chamaeleo.utils.monitor as monitor
 
 
 # noinspection PyUnresolvedReferences,

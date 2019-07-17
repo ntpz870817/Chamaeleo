@@ -7,13 +7,12 @@ Current Version: 1
 
 Function(s): The Feasibility of Testing the Whole Process of DDC
 """
-import sys
 
-import methods.ddc as ddc
-import methods.components.index_operator as index_operator
+import Chamaeleo.methods.ddc as ddc
+import Chamaeleo.methods.components.index_operator as index_operator
 
-import utils.model_saver as saver
-import utils.data_handle as data_handle
+import Chamaeleo.utils.model_saver as saver
+import Chamaeleo.utils.data_handle as data_handle
 
 read_file_path = "..\\..\\test\\test_files\\books\\A Tale of Two Cities.pdf"
 write_file_path = "..\\..\\test\\generated_files\\target.pdf"
@@ -22,7 +21,7 @@ dna_path = "..\\..\\test\\generated_files\\target.dna"
 
 model_path = "..\\..\\test\\generated_files\\ddc.pkl"
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     input_matrix, size = data_handle.read_binary_from_all(read_file_path)
     input_matrix = index_operator.connect_all(input_matrix)
     tool = ddc.DDC()
@@ -37,4 +36,3 @@ if __name__ == '__main__':
     indexes, data_set = index_operator.divide_all(output_matrix)
     output_matrix = index_operator.sort_order(indexes, data_set)
     data_handle.write_all_from_binary(write_file_path, output_matrix, size)
-

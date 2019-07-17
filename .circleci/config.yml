@@ -32,6 +32,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
+            pip install --upgrade pip
             pip install -r requirements.txt
 
       - save_cache:
@@ -43,7 +44,8 @@ jobs:
           name: check style
           command: |
             . venv/bin/activate
-            pycodestyle *.py
+            pycodestyle --ignore=E501,E203,E731,W503 *.py */*py
+            python3 setup.py install
 
       # run tests!
       # this example uses Django's built-in test-runner

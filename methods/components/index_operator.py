@@ -12,8 +12,8 @@ Function(s): (1) Connect index (to binary) to binary data, one or all.
 
 import sys
 
-import utils.monitor as monitor
-import utils.log as log
+import Chamaeleo.utils.monitor as monitor
+import Chamaeleo.utils.log as log
 
 
 def connect_all(matrix):
@@ -29,8 +29,12 @@ def connect_all(matrix):
     m = monitor.Monitor()
     index_binary_length = int(len(str(bin(len(matrix)))) - 2)
 
-    log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-               "Add index in the binary matrix.")
+    log.output(
+        log.NORMAL,
+        str(__name__),
+        str(sys._getframe().f_code.co_name),
+        "Add index in the binary matrix.",
+    )
 
     new_matrix = []
     for row in range(len(matrix)):
@@ -79,8 +83,12 @@ def divide_all(matrix):
     m = monitor.Monitor()
     index_binary_length = int(len(str(bin(len(matrix)))) - 2)
 
-    log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-               "Divide index and data from binary matrix.")
+    log.output(
+        log.NORMAL,
+        str(__name__),
+        str(sys._getframe().f_code.co_name),
+        "Divide index and data from binary matrix.",
+    )
 
     indexs = []
     datas = []
@@ -132,8 +140,12 @@ def sort_order(indexes, data_set):
     """
     m = monitor.Monitor()
 
-    log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-               "Restore the disrupted data order.")
+    log.output(
+        log.NORMAL,
+        str(__name__),
+        str(sys._getframe().f_code.co_name),
+        "Restore the disrupted data order.",
+    )
 
     # noinspection PyUnusedLocal
     matrix = [[0 for col in range(len(data_set[0]))] for row in range(len(indexes))]
