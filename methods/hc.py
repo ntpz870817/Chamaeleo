@@ -12,9 +12,9 @@ Function(s): (1) DNA encoding by Huffman Codec.
 """
 import re
 import sys
-import utils.monitor as monitor
-import utils.log as log
-import methods.components.inherent as inherent
+import Chamaeleo.utils.monitor as monitor
+import Chamaeleo.utils.log as log
+import Chamaeleo.methods.components.inherent as inherent
 
 
 # noinspection PyProtectedMember,PyMethodMayBeStatic,PyTypeChecker,PyUnusedLocal
@@ -27,8 +27,12 @@ class HC:
                                In order to reduce the possible loss of function storage, we recommend using this dictionary.
         """
 
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Create the Huffman Codec method.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Create the Huffman Codec method.",
+        )
 
         self.huffman_tree = None
         self.segment_length = 0
@@ -36,7 +40,7 @@ class HC:
         self.file_size = 0
         self.m = monitor.Monitor()
 
-# ================================================= encode part ========================================================
+    # ================================================= encode part ========================================================
 
     def encode(self, matrix, size):
         """
@@ -57,21 +61,31 @@ class HC:
         self.segment_length = len(matrix[0])
 
         self.m.restore()
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Generate the huffman dictionary.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Generate the huffman dictionary.",
+        )
         if self.fixed_huffman:
             self.__huffman_dict__()
         else:
             self.__huffman_dict__(matrix)
 
         self.m.restore()
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Convert matrix to dna motif set.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Convert matrix to dna motif set.",
+        )
         dna_motifs = []
 
         for row in range(len(matrix)):
             self.m.output(row, len(matrix))
-            dna_motifs.append(self.__list_to_motif__(self.__huffman_compressed__(matrix[row])))
+            dna_motifs.append(
+                self.__list_to_motif__(self.__huffman_compressed__(matrix[row]))
+            )
 
         self.m.restore()
         return dna_motifs
@@ -102,7 +116,9 @@ class HC:
         ternary_list = []
 
         for list_index in range(0, len(binary_list), 8):
-            current_number = int("".join(list(map(str, binary_list[list_index: list_index + 8]))), 2)
+            current_number = int(
+                "".join(list(map(str, binary_list[list_index : list_index + 8]))), 2
+            )
             huffman_code = self.huffman_tree[current_number]
             for code_index in range(len(huffman_code)):
                 ternary_list.append(int(huffman_code[code_index]))
@@ -165,7 +181,7 @@ class HC:
             if (len(weight) - 1) % (multiple - 1) == 0:
                 break
             else:
-                weight['_' * one_byte] = 0
+                weight["_" * one_byte] = 0
         weight_list = list(weight.items())
 
         for index in range(0, (len(weight) - 1) // (multiple - 1)):
@@ -204,7 +220,7 @@ class HC:
         :return decimal_list: Decimal list.
                               Type: One-dimensional list(int)
         """
-        bit_index, temp_byte, decimal_list =  0, 0, []
+        bit_index, temp_byte, decimal_list = 0, 0, []
         for row in range(len(bit_matrix)):
             for col in range(len(bit_matrix[0])):
                 bit_index += 1
@@ -218,7 +234,7 @@ class HC:
 
         return decimal_list
 
-# ================================================= decode part ========================================================
+    # ================================================= decode part ========================================================
 
     def decode(self, dna_motifs):
         """
@@ -235,15 +251,23 @@ class HC:
         """
 
         self.m.restore()
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Convert DNA motifs to binary matrix.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Convert DNA motifs to binary matrix.",
+        )
 
         matrix = []
         index_binary_length = int(len(str(bin(len(dna_motifs)))) - 2)
 
         for index in range(len(dna_motifs)):
             self.m.output(index, len(dna_motifs))
-            matrix.append(self.__huffman_decompressed__(self.__motif_to_list__(dna_motifs[index]), index_binary_length))
+            matrix.append(
+                self.__huffman_decompressed__(
+                    self.__motif_to_list__(dna_motifs[index]), index_binary_length
+                )
+            )
 
         self.m.restore()
 
@@ -261,7 +285,9 @@ class HC:
         """
         last_base, one_list = "A", []
         for index in range(len(dna_motif)):
-            one_list.append(inherent.rotate_codes.get(last_base).index(dna_motif[index]))
+            one_list.append(
+                inherent.rotate_codes.get(last_base).index(dna_motif[index])
+            )
             last_base = dna_motif[index]
 
         return one_list
@@ -282,10 +308,19 @@ class HC:
             for tree_index in range(len(self.huffman_tree)):
                 if temp_ternary == self.huffman_tree[tree_index]:
                     if len(binary_list) + 8 < self.segment_length + index_binary_length:
-                        binary_list += list(map(int, list(str(bin(tree_index))[2:].zfill(8))))
+                        binary_list += list(
+                            map(int, list(str(bin(tree_index))[2:].zfill(8)))
+                        )
                     else:
-                        remaining_length = self.segment_length + index_binary_length - len(binary_list)
-                        binary_list += list(map(int, list(str(bin(tree_index))[2:].zfill(remaining_length))))
+                        remaining_length = (
+                            self.segment_length + index_binary_length - len(binary_list)
+                        )
+                        binary_list += list(
+                            map(
+                                int,
+                                list(str(bin(tree_index))[2:].zfill(remaining_length)),
+                            )
+                        )
                     temp_ternary = ""
                     break
 

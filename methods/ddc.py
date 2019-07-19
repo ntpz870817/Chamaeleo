@@ -17,14 +17,20 @@ Advantages: (1) High compressibility, maximum compressibility to 1/2 of the orig
 
 import sys
 
-import methods.yyc as yyc
-import utils.log as log
+import Chamaeleo.methods.yyc as yyc
+import Chamaeleo.utils.log as log
 
 
 # noinspection PyProtectedMember
 class DDC(yyc.YYC):
-
-    def __init_check__(self, support_bases, support_spacing, base_reference, current_code_matrix, max_ratio):
+    def __init_check__(
+        self,
+        support_bases,
+        support_spacing,
+        base_reference,
+        current_code_matrix,
+        max_ratio,
+    ):
         # TODO need update rules by Ping Zhi
         """
         introduction: The verification of initialization parameters in DDC.
@@ -53,69 +59,171 @@ class DDC(yyc.YYC):
                            When the (count/length) >= this parameter, we decide that this binary sequence is not good.
 
         """
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Create the DDC method.")
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Create the DDC method.",
+        )
 
         # check support bases
         for index in range(len(support_bases)):
-            if support_bases[index] != 'A' and support_bases[index] != 'T' and support_bases[index] != 'C' and support_bases[index] != 'G':
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Only A, T, C, and G can be included in the support bases, "
-                           "and the support bases[" + str(index) + "] has entered " + str(support_bases[index] + "!"))
+            if (
+                support_bases[index] != "A"
+                and support_bases[index] != "T"
+                and support_bases[index] != "C"
+                and support_bases[index] != "G"
+            ):
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Only A, T, C, and G can be included in the support bases, "
+                    "and the support bases["
+                    + str(index)
+                    + "] has entered "
+                    + str(support_bases[index] + "!"),
+                )
         if len(support_bases) < support_spacing + 1:
-            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "The count of support base needs more than support spacing!")
+            log.output(
+                log.ERROR,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "The count of support base needs more than support spacing!",
+            )
 
         # check base reference (rule 1)
         for index in range(len(base_reference)):
             if base_reference[index] != 0 and base_reference[index] != 1:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Only 0 and 1 can be included in the base reference, "
-                           "and your number " + str(index) + " has entered " + str(base_reference[index] + "!"))
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Only 0 and 1 can be included in the base reference, "
+                    "and your number "
+                    + str(index)
+                    + " has entered "
+                    + str(base_reference[index] + "!"),
+                )
         if sum(base_reference) != 2:
-            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Wrong correspondence between base and binary data!")
+            log.output(
+                log.ERROR,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Wrong correspondence between base and binary data!",
+            )
 
         # check current code matrix (rule 2)
         for row in range(len(current_code_matrix)):
             for col in range(len(current_code_matrix[row])):
-                if current_code_matrix[row][col] != 0 and current_code_matrix[row][col] != 1:
-                    log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                               "Only 0 and 1 can be included in the current code matrix, "
-                               "and the current code matrix [" + str(row) + ", " + str(col) + "] has entered " +
-                               str(current_code_matrix[row][col]) + "!")
+                if (
+                    current_code_matrix[row][col] != 0
+                    and current_code_matrix[row][col] != 1
+                ):
+                    log.output(
+                        log.ERROR,
+                        str(__name__),
+                        str(sys._getframe().f_code.co_name),
+                        "Only 0 and 1 can be included in the current code matrix, "
+                        "and the current code matrix ["
+                        + str(row)
+                        + ", "
+                        + str(col)
+                        + "] has entered "
+                        + str(current_code_matrix[row][col])
+                        + "!",
+                    )
         for row in range(len(current_code_matrix)):
             if base_reference[0] == base_reference[1]:
                 for col in range(0, len(current_code_matrix[row]) - 1, 2):
-                    if current_code_matrix[row][col] + current_code_matrix[row][col + 1] == 1 \
-                            and current_code_matrix[row][col] * current_code_matrix[row][col + 1] == 0:
+                    if (
+                        current_code_matrix[row][col]
+                        + current_code_matrix[row][col + 1]
+                        == 1
+                        and current_code_matrix[row][col]
+                        * current_code_matrix[row][col + 1]
+                        == 0
+                    ):
                         continue
                     else:
-                        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                                   "Wrong current code matrix, "
-                                   "the error locations are [" + str(row) + ", " + str(col) + "] and [" + str(row) + ", " + str(col) + "]! "
-                                   "Rules are that they add up to 1 and multiply by 0.")
+                        log.output(
+                            log.ERROR,
+                            str(__name__),
+                            str(sys._getframe().f_code.co_name),
+                            "Wrong current code matrix, "
+                            "the error locations are ["
+                            + str(row)
+                            + ", "
+                            + str(col)
+                            + "] and ["
+                            + str(row)
+                            + ", "
+                            + str(col)
+                            + "]! "
+                            "Rules are that they add up to 1 and multiply by 0.",
+                        )
             elif base_reference[0] == base_reference[2]:
                 for col in range(len(current_code_matrix[row]) - 2):
-                    if current_code_matrix[row][col] + current_code_matrix[row][col + 2] == 1 \
-                            and current_code_matrix[row][col] * current_code_matrix[row][col + 2] == 0:
+                    if (
+                        current_code_matrix[row][col]
+                        + current_code_matrix[row][col + 2]
+                        == 1
+                        and current_code_matrix[row][col]
+                        * current_code_matrix[row][col + 2]
+                        == 0
+                    ):
                         continue
                     else:
-                        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                                   "Wrong current code matrix, "
-                                   "the error locations are [" + str(row) + ", " + str(col) + "] and [" + str(row) + ", " + str(col) + "]! "
-                                   "Rules are that they add up to 1 and multiply by 0.")
+                        log.output(
+                            log.ERROR,
+                            str(__name__),
+                            str(sys._getframe().f_code.co_name),
+                            "Wrong current code matrix, "
+                            "the error locations are ["
+                            + str(row)
+                            + ", "
+                            + str(col)
+                            + "] and ["
+                            + str(row)
+                            + ", "
+                            + str(col)
+                            + "]! "
+                            "Rules are that they add up to 1 and multiply by 0.",
+                        )
 
             else:
                 for col in range(len(current_code_matrix[row]) - 3):
-                    if current_code_matrix[row][col] + current_code_matrix[row][col + 3] == 1 and current_code_matrix[row][col] * current_code_matrix[row][col + 3] == 0:
+                    if (
+                        current_code_matrix[row][col]
+                        + current_code_matrix[row][col + 3]
+                        == 1
+                        and current_code_matrix[row][col]
+                        * current_code_matrix[row][col + 3]
+                        == 0
+                    ):
                         continue
                     else:
-                        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                                   "Wrong current code matrix, "
-                                   "the error locations are [" + str(row) + ", " + str(col) + "] and [" + str(row) + ", " + str(col) + "]! "
-                                   "Rules are that they add up to 1 and multiply by 0.")
+                        log.output(
+                            log.ERROR,
+                            str(__name__),
+                            str(sys._getframe().f_code.co_name),
+                            "Wrong current code matrix, "
+                            "the error locations are ["
+                            + str(row)
+                            + ", "
+                            + str(col)
+                            + "] and ["
+                            + str(row)
+                            + ", "
+                            + str(col)
+                            + "]! "
+                            "Rules are that they add up to 1 and multiply by 0.",
+                        )
         # check max ratio
         if max_ratio <= 0.5 or max_ratio >= 1:
-            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Wrong max ratio (" + str(max_ratio) + ")!")
+            log.output(
+                log.ERROR,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Wrong max ratio (" + str(max_ratio) + ")!",
+            )
