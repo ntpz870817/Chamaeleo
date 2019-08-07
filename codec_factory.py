@@ -155,7 +155,7 @@ def decode(
 
         dna_motifs = data_handle.read_dna_file(input_path)
 
-        output_matrix = method.decode(dna_motifs)
+        output_matrix = method.decode(dna_motifs, has_index)
 
         if has_index:
             indexes, data_set = index_operator.divide_all(output_matrix)
