@@ -60,6 +60,12 @@ class HC:
 
         self.segment_length = len(matrix[0])
 
+        if self.segment_length % 8 != 0:
+            temp_matrix = []
+            for row in range(len(matrix)):
+                temp_matrix.append([0 for col in range(self.segment_length % 8)] + matrix[row])
+            matrix = temp_matrix
+
         self.m.restore()
         log.output(
             log.NORMAL,
@@ -268,6 +274,12 @@ class HC:
                     self.__motif_to_list__(dna_motifs[index]), index_binary_length
                 )
             )
+
+        if len(matrix[0]) != self.segment_length:
+            temp_matrix = []
+            for row in range(len(matrix)):
+                temp_matrix.append(matrix[row][self.segment_length % 8:])
+            matrix = temp_matrix
 
         self.m.restore()
 
