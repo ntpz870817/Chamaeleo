@@ -26,7 +26,7 @@ def encode(
     model_path=None,
     verify=None,
     need_index=True,
-    segment_length=None,
+    segment_length=120,
 ):
     """
     introduction: Use the selected method, convert the binary file to DNA motif
@@ -72,12 +72,7 @@ def encode(
             "We did not obtain the path of generated file!",
         )
 
-    if model_path is not None:
-        saver.save_model(model_path, method)
-
-    input_matrix, size = data_handle.read_binary_from_all(
-        input_path, segment_length=segment_length
-    )
+    input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length=segment_length)
 
     if verify is not None:
         input_matrix = verify.add_for_matrix(input_matrix)
@@ -86,6 +81,9 @@ def encode(
         input_matrix = index_operator.connect_all(input_matrix)
 
     dna_motifs = method.encode(input_matrix, size)
+
+    if model_path is not None:
+        saver.save_model(model_path, method)
 
     data_handle.write_dna_file(output_path, dna_motifs)
 
@@ -155,7 +153,7 @@ def decode(
 
         dna_motifs = data_handle.read_dna_file(input_path)
 
-        output_matrix = method.decode(dna_motifs)
+        output_matrix, size = method.decode(dna_motifs)
 
         if has_index:
             indexes, data_set = index_operator.divide_all(output_matrix)
@@ -165,4 +163,4 @@ def decode(
             output_matrix = verify.verify_for_matrix(output_matrix)
             output_matrix = verify.remove_for_matrix(output_matrix)
 
-        data_handle.write_all_from_binary(output_path, output_matrix)
+        data_handle.write_all_from_binary(output_path, output_matrix, size)

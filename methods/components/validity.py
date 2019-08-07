@@ -1,4 +1,12 @@
 def check(dna_motif, max_base_repeat=4, max_motif_repeat=3, max_content=0.6):
+    """
+
+    :param dna_motif:
+    :param max_base_repeat:
+    :param max_motif_repeat:
+    :param max_content:
+    :return:
+    """
     if base_repeat(dna_motif, max_base_repeat) is False:
         return False
     if motif_repeat(dna_motif, max_motif_repeat) is False:
@@ -14,6 +22,12 @@ def check(dna_motif, max_base_repeat=4, max_motif_repeat=3, max_content=0.6):
 
 
 def base_repeat(dna_motif, max_repeat):
+    """
+
+    :param dna_motif:
+    :param max_repeat:
+    :return:
+    """
     base_index = {'A': 0, 'T': 1, 'C': 2, 'G': 3}
     counts = [0, 0, 0, 0]
     last_base = None
@@ -43,6 +57,12 @@ def base_repeat(dna_motif, max_repeat):
 
 
 def motif_repeat(dna_motif, max_repeat):
+    """
+
+    :param dna_motif:
+    :param max_repeat:
+    :return:
+    """
     length = len(dna_motif) - 1
     while length > max_repeat:
         for index in range(len(dna_motif)):
@@ -56,6 +76,12 @@ def motif_repeat(dna_motif, max_repeat):
 
 
 def inverse_motif_repeat(motif, max_repeat):
+    """
+
+    :param motif:
+    :param max_repeat:
+    :return:
+    """
     length = len(motif) - 1
     while length > max_repeat:
         for index in range(len(motif)):
@@ -69,6 +95,12 @@ def inverse_motif_repeat(motif, max_repeat):
 
 
 def dyad_motif_repeat(motif, max_repeat):
+    """
+
+    :param motif:
+    :param max_repeat:
+    :return:
+    """
     length = len(motif) - 1
     dyad_motif = ""
     for index in range(len(motif)):
@@ -93,4 +125,10 @@ def dyad_motif_repeat(motif, max_repeat):
 
 
 def cg_content(motif, max_content):
+    """
+
+    :param motif:
+    :param max_content:
+    :return:
+    """
     return (1 - max_content) <= float(motif.count("C") + motif.count("G")) / float(len(motif)) <= max_content
