@@ -64,15 +64,15 @@ class YYC:
 
         """
 
-        # Set default values for Rules 1 and 2
+        # Set default values for Rules 1 and 2 (RULE 495)
         if not base_reference:
-            base_reference = [0, 0, 1, 1]
+            base_reference = [0, 1, 0, 1]
         if not current_code_matrix:
             current_code_matrix = [
-                [1, 0, 1, 0],
-                [1, 0, 1, 0],
-                [0, 1, 0, 1],
-                [0, 1, 0, 1],
+                [1, 1, 0, 0],
+                [1, 0, 0, 1],
+                [1, 1, 0, 0],
+                [1, 1, 0, 0],
             ]
         if not support_bases:
             support_bases = [inherent.index_base.get(0)]
@@ -266,6 +266,7 @@ class YYC:
             str(sys._getframe().f_code.co_name),
             "Separate good data from bad data.",
         )
+
         good_data_set, bad_data_set = self.__divide_library__(matrix)
 
         self.monitor.restore()
@@ -317,19 +318,19 @@ class YYC:
             )
 
         if len(bad_indexes) == 0 and len(matrix) == 0:
-            return None, None
+            return [], []
         elif len(bad_indexes) == 0:
             good_data_set = []
-            for row in range(len(good_data_set)):
-                self.monitor.output(row, len(good_data_set))
+            for row in range(len(matrix)):
+                self.monitor.output(row, len(matrix))
                 good_data_set.append(matrix[row])
-            return good_data_set, None
+            return good_data_set, []
         elif len(bad_indexes) == len(matrix):
             bad_data_set = []
-            for row in range(len(bad_data_set)):
-                self.monitor.output(row, len(bad_data_set))
+            for row in range(len(matrix)):
+                self.monitor.output(row, len(matrix))
                 bad_data_set.append(matrix[row])
-            return None, bad_data_set
+            return [], bad_data_set
         else:
             good_data_set = []
             bad_data_set = []

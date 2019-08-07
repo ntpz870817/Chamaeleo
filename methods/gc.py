@@ -20,7 +20,7 @@ import Chamaeleo.utils.log as log
 
 # noinspection PyMethodMayBeStatic,PyProtectedMember,PyTypeChecker
 class GC:
-    def __init__(self, base_values):
+    def __init__(self, base_values=None):
         """
         introduction: The initialization method of Grass Codec.
 
@@ -35,6 +35,9 @@ class GC:
             str(sys._getframe().f_code.co_name),
             "Create the Grass method.",
         )
+
+        if base_values is None:
+            base_values = [index for index in range(48)]
 
         temp_keys = []
         temp_values = []
