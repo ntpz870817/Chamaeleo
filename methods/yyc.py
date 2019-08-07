@@ -19,7 +19,7 @@ import sys
 import numpy
 
 import Chamaeleo.methods.components.inherent as inherent
-import Chamaeleo.methods.components.motif_validity as motif_friendly
+import Chamaeleo.methods.components.validity as validity
 import Chamaeleo.utils.log as log
 import Chamaeleo.utils.monitor as monitor
 
@@ -386,7 +386,7 @@ class YYC:
                         bad_index = int(bad_indexes.pop())
                         if (
                             search_index >= self.search_count - 1
-                            or motif_friendly.friendly_check(
+                            or validity.friendly_check(
                                 self.__list_to_motif__(
                                     good_data_set[good_index], bad_data_set[bad_index]
                                 )
@@ -405,7 +405,7 @@ class YYC:
                         good_index2 = int(good_indexes.pop())
                         if (
                             search_index >= self.search_count - 1
-                            or motif_friendly.friendly_check(
+                            or validity.friendly_check(
                                 self.__list_to_motif__(
                                     good_data_set[good_index1],
                                     good_data_set[good_index2],
@@ -425,7 +425,7 @@ class YYC:
                         bad_index2 = int(bad_indexes.pop())
                         if (
                             search_index >= self.search_count - 1
-                            or motif_friendly.friendly_check(
+                            or validity.friendly_check(
                                 self.__list_to_motif__(
                                     bad_data_set[bad_index1], bad_data_set[bad_index2]
                                 )
