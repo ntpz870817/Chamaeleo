@@ -9,7 +9,7 @@
 We hope to provide a readable, robust and high-performance learning and useful framework for researchers and engineers.
 
 ## Environment Configuration
-The kit is developed by **Python3.5**.
+The kit is developed by **Python3.7.3**.
 
 In addition, the packages we are calling now is as follows:
 
@@ -36,7 +36,6 @@ In addition, the packages we are calling now is as follows:
 │    ├── verifies                     // Error-Correction Method
 │    │    ├── hm.py                   // Hamming error correction
 │    │    ├── rs.py                   // Reed-Solomon error correction
-│    ├── ddc.py                       // DDC (Double-Double DNA Storage Code)
 │    ├── gc.py                        // GC (DNA Storage Code created by Grass)
 │    ├── hc.py                        // HC (DNA Storage Code based on Huffman code)
 │    ├── sc.py                        // SC (Simple DNA Storage Code)

@@ -10,7 +10,7 @@ We hope to provide a readable, robust and high-performance learning and useful f
 We welcome your participation and dedicate strength to this community.
 
 ## Language in USE
-We use **Python3.5** to develop the kit.
+We use **Python3.7.3** to develop the kit.
 
 ## Package in USE
 The packages we are calling now is as follows:
@@ -47,7 +47,6 @@ In addition, some non-robust external packages may lead to instability or even c
 │    ├── verifies                     // Error-Correction Method
 │    │    ├── hm.py                   // Hamming error correction
 │    │    ├── rs.py                   // Reed-Solomon error correction
-│    ├── ddc.py                       // DDC (Double-Double DNA Storage Code)
 │    ├── gc.py                        // GC (DNA Storage Code created by Grass)
 │    ├── hc.py                        // HC (DNA Storage Code based on Huffman code)
 │    ├── sc.py                        // SC (Simple DNA Storage Code)
