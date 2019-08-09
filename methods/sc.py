@@ -33,7 +33,7 @@ class SC:
         """
 
         if not mapping_rule:
-            mapping_rule = [0, 0, 1, 1]
+            mapping_rule = [0, 1, 2, 3]
         else:
             self.__init_check__(mapping_rule)
 
@@ -150,7 +150,7 @@ class SC:
                     str(sys._getframe().f_code.co_name),
                     "Data length cannot be odd number!",
                 )
-            for index in range(len(one_list)):
+            for index in range(0, len(one_list), 2):
                 dna_motif.append(
                     inherent.index_base.get(
                         self.mapping_rule.index(

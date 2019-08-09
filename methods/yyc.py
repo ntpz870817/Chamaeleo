@@ -185,6 +185,14 @@ class YYC:
                 "Wrong correspondence between base and binary data!",
             )
 
+        positions = []
+        for i in range(len(base_reference)):
+            if base_reference[i] == 1:
+                positions.append([i])
+        for i in range(len(base_reference)):
+            if base_reference[i] != 1:
+                positions.append([i])
+
         # Check current code matrix (rule 2)
         for row in range(len(current_code_matrix)):
             for col in range(len(current_code_matrix[row])):
@@ -205,33 +213,49 @@ class YYC:
                         + str(current_code_matrix[row][col] + "!"),
                     )
         for row in range(len(current_code_matrix)):
-            for col in range(0, len(current_code_matrix[row]) - 1, 2):
-                if (
-                    current_code_matrix[row][col] + current_code_matrix[row][col + 1]
-                    == 1
-                    and current_code_matrix[row][col]
-                    * current_code_matrix[row][col + 1]
-                    == 0
-                ):
-                    continue
-                else:
-                    log.output(
-                        log.ERROR,
-                        str(__name__),
-                        str(sys._getframe().f_code.co_name),
-                        "Wrong current code matrix, "
-                        "the error locations are ["
-                        + str(row)
-                        + ", "
-                        + str(col)
-                        + "] and ["
-                        + str(row)
-                        + ", "
-                        + str(col)
-                        + "]! "
-                        "Rules are that they add up to 1 and multiply by 0.",
-                    )
+            left = current_code_matrix[row][positions[0]]
+            right = current_code_matrix[row][positions[1]]
+            if left + right == 1 and left * right == 0:
+                continue
+            else:
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Wrong current code matrix, "
+                    "the error locations are ["
+                    + str(row)
+                    + ", "
+                    + str(positions[0])
+                    + "] and ["
+                    + str(row)
+                    + ", "
+                    + str(positions[1])
+                    + "]! "
+                      "Rules are that they add up to 1 and multiply by 0.",
+                )
 
+            left = current_code_matrix[row][positions[2]]
+            right = current_code_matrix[row][positions[3]]
+            if left + right == 1 and left * right == 0:
+                continue
+            else:
+                log.output(
+                    log.ERROR,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Wrong current code matrix, "
+                    "the error locations are ["
+                    + str(row)
+                    + ", "
+                    + str(positions[2])
+                    + "] and ["
+                    + str(row)
+                    + ", "
+                    + str(positions[3])
+                    + "]! "
+                      "Rules are that they add up to 1 and multiply by 0.",
+                )
         # Check max ratio
         if max_ratio <= 0.5 or max_ratio >= 1:
             log.output(
@@ -387,7 +411,7 @@ class YYC:
                         bad_index = int(bad_indexes.pop())
                         if (
                             search_index >= self.search_count - 1
-                            or validity.friendly_check(
+                            or validity.check(
                                 self.__list_to_motif__(
                                     good_data_set[good_index], bad_data_set[bad_index]
                                 )
@@ -406,7 +430,7 @@ class YYC:
                         good_index2 = int(good_indexes.pop())
                         if (
                             search_index >= self.search_count - 1
-                            or validity.friendly_check(
+                            or validity.check(
                                 self.__list_to_motif__(
                                     good_data_set[good_index1],
                                     good_data_set[good_index2],
@@ -426,7 +450,7 @@ class YYC:
                         bad_index2 = int(bad_indexes.pop())
                         if (
                             search_index >= self.search_count - 1
-                            or validity.friendly_check(
+                            or validity.check(
                                 self.__list_to_motif__(
                                     bad_data_set[bad_index1], bad_data_set[bad_index2]
                                 )

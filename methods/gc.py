@@ -18,7 +18,7 @@ import Chamaeleo.utils.monitor as monitor
 import Chamaeleo.utils.log as log
 
 
-# noinspection PyMethodMayBeStatic,PyProtectedMember,PyTypeChecker
+# noinspection PyMethodMayBeStatic,PyProtectedMember,PyTypeChecker,PyUnusedLocal
 class GC:
     def __init__(self, base_values=None):
         """
@@ -47,6 +47,7 @@ class GC:
                 temp_values.append(base_values[index])
 
         self.mapping_rule = [temp_keys, temp_values]
+        self.segment_length = 0
         self.file_size = 0
         self.m = monitor.Monitor()
 
@@ -69,15 +70,14 @@ class GC:
         """
 
         self.file_size = size
+        self.segment_length = len(matrix[0])
         self.m.restore()
 
-        if len(matrix[0]) % 16 != 0:
-            log.output(
-                log.ERROR,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "The length of col should be a multiple of 16!",
-            )
+        if self.segment_length % 16 != 0:
+            temp_matrix = []
+            for row in range(len(matrix)):
+                temp_matrix.append([0 for col in range(self.segment_length % 16)] + matrix[row])
+            matrix = temp_matrix
 
         dna_motifs = []
 
@@ -156,6 +156,12 @@ class GC:
             matrix.append(self.__motif_to_list__(dna_motifs[index]))
 
         self.m.restore()
+
+        if len(matrix[0]) != self.segment_length:
+            temp_matrix = []
+            for row in range(len(matrix)):
+                temp_matrix.append(matrix[row][self.segment_length % 16:])
+            matrix = temp_matrix
 
         return matrix, self.file_size
 
