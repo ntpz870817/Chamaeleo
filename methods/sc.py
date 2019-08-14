@@ -33,7 +33,7 @@ class SC:
         """
 
         if not mapping_rule:
-            mapping_rule = [0, 1, 2, 3]
+            mapping_rule = [0, 0, 1, 1]
         else:
             self.__init_check__(mapping_rule)
 
