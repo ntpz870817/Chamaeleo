@@ -17,7 +17,7 @@ import sys
 import Chamaeleo.utils.log as log
 
 
-# noinspection PyProtectedMember
+# noinspection PyProtectedMember,PyMethodMayBeStatic
 class Hm:
     def __init__(self):
         pass
@@ -203,7 +203,7 @@ class Hm:
             output_list.append(input_list[index])
             output_list_copy.append(input_list[index])
             if pow(2, detect_site) == index + 1:
-                detect_site = detect_site + 1
+                detect_site += 1
 
         detect_site, parity_list = 0, []
         for parity in range(0, (len(output_list))):

@@ -39,7 +39,7 @@ def base_repeat(dna_motif, max_repeat):
             if dna_motif[index] != last_base:
                 if counts[base_index[save_base]] < current_count:
                     counts[base_index[save_base]] = current_count
-                    current_count = 1
+                current_count = 1
                 last_base = dna_motif[index]
                 save_base = last_base
             else:
@@ -68,7 +68,7 @@ def motif_repeat(dna_motif, max_repeat):
         for index in range(len(dna_motif)):
             if index + length < len(dna_motif):
                 sample = dna_motif[index: index + length]
-                if dna_motif.count(sample) > 1:
+                if dna_motif.count(str(sample)) > 1:
                     return False
         length -= 1
 
@@ -87,7 +87,7 @@ def inverse_motif_repeat(motif, max_repeat):
         for index in range(len(motif)):
             if index + length < len(motif):
                 sample = motif[index: index + length]
-                if motif.count(sample[::-1]) > 0:
+                if motif.count(str(sample[::-1])) > 0:
                     return False
         length -= 1
 
@@ -117,7 +117,7 @@ def dyad_motif_repeat(motif, max_repeat):
         for index in range(len(motif)):
             if index + length < len(motif):
                 sample = motif[index: index + length]
-                if dyad_motif.count(sample[::-1]) > 0:
+                if dyad_motif.count(str(sample[::-1])) > 0:
                     return False
         length -= 1
 
