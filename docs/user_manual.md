@@ -22,10 +22,10 @@ In addition, the packages we are calling now is as follows:
 - [x] numpy
 - [x] pickle
 
-## Kit Tree Diagram
+## Library Tree Diagram
 ```html
 ├── docs                              // Description document folder
-│    ├── author.md                    //  Author catalogue
+│    ├── author.md                    // Author catalogue
 │    ├── contributor_manual.md        // Read Before You Want to Make a Contribution
 │    ├── user_manual.md               // Read before you want to use it
 ├── methods                           // Method module
@@ -44,9 +44,9 @@ In addition, the packages we are calling now is as follows:
 │    ├── data_handle.py               // Conversion of DNA motifs and binary document
 │    ├── log.py                       // Outputting the logs in console
 │    ├── model_saver.py               // Save model to file and load model from file
-│    ├── monitor.py                   // Getting the progress  situation and the time left
+│    ├── monitor.py                   // Getting the progress situation and the time left
 ├── codec_factory.py                  // Main calling function
-├── README.md                         // Description document of kit
+├── README.md                         // Description document of library
 ```
 
 ## Method of Application

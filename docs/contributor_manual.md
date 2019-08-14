@@ -33,10 +33,10 @@ Failures of development or usage caused by external packages should be avoid.
 In addition, some non-robust external packages may lead to instability or even collapse of the kit.
 
 
-## Kit Tree Diagram
+## Library Tree Diagram
 ```html
 ├── docs                              // Description document folder
-│    ├── author.md                    //  Author catalogue
+│    ├── author.md                    // Author catalogue
 │    ├── contributor_manual.md        // Read Before You Want to Make a Contribution
 │    ├── user_manual.md               // Read before you want to use it
 ├── methods                           // Method module
@@ -69,12 +69,12 @@ In addition, some non-robust external packages may lead to instability or even c
 │    ├── data_handle.py               // Conversion of DNA motifs and binary document
 │    ├── log.py                       // Outputting the logs in console
 │    ├── model_saver.py               // Save model to file and load model from file
-│    ├── monitor.py                   // Getting the progress  situation and the time left
+│    ├── monitor.py                   // Getting the progress situation and the time left
 ├── .gitignore                        // Upload ignore file
 ├── codec_factory.py                  // Main calling function
 ├── LICENSE                           // Protocol of kit
 ├── logo.png                          // Logo of kit
-├── README.md                         // Description document of kit
+├── README.md                         // Description document of library
 ```
 
 ## Coding Specification
