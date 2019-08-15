@@ -76,7 +76,7 @@ class GC:
         if self.segment_length % 16 != 0:
             temp_matrix = []
             for row in range(len(matrix)):
-                temp_matrix.append([0 for col in range(self.segment_length % 16)] + matrix[row])
+                temp_matrix.append([0 for col in range(16 - (self.segment_length % 16))] + matrix[row])
             matrix = temp_matrix
 
         dna_motifs = []
@@ -160,7 +160,7 @@ class GC:
         if len(matrix[0]) != self.segment_length:
             temp_matrix = []
             for row in range(len(matrix)):
-                temp_matrix.append(matrix[row][self.segment_length % 16:])
+                temp_matrix.append(matrix[row][16 - (self.segment_length % 16):])
             matrix = temp_matrix
 
         return matrix, self.file_size
@@ -189,13 +189,13 @@ class GC:
 
         for index in range(0, len(dna_motif), 9):
             first = self.mapping_rule[1][
-                self.mapping_rule[0].index("".join(dna_motif[index : index + 3]))
+                self.mapping_rule[0].index("".join(dna_motif[index: index + 3]))
             ]
             second = self.mapping_rule[1][
-                self.mapping_rule[0].index("".join(dna_motif[index + 3 : index + 6]))
+                self.mapping_rule[0].index("".join(dna_motif[index + 3: index + 6]))
             ]
             third = self.mapping_rule[1][
-                self.mapping_rule[0].index("".join(dna_motif[index + 6 : index + 9]))
+                self.mapping_rule[0].index("".join(dna_motif[index + 6: index + 9]))
             ]
 
             decimal_number = first
