@@ -188,10 +188,10 @@ class YYC:
         positions = []
         for i in range(len(base_reference)):
             if base_reference[i] == 1:
-                positions.append([i])
+                positions.append(i)
         for i in range(len(base_reference)):
             if base_reference[i] != 1:
-                positions.append([i])
+                positions.append(i)
 
         # Check current code matrix (rule 2)
         for row in range(len(current_code_matrix)):
