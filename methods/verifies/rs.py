@@ -192,7 +192,7 @@ class RS:
         :return output_list: List that has been verified even repaired.
                              Type: One-dimensional list(int).
         """
-        if row in None:
+        if row is None:
             log.output(
                 log.NORMAL,
                 str(__name__),
