@@ -243,8 +243,8 @@ class Hm:
                     log.WARN,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "Error is no. "
-                    + str(error)
+                    "Error is No. "
+                    + str(len(output_list_copy) - error)
                     + "bit, in "
                     + str(row + 1)
                     + " of matrix, and it is repaired.",
@@ -254,8 +254,13 @@ class Hm:
                     log.WARN,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "Error is no. " + str(error) + "bit, and it is repaired.",
+                    "Error is No. " + str(len(output_list_copy) - error) + "bit, and it is repaired.",
                 )
-            output_list_copy[error - 1] = int(output_list_copy[error - 1] is False)
+
+            if output_list_copy[error - 1] == 0:
+                output_list_copy[error - 1] = 1
+            else:
+                output_list_copy[error - 1] = 0
+            # output_list_copy[error - 1] = int(output_list_copy[error - 1] is False)
             output_list_copy.reverse()
             return output_list_copy

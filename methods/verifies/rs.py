@@ -82,6 +82,7 @@ class RS:
             verify_matrix.append(self.add_for_list(matrix[row]))
         return verify_matrix
 
+    # noinspection PyUnusedLocal
     def add_for_list(self, input_list):
         """
         introduction: Add Reed-Solomon error correction for a origin list.
@@ -103,6 +104,10 @@ class RS:
                     "Data length is too long, encoding and decoding will take a lot of time.",
                 )
 
+        if len(input_list) % 8 != 0:
+            add_length = 8 - len(input_list) % 8
+            input_list = [0 for add_bit in range(add_length)] + input_list
+
         input_list = self.__binary_to_decimal__(input_list)
         output_list = [0] * (len(input_list) + self.check_size)
         output_list[: len(input_list)] = input_list
@@ -119,13 +124,15 @@ class RS:
         output_list = self.__decimal_to_binary__(output_list)
         return output_list
 
-    def remove_for_matrix(self, verity_matrix):
+    def remove_for_matrix(self, verity_matrix, original_length):
         """
         introduction: Remove Reed-Solomon error correction from origin matrix.
 
         :param verity_matrix: Verifiable matrix.
                               The data of this matrix contains only 0 or 1 (non-char).
                               Type: Two-dimensional list(int).
+
+        :param original_length:
 
         :return matrix: Origin matrix.
                         Type: Two-dimensional list(int).
@@ -139,10 +146,10 @@ class RS:
         )
         matrix = []
         for row in range(len(verity_matrix)):
-            matrix.append(self.remove_for_list(verity_matrix[row]))
+            matrix.append(self.remove_for_list(verity_matrix[row], original_length))
         return matrix
 
-    def remove_for_list(self, input_list):
+    def remove_for_list(self, input_list, original_length):
         """
         introduction: Remove Reed-Solomon error correction from origin list.
 
@@ -150,10 +157,13 @@ class RS:
                             The data of this matrix contains only 0 or 1 (non-char).
                             Type: One-dimensional list(int).
 
+        :param original_length:
+
         :return output_list: Origin list.
                              Type: One-dimensional list(int).
         """
         output_list = input_list[: -self.check_size * 8]
+        output_list = output_list[len(output_list) - original_length:]
         return output_list
 
     def verify_for_matrix(self, verity_matrix):
@@ -239,6 +249,8 @@ class RS:
             output_list = self.__decimal_to_binary__(output_list)
             return output_list
 
+        if error_positions is None:
+            error_positions = []
         output_list = self.__correct_errata__(
             output_list, syndromes, erasure_positions + error_positions
         )
@@ -285,7 +297,7 @@ class RS:
         """
         decimal = []
         for index in range(0, len(binary), 8):
-            decimal.append(int("".join(list(map(str, binary[index : index + 8]))), 2))
+            decimal.append(int("".join(list(map(str, binary[index: index + 8]))), 2))
         return decimal
 
     def __decimal_to_binary__(self, decimal):
