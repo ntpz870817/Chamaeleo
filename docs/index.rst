@@ -5,8 +5,8 @@
 
 Chamaeleo
 =====================================
-TODO: brief intro
-
+Chamaeleo is a collective library that addapting some well-accepted coding
+schemes for DNA storage.
 
 .. toctree::
    :maxdepth: 2
@@ -14,11 +14,7 @@ TODO: brief intro
    description
    installation
    Tutorial
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   modules
+   contributor_manual
+   user_manual
+   authors

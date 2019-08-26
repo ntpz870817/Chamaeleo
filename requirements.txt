@@ -2,3 +2,6 @@ numpy
 virtualenv==16.6.0
 nose==1.3.7
 pycodestyle
+sphinx
+sphinx_markdown_tables
+sphinx_rtd_theme

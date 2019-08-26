@@ -9,7 +9,12 @@ setup(
     author="Zhi PING, Hao-Ling ZHANG, Sha (Joe) ZHU",
     author_email="",
     url="",
-    packages=["Chamaeleo", "Chamaeleo.methods", "Chamaeleo.utils"],
+    packages=[
+        "Chamaeleo",
+        "Chamaeleo.methods",
+        "Chamaeleo.methods.components",
+        "Chamaeleo.utils",
+    ],
     package_dir={"Chamaeleo": "."},
     package_data={
         "Chamaeleo": [

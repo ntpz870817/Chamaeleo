@@ -32,3 +32,23 @@ Using command line:
   $ codec_factory.decode(input_path="C:/target.dna", output_path="C:/target.mp4", model_path="C:/yyc.pkl") $
 
 In the two statements in codec_factory.py, the hyper parameters of encoding and encoding must correspond one by one. In the encoding process, codec_factory.encode(…), the hyper parameters are: method, input_path, output_path, model_path, verify, need_index, and segment_length. The decoding process, codec_factory.decode(…), is consistent with the hyper parameters of the encoding process. If need_index is True in encoding process, has_index needs True in decoding process. If verify is an instantiated method (=code) in the encoding process, verify=code needs in decoding process.
+
+
+Transcoding requirements with highly customized
+***********************************************
+
+When we need highly customized coding and decoding programs for DNA storage, the basic
+functions of codec_factory.py can provide will not be able to meet. We recommend using the
+Python programming tools to accomplish these required tasks.
+
+Transcoding method customization
+--------------------------------
+
+In the transcoding module, four transcoding method is collected. Here, we will discuss the hyper
+parameters of these above four methods respectively.
+Simple Code (see sc.py, in Chamaeleo/methods) has only one hyper parameter:
+mapping_rule, which describes the mapping between bases and numbers.
+
+
+Error-correction method customization
+-------------------------------------
