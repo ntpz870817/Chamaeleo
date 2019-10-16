@@ -21,7 +21,7 @@ import Chamaeleo.utils.monitor as monitor
 # PyBroadException, PyProtectedMember, PyUnusedLocal
 def read_binary_from_all(path, segment_length=120):
     """
-    introduction: Writing DNA motif set from documents.
+    introduction: Reading binary matrix from document.
 
     :param path: File path.
                   Type: string
