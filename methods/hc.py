@@ -10,11 +10,16 @@ Current Version: 1
 Function(s): (1) DNA encoding by Huffman Codec.
              (2) DNA decoding by Huffman Codec.
 """
-import re
+
 import sys
-import Chamaeleo.utils.monitor as monitor
-import Chamaeleo.utils.log as log
-import Chamaeleo.methods.components.inherent as inherent
+import os
+import re
+
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+import utils.monitor as monitor
+import utils.log as log
+import methods.components.inherent as inherent
 
 
 # noinspection PyProtectedMember,PyMethodMayBeStatic,PyTypeChecker,PyUnusedLocal

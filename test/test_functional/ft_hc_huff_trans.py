@@ -9,8 +9,12 @@ Function(s): The reliability of Huffman code transformation
 """
 
 import random
+import sys
+import os
 
-import Chamaeleo.methods.hc as hc
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+import methods.hc as hc
 
 if __name__ == "__main__":
     tool = hc.HC()

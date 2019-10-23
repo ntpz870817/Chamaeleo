@@ -14,10 +14,13 @@ Function(s): (1) DNA encoding by Simple.
 
 import sys
 import random
+import os
 
-import Chamaeleo.utils.monitor as monitor
-import Chamaeleo.utils.log as log
-import Chamaeleo.methods.components.inherent as inherent
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+import utils.monitor as monitor
+import utils.log as log
+import methods.components.inherent as inherent
 
 
 # noinspection PyMethodMayBeStatic,PyProtectedMember

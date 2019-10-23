@@ -8,13 +8,15 @@ Current Version: 1
 Function(s): Conversion of DNA motifs and binary document
 """
 
-import os
 import struct
 import math
 import sys
+import os
 
-import Chamaeleo.utils.log as log
-import Chamaeleo.utils.monitor as monitor
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+import utils.log as log
+import utils.monitor as monitor
 
 
 # noinspection PyUnresolvedReferences,

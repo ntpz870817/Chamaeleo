@@ -7,10 +7,13 @@ Current Version: 1
 
 Function(s): The reliability of 256^2 and 47^3 transformation
 """
-
 import random
+import sys
+import os
 
-import Chamaeleo.methods.gc as gc
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+import methods.gc as gc
 
 if __name__ == "__main__":
     tool = gc.GC([index for index in range(0, 48)])

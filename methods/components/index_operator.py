@@ -11,9 +11,12 @@ Function(s): (1) Connect index (to binary) to binary data, one or all.
 """
 
 import sys
+import os
 
-import Chamaeleo.utils.monitor as monitor
-import Chamaeleo.utils.log as log
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+import utils.monitor as monitor
+import utils.log as log
 
 
 def connect_all(matrix):

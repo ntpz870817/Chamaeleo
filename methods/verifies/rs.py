@@ -15,8 +15,11 @@ Function(s): (1) Add Reed-Solomon error correction for origin matrix or origin l
 """
 
 import sys
+import os
 
-import Chamaeleo.utils.log as log
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+import utils.log as log
 
 
 # noinspection PyProtectedMember,PyMethodMayBeStatic,PyTypeChecker,PyUnresolvedReferences

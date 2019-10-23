@@ -8,9 +8,13 @@ Current Version: 1
 Function(s): The Feasibility of Testing the Whole Process of HC
 """
 
+import sys
+import os
 
-import Chamaeleo.codec_factory
-import Chamaeleo.methods.hc as hc
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+import codec_factory
+import methods.hc as hc
 
 read_file_path = "..\\..\\test\\test_files\\books\\A Tale of Two Cities.pdf"
 

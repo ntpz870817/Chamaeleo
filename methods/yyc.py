@@ -16,12 +16,15 @@ Advantages: (1) High compressibility, maximum compressibility to 1/2 of the orig
 """
 
 import sys
+import os
 import numpy
 
-import Chamaeleo.methods.components.inherent as inherent
-import Chamaeleo.methods.components.validity as validity
-import Chamaeleo.utils.log as log
-import Chamaeleo.utils.monitor as monitor
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+import methods.components.inherent as inherent
+import methods.components.validity as validity
+import utils.log as log
+import utils.monitor as monitor
 
 
 # noinspection PyProtectedMember, PyUnresolvedReferences,PyMethodMayBeStatic

@@ -8,8 +8,13 @@ Current Version: 1
 Function(s): The Feasibility of Testing the Whole Process of Simple
 """
 
-import Chamaeleo.codec_factory
-import Chamaeleo.methods.sc as sc
+import sys
+import os
+
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+import codec_factory
+import methods.sc as sc
 
 read_file_path = "..\\..\\test\\test_files\\books\\A Tale of Two Cities.pdf"
 

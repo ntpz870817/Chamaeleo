@@ -12,10 +12,13 @@ Function(s): (1) DNA encoding by Grass Codec.
 """
 
 import sys
+import os
 
-import Chamaeleo.methods.components.inherent as inherent
-import Chamaeleo.utils.monitor as monitor
-import Chamaeleo.utils.log as log
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+import methods.components.inherent as inherent
+import utils.monitor as monitor
+import utils.log as log
 
 
 # noinspection PyMethodMayBeStatic,PyProtectedMember,PyTypeChecker,PyUnusedLocal

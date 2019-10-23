@@ -13,8 +13,11 @@ Function(s): (1) Save model to file.
 import pickle
 
 import sys
+import os
 
-from Chamaeleo.utils import log
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+from utils import log
 
 
 # noinspection PyProtectedMember

@@ -1,6 +1,11 @@
+# add root path for terminal
+import sys
+import os
 import random
 
-from Chamaeleo.methods.verifies import rs
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
+from methods.verifies import rs
 
 length = 16
 
