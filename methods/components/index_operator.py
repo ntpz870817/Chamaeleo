@@ -19,6 +19,7 @@ import utils.monitor as monitor
 import utils.log as log
 
 
+# noinspection PyProtectedMember
 def connect_all(matrix):
     """
     introduction: Connect index and data from the two-dimensional matrix.
@@ -73,6 +74,7 @@ def connect(index, data, index_binary_length):
     return one_list
 
 
+# noinspection PyProtectedMember
 def divide_all(matrix):
     """
     introduction: Separate data from indexes in binary strings.

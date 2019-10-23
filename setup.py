@@ -5,10 +5,10 @@ from distutils.core import setup
 setup(
     name="Chamaeleo",
     version="0.0",
-    description="Python Distribution Utilities",
+    description="library for the well accepted coding schemes of DNA storage",
     author="Zhi PING, Hao-Ling ZHANG, Sha (Joe) ZHU",
     author_email="",
-    url="",
+    url="https://github.com/ntpz870817/Chamaeleo",
     packages=["Chamaeleo", "Chamaeleo.methods", "Chamaeleo.utils"],
     package_dir={"Chamaeleo": "."},
     package_data={
@@ -25,5 +25,8 @@ setup(
             "test/test_files/videos/I have a Dream (Martin Luther King).mp4",
         ]
     },
-    # scripts=["bin/Chamaeleo"],
+    install_requires=[
+        'numpy>=1.17.0',
+    ],
+
 )

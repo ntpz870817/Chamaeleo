@@ -1,7 +1,7 @@
 """
 Name: Validity
 
-Coder: HaoLing ZHANG (BGI-Research)
+Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Function(s):
 Check the validity of requested DNA sequence.
