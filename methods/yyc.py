@@ -415,9 +415,9 @@ class YYC:
                         if (
                             search_index >= self.search_count - 1
                             or validity.check(
-                                self.__list_to_motif__(
+                                "".join(self.__list_to_motif__(
                                     good_data_set[good_index], bad_data_set[bad_index]
-                                )
+                                ))
                             )
                         ):
                             data_set.append(good_data_set[good_index])
@@ -434,10 +434,10 @@ class YYC:
                         if (
                             search_index >= self.search_count - 1
                             or validity.check(
-                                self.__list_to_motif__(
+                                "".join(self.__list_to_motif__(
                                     good_data_set[good_index1],
                                     good_data_set[good_index2],
-                                )
+                                ))
                             )
                         ):
                             data_set.append(good_data_set[good_index1])
@@ -454,9 +454,9 @@ class YYC:
                         if (
                             search_index >= self.search_count - 1
                             or validity.check(
-                                self.__list_to_motif__(
+                                "".join(self.__list_to_motif__(
                                     bad_data_set[bad_index1], bad_data_set[bad_index2]
-                                )
+                                ))
                             )
                         ):
                             data_set.append(bad_data_set[bad_index1])
