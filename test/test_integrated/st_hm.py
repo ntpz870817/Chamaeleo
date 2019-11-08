@@ -1,10 +1,6 @@
 import random
-import sys
-import os
 
-sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
-
-from methods.verifies import hm
+from Chamaeleo.methods.verifies import hm
 
 length = 16
 

@@ -13,15 +13,14 @@ import math
 import sys
 import os
 
-sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
-
-import utils.log as log
-import utils.monitor as monitor
+import Chamaeleo.utils.log as log
+import Chamaeleo.utils.monitor as monitor
 
 
 # noinspection PyUnresolvedReferences,
 # PyBroadException, PyProtectedMember, PyUnusedLocal
-def read_binary_from_all(path, segment_length=120):
+# noinspection PyProtectedMember
+def read_binary_from_all(path, segment_length=120, need_log=False):
     """
     introduction: Reading binary matrix from document.
 
@@ -35,6 +34,8 @@ def read_binary_from_all(path, segment_length=120):
     :return matrix: A corresponding DNA motif string in which each row acts
                     as a motif.
                     Type: two-dimensional list(int)
+
+    :param need_log: need output log.
     """
 
     m = monitor.Monitor()
@@ -43,12 +44,13 @@ def read_binary_from_all(path, segment_length=120):
         # Open selected file
         with open(path, mode="rb") as file:
 
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Read binary matrix from file: " + path,
-            )
+            if need_log:
+                log.output(
+                    log.NORMAL,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Read binary matrix from file: " + path,
+                )
             size = os.path.getsize(path)
 
             # Set init storage matrix
@@ -60,7 +62,8 @@ def read_binary_from_all(path, segment_length=120):
             row = 0
             col = 0
             for byte_index in range(size):
-                m.output(byte_index, size)
+                if need_log:
+                    m.output(byte_index, size)
                 # Read a file as bytes
                 one_byte = file.read(1)
                 element = list(
@@ -77,13 +80,14 @@ def read_binary_from_all(path, segment_length=120):
                         row += 1
 
         if int(len(str(bin(len(matrix)))) - 2) * 7 > segment_length:
-            log.output(
-                log.WARN,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "The proportion of index may be high. "
-                "It is recommended that the file be fragmented or the fragment length be increased.",
-            )
+            if need_log:
+                log.output(
+                    log.WARN,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "The proportion of index may be high. "
+                    "It is recommended that the file be fragmented or the fragment length be increased.",
+                )
 
         return matrix, size
     except IOError:
@@ -96,7 +100,7 @@ def read_binary_from_all(path, segment_length=120):
 
 
 # noinspection PyBroadException,PyProtectedMember
-def write_all_from_binary(path, matrix, size):
+def write_all_from_binary(path, matrix, size, need_log=False):
     """
     introduction: Writing binary matrix to document.
 
@@ -108,23 +112,27 @@ def write_all_from_binary(path, matrix, size):
 
     :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                   Type: int
+
+    :param need_log: need output log.
     """
     m = monitor.Monitor()
 
     try:
         with open(path, "wb+") as file:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Write file from binary matrix: " + path,
-            )
+            if need_log:
+                log.output(
+                    log.NORMAL,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Write file from binary matrix: " + path,
+                )
 
             # Change bit to byte (8 -> 1), and write a file as bytes
             bit_index = 0
             temp_byte = 0
             for row in range(len(matrix)):
-                m.output(row, len(matrix))
+                if need_log:
+                    m.output(row, len(matrix))
                 for col in range(len(matrix[0])):
                     bit_index += 1
                     temp_byte *= 2
@@ -145,7 +153,7 @@ def write_all_from_binary(path, matrix, size):
 
 
 # noinspection PyBroadException,PyProtectedMember
-def read_dna_file(path):
+def read_dna_file(path, need_log=False):
     """
     introduction: Reading DNA motif set from documents.
 
@@ -154,6 +162,8 @@ def read_dna_file(path):
 
     :return dna_motifs: A corresponding DNA sequence string in which each row acts as a sequence.
                          Type: one-dimensional list(string)
+
+    :param need_log: need output log.
     """
 
     m = monitor.Monitor()
@@ -162,17 +172,19 @@ def read_dna_file(path):
 
     try:
         with open(path, "r") as file:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Read DNA motifs from file: " + path,
-            )
+            if need_log:
+                log.output(
+                    log.NORMAL,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Read DNA motifs from file: " + path,
+                )
 
             # Read current file by line
             lines = file.readlines()
             for index in range(len(lines)):
-                m.output(index, len(lines))
+                if need_log:
+                    m.output(index, len(lines))
                 line = lines[index]
                 dna_motifs.append([line[col] for col in range(len(line) - 1)])
 
@@ -187,7 +199,7 @@ def read_dna_file(path):
 
 
 # noinspection PyProtectedMember,PyBroadException
-def write_dna_file(path, dna_motifs):
+def write_dna_file(path, dna_motifs, need_log=False):
     """
     introduction: Writing DNA motif set to documents.
 
@@ -196,20 +208,24 @@ def write_dna_file(path, dna_motifs):
 
     :param dna_motifs: A corresponding DNA sequence string in which each row acts as a sequence.
                         Type: one-dimensional list(string)
+
+    :param need_log: need output log.
     """
 
     m = monitor.Monitor()
 
     try:
         with open(path, "w") as file:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Write DNA motifs to file: " + path,
-            )
+            if need_log:
+                log.output(
+                    log.NORMAL,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Write DNA motifs to file: " + path,
+                )
             for row in range(len(dna_motifs)):
-                m.output(row, len(dna_motifs))
+                if need_log:
+                    m.output(row, len(dna_motifs))
                 file.write("".join(dna_motifs[row]) + "\n")
         return dna_motifs
     except IOError:

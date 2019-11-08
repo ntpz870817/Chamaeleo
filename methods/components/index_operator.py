@@ -9,18 +9,14 @@ Function(s): (1) Connect index (to binary) to binary data, one or all.
              (2) Divide index (to decimal) and binary data, one or all.
              (3) Arrange the scrambled data by indexes.
 """
-
 import sys
-import os
 
-sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
-
-import utils.monitor as monitor
-import utils.log as log
+import Chamaeleo.utils.monitor as monitor
+import Chamaeleo.utils.log as log
 
 
 # noinspection PyProtectedMember
-def connect_all(matrix):
+def connect_all(matrix, need_log=False):
     """
     introduction: Connect index and data from the two-dimensional matrix.
 
@@ -33,12 +29,13 @@ def connect_all(matrix):
     m = monitor.Monitor()
     index_binary_length = int(len(str(bin(len(matrix)))) - 2)
 
-    log.output(
-        log.NORMAL,
-        str(__name__),
-        str(sys._getframe().f_code.co_name),
-        "Add index in the binary matrix.",
-    )
+    if need_log:
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Add index in the binary matrix.",
+        )
 
     new_matrix = []
     for row in range(len(matrix)):
@@ -75,7 +72,7 @@ def connect(index, data, index_binary_length):
 
 
 # noinspection PyProtectedMember
-def divide_all(matrix):
+def divide_all(matrix, need_log=False):
     """
     introduction: Separate data from indexes in binary strings.
 
@@ -88,12 +85,13 @@ def divide_all(matrix):
     m = monitor.Monitor()
     index_binary_length = int(len(str(bin(len(matrix)))) - 2)
 
-    log.output(
-        log.NORMAL,
-        str(__name__),
-        str(sys._getframe().f_code.co_name),
-        "Divide index and data from binary matrix.",
-    )
+    if need_log:
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Divide index and data from binary matrix.",
+        )
 
     indexs = []
     datas = []
@@ -132,7 +130,7 @@ def divide(one_list, index_binary_length):
 
 
 # noinspection PyProtectedMember
-def sort_order(indexes, data_set):
+def sort_order(indexes, data_set, need_log=False):
     """
     introduction: Restore data in order of index.
 
@@ -145,12 +143,13 @@ def sort_order(indexes, data_set):
     """
     m = monitor.Monitor()
 
-    log.output(
-        log.NORMAL,
-        str(__name__),
-        str(sys._getframe().f_code.co_name),
-        "Restore the disrupted data order.",
-    )
+    if need_log:
+        log.output(
+            log.NORMAL,
+            str(__name__),
+            str(sys._getframe().f_code.co_name),
+            "Restore the disrupted data order.",
+        )
 
     # noinspection PyUnusedLocal
     matrix = [[0 for col in range(len(data_set[0]))] for row in range(len(indexes))]
