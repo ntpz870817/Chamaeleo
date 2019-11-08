@@ -7,10 +7,11 @@ setup(
     version="0.0",
     description="library for the well accepted coding schemes of DNA storage",
     author="Zhi PING, Hao-Ling ZHANG, Sha (Joe) ZHU",
-    author_email="",
+    author_email="pingzhi@cngb.org, zhanghaoling@genomics.cn",
     url="https://github.com/ntpz870817/Chamaeleo",
     packages=["Chamaeleo", "Chamaeleo.methods", "Chamaeleo.utils"],
     package_dir={"Chamaeleo": "."},
+    license='MIT',
     package_data={
         "Chamaeleo": [
             "test/test_files/binaries/DNA Fountain Input Files.tar",
@@ -28,5 +29,5 @@ setup(
     install_requires=[
         'numpy>=1.17.0',
     ],
-
+    python_requires='>=3'
 )
