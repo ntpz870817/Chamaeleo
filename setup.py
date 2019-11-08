@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name="Chamaeleo",
-    version="0.0",
+    version="0.1",
     description="library for the well accepted coding schemes of DNA storage",
     author="Zhi PING, Hao-Ling ZHANG, Sha (Joe) ZHU",
     author_email="pingzhi@cngb.org, zhanghaoling@genomics.cn",
@@ -12,6 +12,7 @@ setup(
     packages=["Chamaeleo", "Chamaeleo.methods", "Chamaeleo.utils"],
     package_dir={"Chamaeleo": "."},
     license='MIT',
+    keywords='DNA Storage, Coding Scheme',
     package_data={
         "Chamaeleo": [
             "test/test_files/binaries/DNA Fountain Input Files.tar",
@@ -25,9 +26,5 @@ setup(
             "test/test_files/videos/Exiting the Factory (the First Movie in the World).flv",
             "test/test_files/videos/I have a Dream (Martin Luther King).mp4",
         ]
-    },
-    install_requires=[
-        'numpy>=1.17.0',
-    ],
-    python_requires='>=3'
+    }
 )
