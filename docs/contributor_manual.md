@@ -1,8 +1,10 @@
+Contributor Manual
+==================
+
 <p align="center">
 <img src="https://github.com/ntpz870817/Chamaeleo/blob/master/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
 </p>
 
----
 
 # Read Before You Want to Make a Contribution
 **Chamaeleo** is currently the only collection focused on different codec methods for DNA storage.
@@ -115,8 +117,9 @@ Usually, the annotation includes the purpose of the function, the interpretation
 
 
 Two simple example is shown below:
+
 ```python
-"""
+
 introduction: The initialization method of YYC.
 
 :param base_reference: Correspondence between base and binary data (RULE 1).
@@ -142,13 +145,12 @@ introduction: The initialization method of YYC.
 :param max_ratio: The max ratio of 0 or 1.
                   When the (count/length) >= this parameter, we decide that this binary sequence is not good.
 
-"""
 ```
 
 and another is:
 
 ```python
-"""
+
 introduction: Separate good and bad data from total data, and splice index and data as a list
 
 :param matrix: Generated binary two-dimensional matrix
@@ -157,7 +159,7 @@ introduction: Separate good and bad data from total data, and splice index and d
 
 :returns good_datas, bad datas: good and bad data from total data
                                 Type: list(int)
-"""
+
 ```
 
 ### Process Output Specification
