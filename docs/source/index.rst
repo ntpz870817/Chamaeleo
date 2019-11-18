@@ -11,10 +11,11 @@ schemes for DNA storage.
 .. toctree::
    :maxdepth: 2
 
-   description
-   installation
-   Tutorial
+   authors.md
+   installation.md
+   description.md
+   user_manual.md
+   contributor_manual.md
+
+   tutorial
    modules
-   contributor_manual
-   user_manual
-   authors

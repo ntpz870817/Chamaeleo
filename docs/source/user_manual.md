@@ -2,12 +2,11 @@ User manual
 ===========
 
 <p align="center">
-<img src="https://github.com/ntpz870817/Chamaeleo/blob/master/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
+<img src="./_static/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
 </p>
 
 ---
 
-# Read before you want to use it
 **Chamaeleo** is currently the only collection focused on different codec methods for DNA storage.
 We hope to provide a readable, robust and high-performance learning and useful framework for researchers and engineers.
 

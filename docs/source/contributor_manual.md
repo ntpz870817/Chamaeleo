@@ -2,11 +2,9 @@ Contributor Manual
 ==================
 
 <p align="center">
-<img src="https://github.com/ntpz870817/Chamaeleo/blob/master/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
+<img src="./_static/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
 </p>
 
-
-# Read Before You Want to Make a Contribution
 **Chamaeleo** is currently the only collection focused on different codec methods for DNA storage.
 We hope to provide a readable, robust and high-performance learning and useful framework for researchers and engineers.
 We welcome your participation and dedicate strength to this community.
@@ -88,7 +86,6 @@ An overview of a document is necessary, which helps us to know what tasks this d
 Among them, the "Name" section should contain citations including journal papers or other reference.
 This operation will help people with learning needs to trace back to the principles of methods.
 
-
 A simple example is shown below:
 
 ```python
@@ -114,7 +111,6 @@ Reference: Z.Ping et al. Towards Practical and Robust DNA-based Data Archiving b
 Unless the construction and reading of the function is very simple, we need to complete the annotation of the function header.
 It is important for cooperative development.
 Usually, the annotation includes the purpose of the function, the interpretation and constraints of the input parameters, and the necessary information of the return production.
-
 
 Two simple example is shown below:
 

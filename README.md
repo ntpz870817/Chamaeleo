@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/ntpz870817/Chamaeleo/blob/master/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
+<img src="./docs/source/_static/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
 </p>
 
 ---
@@ -13,5 +13,5 @@ It provides you a chance to use the classical DNA encoding and decoding methods 
 Here, we provide guidance for different visitors.
 We recommend that you read the user manual first and then the contributor manual.
 
-- If you are a learner or a engineer, please pay attention to the user manual, see [**\docs\user_manual.md**](https://github.com/ntpz870817/Chamaeleo/blob/master/docs/user_manual.md).
-- If you want to be a contributor, please pay attention to the contributor manual, see [**\docs\contributor_manual.md**](https://github.com/ntpz870817/Chamaeleo/blob/master/docs/contributor_manual.md).
+- If you are a learner or a engineer, please pay attention to the user manual, see [**\docs\source\user_manual.md**](https://github.com/ntpz870817/Chamaeleo/blob/master/docs/source/user_manual.md).
+- If you want to be a contributor, please pay attention to the contributor manual, see [**\docs\source\contributor_manual.md**](https://github.com/ntpz870817/Chamaeleo/blob/master/docs/source/contributor_manual.md).
