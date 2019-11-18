@@ -15,6 +15,7 @@ Advantages: (1) High compressibility, maximum compressibility to 1/2 of the orig
             (3) Increase the number of sequence changes (1,536 cases), increasing data security.
 """
 import sys
+import numpy
 
 import Chamaeleo.methods.components.inherent as inherent
 import Chamaeleo.methods.components.validity as validity
@@ -24,9 +25,6 @@ import Chamaeleo.utils.monitor as monitor
 
 # noinspection PyProtectedMember
 # noinspection PyBroadException,PyArgumentList
-import numpy
-
-
 class YYC:
     def __init__(
         self,
