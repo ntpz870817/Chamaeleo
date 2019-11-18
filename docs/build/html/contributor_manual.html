@@ -1,0 +1,448 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Contributor Manual &mdash; Chamaeleo 0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/small_logo.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial" href="tutorial.html" />
+    <link rel="prev" title="User manual" href="user_manual.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Chamaeleo
+          
+
+          
+            
+            <img src="_static/small_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_manual.html">User manual</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributor Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#language-in-use">Language in USE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#package-in-use">Package in USE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#library-tree-diagram">Library Tree Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coding-specification">Coding Specification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#document-header-annotation-specification">Document Header Annotation Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function-header-annotation-specification">Function Header Annotation Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#process-output-specification">Process Output Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#log-output-specification">Log Output Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#variable-naming-specification">Variable Naming Specification</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-process-and-recommendations">Testing Process and Recommendations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#other-requirements">Other Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Chamaeleo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Contributor Manual</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/contributor_manual.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="contributor-manual">
+<h1>Contributor Manual<a class="headerlink" href="#contributor-manual" title="Permalink to this headline">¶</a></h1>
+<p align="center">
+<img src="./_static/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
+</p><p><strong>Chamaeleo</strong> is currently the only collection focused on different codec methods for DNA storage.
+We hope to provide a readable, robust and high-performance learning and useful framework for researchers and engineers.
+We welcome your participation and dedicate strength to this community.</p>
+<div class="section" id="language-in-use">
+<h2>Language in USE<a class="headerlink" href="#language-in-use" title="Permalink to this headline">¶</a></h2>
+<p>We use <strong>Python3.7.3</strong> to develop the kit.</p>
+</div>
+<div class="section" id="package-in-use">
+<h2>Package in USE<a class="headerlink" href="#package-in-use" title="Permalink to this headline">¶</a></h2>
+<p>The packages we are calling now is as follows:</p>
+<ul class="simple">
+<li><p>[x] sys</p></li>
+<li><p>[x] os</p></li>
+<li><p>[x] random</p></li>
+<li><p>[x] math</p></li>
+<li><p>[x] struct</p></li>
+<li><p>[x] datetime</p></li>
+<li><p>[x] numpy</p></li>
+<li><p>[x] pickle</p></li>
+</ul>
+<p>If you have other packages, Please add them here.</p>
+<p>While choosing external packages, you need to consider the problems caused by different systems and focus on the reliability of the source of the package.
+For example, the Windows version of Python has no “termios” module.
+Failures of development or usage caused by external packages should be avoid.
+In addition, some non-robust external packages may lead to instability or even collapse of the kit.</p>
+</div>
+<div class="section" id="library-tree-diagram">
+<h2>Library Tree Diagram<a class="headerlink" href="#library-tree-diagram" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>├── docs                              // Description document folder
+│    ├── author.md                    // Author catalogue
+│    ├── contributor_manual.md        // Read Before You Want to Make a Contribution
+│    ├── user_manual.md               // Read before you want to use it
+├── methods                           // Method module
+│    ├── components                   // Inherent property folder
+│    │    ├── index_operator.py       // Processing the relationship between index and data
+│    │    ├── inherent.py             // Inherent property
+│    │    ├── validity.py             // Determining whether motif is friendly to sequencing and synthesis
+│    ├── verifies                     // Error-Correction Method
+│    │    ├── hm.py                   // Hamming error correction
+│    │    ├── rs.py                   // Reed-Solomon error correction
+│    ├── gc.py                        // GC (DNA Storage Code created by Grass)
+│    ├── hc.py                        // HC (DNA Storage Code based on Huffman code)
+│    ├── sc.py                        // SC (Simple DNA Storage Code)
+│    ├── yyc.py                       // YYC (Yin-Yang DNA Storage Code)
+├── test                              // Test module
+│    ├── generated_files              // DNA motif set file or binary file generated in the test
+│    │    ├── README.md               // Description document of generated files and the above folder
+│    ├── test_files                   // Files for testing
+│    ├── test_functional              // Functional test folder
+│    │    ├── ft_gc_47_trans.py       // Functional testing for GC (256^2 and 47^3)
+│    │    ├── ft_hc_huff_trans.py     // Functional testing for HC (huffman code transformation)
+│    │    ├── README.md               // Description document of the above folder
+│    ├── test_integrated              // Integrated test folder
+│    │    ├── st_ddc.py               // Symmetrical testing of DDC
+│    │    ├── st_gc.py                // Symmetrical testing of GC
+│    │    ├── st_hc.py                // Symmetrical testing of HC
+│    │    ├── st_sc.py                // Symmetrical testing of SC
+│    │    ├── README.md               // Description document of the above folder
+├── utils                             // Util module
+│    ├── data_handle.py               // Conversion of DNA motifs and binary document
+│    ├── log.py                       // Outputting the logs in console
+│    ├── model_saver.py               // Save model to file and load model from file
+│    ├── monitor.py                   // Getting the progress situation and the time left
+├── .gitignore                        // Upload ignore file
+├── codec_factory.py                  // Main calling function
+├── LICENSE                           // Protocol of kit
+├── logo.png                          // Logo of kit
+├── README.md                         // Description document of library
+</pre></div>
+</div>
+</div>
+<div class="section" id="coding-specification">
+<h2>Coding Specification<a class="headerlink" href="#coding-specification" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="document-header-annotation-specification">
+<h3>Document Header Annotation Specification<a class="headerlink" href="#document-header-annotation-specification" title="Permalink to this headline">¶</a></h3>
+<p>Several information should be included in the beginning of the file:
+(1) Name, (2) Coder, (3) Current Version, and (4) Function(s).</p>
+<p>An overview of a document is necessary, which helps us to know what tasks this document has accomplished.
+Among them, the “Name” section should contain citations including journal papers or other reference.
+This operation will help people with learning needs to trace back to the principles of methods.</p>
+<p>A simple example is shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Name: YYC(Ying-Yang DNA Storage Code)</span>
+
+<span class="sd">Coder: HaoLing ZHANG (BGI-Research)[V1]</span>
+
+<span class="sd">Current Version: 1</span>
+
+<span class="sd">Function(s): (1) DNA encoding by YYC.</span>
+<span class="sd">             (2) DNA decoding by YYC.</span>
+
+<span class="sd">Advantages: (1) high compressibility, maximum compressibility to 1/2 of the original data.</span>
+<span class="sd">            (2) preventing repetitive motifs, like ATCGATCG...</span>
+<span class="sd">            (3) increase the number of sequence changes (1,536 cases), increasing data security.</span>
+
+<span class="sd">Reference: Z.Ping et al. Towards Practical and Robust DNA-based Data Archiving by Codec Named “Yin-Yang”. XXX. 2019</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="function-header-annotation-specification">
+<h3>Function Header Annotation Specification<a class="headerlink" href="#function-header-annotation-specification" title="Permalink to this headline">¶</a></h3>
+<p>Unless the construction and reading of the function is very simple, we need to complete the annotation of the function header.
+It is important for cooperative development.
+Usually, the annotation includes the purpose of the function, the interpretation and constraints of the input parameters, and the necessary information of the return production.</p>
+<p>Two simple example is shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="n">introduction</span><span class="p">:</span> <span class="n">The</span> <span class="n">initialization</span> <span class="n">method</span> <span class="n">of</span> <span class="n">YYC</span><span class="o">.</span>
+
+<span class="p">:</span><span class="n">param</span> <span class="n">base_reference</span><span class="p">:</span> <span class="n">Correspondence</span> <span class="n">between</span> <span class="n">base</span> <span class="ow">and</span> <span class="n">binary</span> <span class="n">data</span> <span class="p">(</span><span class="n">RULE</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span>
+                       <span class="n">Make</span> <span class="n">sure</span> <span class="n">that</span> <span class="n">the</span> <span class="n">first</span> <span class="ow">and</span> <span class="n">third</span><span class="p">,</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">second</span> <span class="ow">and</span> <span class="n">fourth</span> <span class="n">are</span> <span class="n">equal</span><span class="p">,</span> <span class="n">so</span> <span class="n">there</span> <span class="n">are</span> <span class="n">only</span> <span class="n">two</span> <span class="n">cases</span><span class="p">:</span>
+                       <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span>
+
+<span class="p">:</span><span class="n">param</span> <span class="n">current_code_matrix</span><span class="p">:</span> <span class="n">Conversion</span> <span class="n">rule</span> <span class="n">between</span> <span class="n">base</span> <span class="ow">and</span> <span class="n">binary</span> <span class="n">data</span> <span class="n">based</span> <span class="n">on</span> <span class="n">support</span> <span class="n">base</span> <span class="ow">and</span> <span class="n">current</span> <span class="n">base</span> <span class="p">(</span><span class="n">RULE</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span>
+                             <span class="n">Label</span> <span class="n">row</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">support</span> <span class="n">base</span><span class="p">,</span> <span class="n">label</span> <span class="n">col</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">current</span> <span class="n">base</span><span class="o">.</span>
+                                 <span class="n">A</span>   <span class="n">T</span>   <span class="n">C</span>   <span class="n">G</span>
+                             <span class="n">A</span>   <span class="n">X1</span>  <span class="n">Y1</span>  <span class="n">X2</span>  <span class="n">Y2</span>
+                             <span class="n">T</span>   <span class="n">X3</span>  <span class="n">Y3</span>  <span class="n">X4</span>  <span class="n">Y4</span>
+                             <span class="n">C</span>   <span class="n">X5</span>  <span class="n">Y5</span>  <span class="n">X6</span>  <span class="n">Y6</span>
+                             <span class="n">G</span>   <span class="n">X7</span>  <span class="n">Y7</span>  <span class="n">X8</span>  <span class="n">Y8</span>
+                             <span class="n">Make</span> <span class="n">sure</span> <span class="n">that</span> <span class="n">Xn</span> <span class="o">+</span> <span class="n">Yn</span> <span class="o">=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">Xn</span> <span class="o">*</span> <span class="n">Yn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="ow">is</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span><span class="o">.</span>
+
+<span class="p">:</span><span class="n">param</span> <span class="n">support_bases</span><span class="p">:</span> <span class="n">Base</span> <span class="n">replenishment</span> <span class="n">before</span> <span class="n">official</span> <span class="n">data</span><span class="o">.</span>
+                      <span class="n">Make</span> <span class="n">sure</span> <span class="n">that</span> <span class="n">the</span> <span class="n">count</span> <span class="n">of</span> <span class="n">support</span> <span class="n">base</span> <span class="n">must</span> <span class="n">more</span> <span class="n">than</span> <span class="n">support</span> <span class="n">spacing</span><span class="o">.</span>
+                      <span class="n">Make</span> <span class="n">sure</span> <span class="n">that</span> <span class="n">the</span> <span class="n">number</span> <span class="nb">range</span> <span class="n">of</span> <span class="n">each</span> <span class="n">position</span> <span class="ow">is</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">},</span> <span class="n">reference</span> <span class="n">base</span> <span class="n">index</span><span class="o">.</span>
+
+<span class="p">:</span><span class="n">param</span> <span class="n">support_spacing</span><span class="p">:</span> <span class="n">Spacing</span> <span class="n">between</span> <span class="n">support</span> <span class="n">base</span> <span class="ow">and</span> <span class="n">current</span> <span class="n">base</span><span class="o">.</span>
+                        <span class="n">When</span> <span class="n">the</span> <span class="n">support</span> <span class="n">base</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">front</span> <span class="n">of</span> <span class="n">the</span> <span class="n">current</span> <span class="n">base</span><span class="p">,</span> <span class="n">the</span> <span class="n">spacing</span> <span class="ow">is</span> <span class="mf">0.</span>
+
+<span class="p">:</span><span class="n">param</span> <span class="n">max_ratio</span><span class="p">:</span> <span class="n">The</span> <span class="nb">max</span> <span class="n">ratio</span> <span class="n">of</span> <span class="mi">0</span> <span class="ow">or</span> <span class="mf">1.</span>
+                  <span class="n">When</span> <span class="n">the</span> <span class="p">(</span><span class="n">count</span><span class="o">/</span><span class="n">length</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">this</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">we</span> <span class="n">decide</span> <span class="n">that</span> <span class="n">this</span> <span class="n">binary</span> <span class="n">sequence</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">good</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>and another is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="n">introduction</span><span class="p">:</span> <span class="n">Separate</span> <span class="n">good</span> <span class="ow">and</span> <span class="n">bad</span> <span class="n">data</span> <span class="kn">from</span> <span class="nn">total</span> <span class="nn">data</span><span class="p">,</span> <span class="ow">and</span> <span class="n">splice</span> <span class="n">index</span> <span class="ow">and</span> <span class="n">data</span> <span class="k">as</span> <span class="n">a</span> <span class="nb">list</span>
+
+<span class="p">:</span><span class="n">param</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">Generated</span> <span class="n">binary</span> <span class="n">two</span><span class="o">-</span><span class="n">dimensional</span> <span class="n">matrix</span>
+               <span class="n">The</span> <span class="n">data</span> <span class="n">of</span> <span class="n">this</span> <span class="n">matrix</span> <span class="n">contains</span> <span class="n">only</span> <span class="mi">0</span> <span class="ow">or</span> <span class="mi">1</span> <span class="p">(</span><span class="n">non</span><span class="o">-</span><span class="n">char</span><span class="p">)</span><span class="o">.</span>
+               <span class="n">Type</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="n">bit</span>
+
+<span class="p">:</span><span class="n">returns</span> <span class="n">good_datas</span><span class="p">,</span> <span class="n">bad</span> <span class="n">datas</span><span class="p">:</span> <span class="n">good</span> <span class="ow">and</span> <span class="n">bad</span> <span class="n">data</span> <span class="kn">from</span> <span class="nn">total</span> <span class="nn">data</span>
+                                <span class="n">Type</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="process-output-specification">
+<h3>Process Output Specification<a class="headerlink" href="#process-output-specification" title="Permalink to this headline">¶</a></h3>
+<p>Part of the process may require  long loading time.
+We recommend that you to monitor the running time using <a class="reference external" href="https://github.com/ntpz870817/Chamaeleo/blob/master/utils/monitor.py"><strong>monitor.py</strong></a> objects under folder <strong>utils</strong>.</p>
+<p>The specific usage is as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">utils.monitor</span> <span class="kn">as</span> <span class="nn">monitor</span>
+
+<span class="n">monitor</span> <span class="o">=</span> <span class="n">monitor</span><span class="o">.</span><span class="n">Monitor</span><span class="p">()</span>
+<span class="c1"># do something</span>
+<span class="n">length</span> <span class="o">=</span> <span class="mi">1000000000000</span>
+<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+    <span class="n">monitor</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+    <span class="c1"># do something</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="log-output-specification">
+<h3>Log Output Specification<a class="headerlink" href="#log-output-specification" title="Permalink to this headline">¶</a></h3>
+<p>We want you to print each core step to the console through <a class="reference external" href="https://github.com/ntpz870817/Chamaeleo/blob/master/utils/log.py"><strong>log.py</strong></a>  in folder <strong>utils</strong>.
+This helps us understand what procedure the kit takes.</p>
+<p>The specific usage is as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">Chamaeleo.utils.log</span> <span class="kn">as</span> <span class="nn">log</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">NORMAL</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="vm">__name__</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">),</span>
+           <span class="s2">&quot;Restore the disrupted data order.&quot;</span><span class="p">)</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">WARN</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="vm">__name__</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">),</span>
+           <span class="s2">&quot;There may be a large number of motifs that are difficult to use. &quot;</span>
+           <span class="s2">&quot;We recommend stopping and modifying the rules.&quot;</span><span class="p">)</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="vm">__name__</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">),</span>
+           <span class="s2">&quot;The file selection operation was not performed correctly. Please complete the operation again!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We have declared three types available now: NORMAL, WARN, and ERROR.
+If the type is ERROR, we will end this program immediately.</p>
+<ul class="simple">
+<li><p>If the type is NORMAL, print normal.</p></li>
+<li><p>If the type is WARN, print yellow and high light.</p></li>
+<li><p>If the type is ERROR, print red and high light.</p></li>
+</ul>
+</div>
+<div class="section" id="variable-naming-specification">
+<h3>Variable Naming Specification<a class="headerlink" href="#variable-naming-specification" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>The naming of variables requires the basic expression of the meaning of variables.
+We do not recommend that you use some simple characters like “i”, “j” or “k” as process variables, which can be obscure and not conducive to cooperative development.</p></li>
+<li><p>Variables are represented by lowercase letters, numbers and underscores.</p></li>
+<li><p>If you iterate based on subscripts, we recommend that you name the variable “index”.</p></li>
+<li><p>If some variables modify or save the original object (*), it is recommended to use “current_*”, “last_*”, or “temp_*”.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="testing-process-and-recommendations">
+<h2>Testing Process and Recommendations<a class="headerlink" href="#testing-process-and-recommendations" title="Permalink to this headline">¶</a></h2>
+<p>The complete process of testing is as follows:
+(1) setting input type, (2) single function test, (3) integration function test, (4) error input test (input reminder and optimization),
+(5) unilateral integration function test (encoding or decoding), (6) symmetrical integration function test (corresponding to encoding and decoding process)</p>
+<p>We strongly recommend that you complete all the tests before submitting them.</p>
+<p>In addition, considering that using “print” or “log” functions for testing is irrational.
+Package <a class="reference external" href="https://github.com/cool-RR/PySnooper"><strong>“PySnooper”</strong></a> would an option for testing.</p>
+</div>
+<div class="section" id="other-requirements">
+<h2>Other Requirements<a class="headerlink" href="#other-requirements" title="Permalink to this headline">¶</a></h2>
+<p>We strongly recommend that you update the <a class="reference internal" href="#"><span class="doc">Contributor Manual</span></a>
+or <a class="reference internal" href="user_manual.html"><span class="doc">User Manual</span></a> as appropriate while completing the coding.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tutorial.html" class="btn btn-neutral float-right" title="Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="user_manual.html" class="btn btn-neutral float-left" title="User manual" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Haoling Zhang, Zhi Ping, Joe Zhu
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
