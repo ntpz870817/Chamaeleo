@@ -22,6 +22,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../../"))
 
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -89,6 +90,7 @@ html_theme = "alabaster"
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
+# noinspection PyRedeclaration
 html_theme = "sphinx_rtd_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -183,3 +185,4 @@ texinfo_documents = [
         "Miscellaneous",
     )
 ]
+
