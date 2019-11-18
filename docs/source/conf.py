@@ -35,7 +35,6 @@ sys.path.insert(0, os.path.abspath("../../"))
 extensions = ["sphinx.ext.autodoc", "sphinx_markdown_tables"]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ["_static"]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -96,18 +95,15 @@ html_theme = "sphinx_rtd_theme"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_logo = "_static/small_logo.png"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = "_static/small_logo.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 
-html_static_path = ["_static"]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
