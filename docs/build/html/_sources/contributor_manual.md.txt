@@ -165,7 +165,7 @@ We recommend that you to monitor the running time using [**monitor.py**](https:/
 The specific usage is as follows:
 
 ```python
-import utils.monitor as monitor
+import Chamaeleo.utils.monitor as monitor
 
 monitor = monitor.Monitor()
 # do something
