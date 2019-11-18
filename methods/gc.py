@@ -20,7 +20,7 @@ import Chamaeleo.utils.log as log
 
 # noinspection PyMethodMayBeStatic,PyProtectedMember,PyTypeChecker,PyUnusedLocal
 class GC:
-    def __init__(self, base_values=None):
+    def __init__(self, base_values=None, need_log=False):
         """
         introduction: The initialization method of Grass Codec.
 
@@ -28,13 +28,6 @@ class GC:
                              Other values and their corresponding 'three bases' types will be discarded.
                              One-dimensional list containing all values of 1-47.
         """
-
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Create the Grass method.",
-        )
 
         if base_values is None:
             base_values = [index for index in range(48)]
@@ -50,6 +43,14 @@ class GC:
         self.segment_length = 0
         self.file_size = 0
         self.m = monitor.Monitor()
+        self.need_log = need_log
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Create the Grass method.",
+            )
 
     # ================================================= encode part ========================================================
 
@@ -88,7 +89,8 @@ class GC:
             "Encode the matrix.",
         )
         for row in range(len(matrix)):
-            self.m.output(row, len(matrix))
+            if self.need_log:
+                self.m.output(row, len(matrix))
             dna_motifs.append(self.__list_to_motif__(matrix[row]))
 
         self.m.restore()
@@ -145,14 +147,17 @@ class GC:
 
         matrix = []
 
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Convert DNA motifs to binary matrix.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Convert DNA motifs to binary matrix.",
+            )
+
         for index in range(len(dna_motifs)):
-            self.m.output(index, len(dna_motifs))
+            if self.need_log:
+                self.m.output(index, len(dna_motifs))
             matrix.append(self.__motif_to_list__(dna_motifs[index]))
 
         self.m.restore()

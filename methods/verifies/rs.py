@@ -14,14 +14,12 @@ Function(s): (1) Add Reed-Solomon error correction for origin matrix or origin l
              (2) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
 """
 
-import sys
-
 import Chamaeleo.utils.log as log
 
 
 # noinspection PyProtectedMember,PyMethodMayBeStatic,PyTypeChecker,PyUnresolvedReferences
 class RS:
-    def __init__(self, check_size=3):
+    def __init__(self, check_size=3, need_log=False):
         """
         introduction: The initialization method of Reed-Solomon Codec.
 
@@ -31,6 +29,7 @@ class RS:
         self.galois_field_exp, self.galois_field_log = self.__init_galois_field__()
         self.rs_generator = self.__obtain_generator__()
         self.length_examine = False
+        self.need_log = need_log
 
     def __init_galois_field__(self):
         """
@@ -61,20 +60,22 @@ class RS:
         :return verity_matrix: Verifiable matrix.
                                Type: Two-dimensional list(int).
         """
-
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Add the error correction for matrix.",
-        )
-        if len(matrix[0]) / 8 + self.check_size > 255:
+        if self.need_log:
             log.output(
-                log.WARN,
+                log.NORMAL,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "Data length is too long, encoding and decoding will take a lot of time.",
+                "Add the error correction for matrix.",
             )
+
+        if len(matrix[0]) / 8 + self.check_size > 255:
+            if self.need_log:
+                log.output(
+                    log.WARN,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Data length is too long, encoding and decoding will take a lot of time.",
+                )
         self.length_examine = True
 
         verify_matrix = []
@@ -97,12 +98,13 @@ class RS:
         """
         if len(input_list) / 8 + self.check_size > 255:
             if self.length_examine is False:
-                log.output(
-                    log.WARN,
-                    str(__name__),
-                    str(sys._getframe().f_code.co_name),
-                    "Data length is too long, encoding and decoding will take a lot of time.",
-                )
+                if self.need_log:
+                    log.output(
+                        log.WARN,
+                        str(__name__),
+                        str(sys._getframe().f_code.co_name),
+                        "Data length is too long, encoding and decoding will take a lot of time.",
+                    )
 
         if len(input_list) % 8 != 0:
             add_length = 8 - len(input_list) % 8
@@ -137,13 +139,13 @@ class RS:
         :return matrix: Origin matrix.
                         Type: Two-dimensional list(int).
         """
-
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Remove the error correction for matrix.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Remove the error correction for matrix.",
+            )
         matrix = []
         for row in range(len(verity_matrix)):
             matrix.append(self.remove_for_list(verity_matrix[row], original_length))
@@ -176,13 +178,13 @@ class RS:
         :return matrix: Matrix that has been verified even repaired.
                         Type: Two-dimensional list(int).
         """
-
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Verify and repair the matrix.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Verify and repair the matrix.",
+            )
         matrix = []
         for row in range(len(verity_matrix)):
             matrix.append(self.verify_for_list(verity_matrix[row], row))
@@ -203,12 +205,13 @@ class RS:
                              Type: One-dimensional list(int).
         """
         if row is None:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Verify and repair the list.",
-            )
+            if self.need_log:
+                log.output(
+                    log.NORMAL,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "Verify and repair the list.",
+                )
 
         output_list = self.__binary_to_decimal__(input_list)
         # find erasures

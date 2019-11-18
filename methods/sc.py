@@ -11,9 +11,8 @@ Current Version: 1
 Function(s): (1) DNA encoding by Simple.
              (2) DNA decoding by Simple.
 """
-
-import sys
 import random
+import sys
 
 import Chamaeleo.utils.monitor as monitor
 import Chamaeleo.utils.log as log
@@ -22,7 +21,7 @@ import Chamaeleo.methods.components.inherent as inherent
 
 # noinspection PyMethodMayBeStatic,PyProtectedMember
 class SC:
-    def __init__(self, mapping_rule=None):
+    def __init__(self, mapping_rule=None, need_log=False):
         """
         introduction: The initialization method of Simple Codec.
 
@@ -40,6 +39,7 @@ class SC:
         self.mapping_rule = mapping_rule
         self.file_size = 0
         self.m = monitor.Monitor()
+        self.need_log = need_log
 
     def __init_check__(self, mapping_rule):
         """
@@ -50,13 +50,13 @@ class SC:
                               (1) Two bases correspond to a number (0 or 1): i.e. AT-0, CG-1.
                               (2) Each base corresponds to a number: i.e. A-00, T-01, C-10, G-11.
         """
-
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Create the Simple method.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Create the Simple method.",
+            )
 
         if 0 <= min(mapping_rule) and max(mapping_rule) <= 1:
             if (
@@ -118,15 +118,17 @@ class SC:
         self.file_size = size
 
         self.m.restore()
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Encode the matrix.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Encode the matrix.",
+            )
         dna_motifs = []
         for row in range(len(matrix)):
-            self.m.output(row, len(matrix))
+            if self.need_log:
+                self.m.output(row, len(matrix))
             dna_motifs.append(self.__list_to_motif__(matrix[row]))
 
         return dna_motifs
@@ -184,16 +186,17 @@ class SC:
                             Type: int
         """
         self.m.restore()
-
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Convert DNA motifs to binary matrix.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Convert DNA motifs to binary matrix.",
+            )
         matrix = []
         for index in range(len(dna_motifs)):
-            self.m.output(index, len(dna_motifs))
+            if self.need_log:
+                self.m.output(index, len(dna_motifs))
             matrix.append(self.__motif_to_list__(dna_motifs[index]))
 
         self.m.restore()

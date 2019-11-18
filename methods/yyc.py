@@ -16,7 +16,10 @@ Advantages: (1) High compressibility, maximum compressibility to 1/2 of the orig
 """
 
 import sys
+import os
 import numpy
+
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
 
 import Chamaeleo.methods.components.inherent as inherent
 import Chamaeleo.methods.components.validity as validity
@@ -24,8 +27,8 @@ import Chamaeleo.utils.log as log
 import Chamaeleo.utils.monitor as monitor
 
 
-# noinspection PyProtectedMember, PyUnresolvedReferences,PyMethodMayBeStatic
-# noinspection PyUnusedLocal,PyBroadException,PyArgumentList
+# noinspection PyProtectedMember
+# noinspection PyBroadException,PyArgumentList
 class YYC:
     def __init__(
         self,
@@ -35,6 +38,7 @@ class YYC:
         support_spacing=0,
         max_ratio=0.8,
         search_count=1,
+        need_log=False
     ):
         """
         introduction: The initialization method of YYC.
@@ -77,6 +81,7 @@ class YYC:
         if not support_bases:
             support_bases = [inherent.index_base.get(0)]
 
+        self.need_log = need_log
         # Detect parameters correctness
         self.__init_check__(
             support_bases,
@@ -131,12 +136,13 @@ class YYC:
                            Make sure that max ratio must more than 50% and less than 100%..
 
         """
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Create the YYC method.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Create the YYC method.",
+            )
 
         # Check support bases
         for index in range(len(support_bases)):
@@ -284,31 +290,36 @@ class YYC:
         self.file_size = size
 
         self.monitor.restore()
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Separate good data from bad data.",
-        )
+
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Separate good data from bad data.",
+            )
 
         good_data_set, bad_data_set = self.__divide_library__(matrix)
 
         self.monitor.restore()
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Random pairing and friendly testing.",
-        )
+
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Random pairing and friendly testing.",
+            )
         data_set = self.__pairing__(good_data_set, bad_data_set)
 
         self.monitor.restore()
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Convert to DNA motif string set.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Convert to DNA motif string set.",
+            )
         dna_motifs = self.__synthesis_motifs__(data_set)
 
         return dna_motifs
@@ -333,33 +344,37 @@ class YYC:
                 bad_indexes.append(row)
 
         if len(matrix) < len(bad_indexes) * 5:
-            log.output(
-                log.WARN,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "There may be a large number of motifs that are difficult to use. "
-                "We recommend stopping and modifying the rules.",
-            )
+            if self.need_log:
+                log.output(
+                    log.WARN,
+                    str(__name__),
+                    str(sys._getframe().f_code.co_name),
+                    "There may be a large number of motifs that are difficult to use. "
+                    "We recommend stopping and modifying the rules.",
+                )
 
         if len(bad_indexes) == 0 and len(matrix) == 0:
             return [], []
         elif len(bad_indexes) == 0:
             good_data_set = []
             for row in range(len(matrix)):
-                self.monitor.output(row, len(matrix))
+                if self.need_log:
+                    self.monitor.output(row, len(matrix))
                 good_data_set.append(matrix[row])
             return good_data_set, []
         elif len(bad_indexes) == len(matrix):
             bad_data_set = []
             for row in range(len(matrix)):
-                self.monitor.output(row, len(matrix))
+                if self.need_log:
+                    self.monitor.output(row, len(matrix))
                 bad_data_set.append(matrix[row])
             return [], bad_data_set
         else:
             good_data_set = []
             bad_data_set = []
             for row in range(len(matrix)):
-                self.monitor.output(row, len(matrix))
+                if self.need_log:
+                    self.monitor.output(row, len(matrix))
                 if row in bad_indexes:
                     bad_data_set.append(matrix[row])
                 else:
@@ -403,7 +418,8 @@ class YYC:
             )
 
         for index in range(0, len(good_data_set) + len(bad_data_set), 2):
-            self.monitor.output(index, len(good_data_set) + len(bad_data_set))
+            if self.need_log:
+                self.monitor.output(index, len(good_data_set) + len(bad_data_set))
             if index < len(good_data_set) + len(bad_data_set) - 1:
                 if len(good_indexes) != 0 and len(bad_indexes) != 0:
                     for search_index in range(self.search_count):
@@ -412,9 +428,9 @@ class YYC:
                         if (
                             search_index >= self.search_count - 1
                             or validity.check(
-                                self.__list_to_motif__(
+                                "".join(self.__list_to_motif__(
                                     good_data_set[good_index], bad_data_set[bad_index]
-                                )
+                                ))
                             )
                         ):
                             data_set.append(good_data_set[good_index])
@@ -431,10 +447,10 @@ class YYC:
                         if (
                             search_index >= self.search_count - 1
                             or validity.check(
-                                self.__list_to_motif__(
+                                "".join(self.__list_to_motif__(
                                     good_data_set[good_index1],
                                     good_data_set[good_index2],
-                                )
+                                ))
                             )
                         ):
                             data_set.append(good_data_set[good_index1])
@@ -451,9 +467,9 @@ class YYC:
                         if (
                             search_index >= self.search_count - 1
                             or validity.check(
-                                self.__list_to_motif__(
+                                "".join(self.__list_to_motif__(
                                     bad_data_set[bad_index1], bad_data_set[bad_index2]
-                                )
+                                ))
                             )
                         ):
                             data_set.append(bad_data_set[bad_index1])
@@ -493,7 +509,8 @@ class YYC:
 
         dna_motifs = []
         for row in range(0, len(data_set), 2):
-            self.monitor.output(row, len(data_set))
+            if self.need_log:
+                self.monitor.output(row, len(data_set))
             if row < len(data_set) - 1:
                 dna_motifs.append(
                     self.__list_to_motif__(data_set[row], data_set[row + 1])
@@ -575,7 +592,6 @@ class YYC:
             if self.base_reference[index] == int(upper_bit):
                 current_options.append(index)
 
-        one_base = None
         if self.current_code_matrix[inherent.base_index.get(support_base)][
             current_options[0]
         ] == int(lower_bit):
@@ -610,12 +626,13 @@ class YYC:
             )
 
         self.monitor.restore()
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Convert DNA motifs to binary matrix.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Convert DNA motifs to binary matrix.",
+            )
         matrix = self.__convert_binaries__(dna_motifs)
 
         self.monitor.restore()
@@ -636,7 +653,8 @@ class YYC:
         matrix = []
 
         for row in range(len(dna_motifs)):
-            self.monitor.output(row, len(dna_motifs))
+            if self.need_log:
+                self.monitor.output(row, len(dna_motifs))
             upper_row_datas, lower_row_datas = self.__dna_motif_to_binaries__(
                 dna_motifs[row]
             )
@@ -652,7 +670,7 @@ class YYC:
         """
         introduction: Convert one DNA motif to two-line binary list.
 
-        :param dna_motifs: The DNA motif of len(matrix) rows.
+        :param dna_motif: The DNA motif of len(matrix) rows.
                             Type: One-dimensional list(string).
 
         :returns upper_row_list, lower_row_list: The binary list corresponding to the dna motif.

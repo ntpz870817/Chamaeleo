@@ -7,7 +7,8 @@ Current Version: 1
 
 Function(s): The Feasibility of Testing the Whole Process of GC
 """
-import Chamaeleo.codec_factory
+
+import Chamaeleo.codec_factory as codec_factory
 import Chamaeleo.methods.gc as cc
 
 

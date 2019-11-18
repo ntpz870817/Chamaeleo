@@ -1,3 +1,4 @@
+# add root path for terminal
 import random
 
 from Chamaeleo.methods.verifies import rs

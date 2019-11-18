@@ -45,7 +45,7 @@ In addition, some non-robust external packages may lead to instability or even c
 │    ├── components                   // Inherent property folder
 │    │    ├── index_operator.py       // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
-│    │    ├── motif_validity.py       // Determining whether motif is friendly to sequencing and synthesis
+│    │    ├── validity.py             // Determining whether motif is friendly to sequencing and synthesis
 │    ├── verifies                     // Error-Correction Method
 │    │    ├── hm.py                   // Hamming error correction
 │    │    ├── rs.py                   // Reed-Solomon error correction

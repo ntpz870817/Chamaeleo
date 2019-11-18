@@ -1,7 +1,6 @@
 Authors
 =======
 
-
 | Name            | Organization                       |
 |:---------------:|:----------------------------------:|
 | Zhi PING        | Synthetic Platform of BGI-Research |

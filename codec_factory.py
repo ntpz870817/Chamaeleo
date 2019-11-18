@@ -9,9 +9,8 @@ Function(s): After initializing the encoding or decoding method,
              the conversion between DNA motif set and binary files is completed
              by the entry function.
 """
-
-
 import sys
+
 import Chamaeleo.utils.model_saver as saver
 import Chamaeleo.utils.data_handle as data_handle
 import Chamaeleo.utils.log as log

@@ -10,8 +10,9 @@ Current Version: 1
 Function(s): (1) DNA encoding by Huffman Codec.
              (2) DNA decoding by Huffman Codec.
 """
-import re
 import sys
+import re
+
 import Chamaeleo.utils.monitor as monitor
 import Chamaeleo.utils.log as log
 import Chamaeleo.methods.components.inherent as inherent
@@ -19,7 +20,7 @@ import Chamaeleo.methods.components.inherent as inherent
 
 # noinspection PyProtectedMember,PyMethodMayBeStatic,PyTypeChecker,PyUnusedLocal
 class HC:
-    def __init__(self, fixed_huffman=True):
+    def __init__(self, fixed_huffman=True, need_log=False):
         """
         introduction: The initialization method of Huffman Codec.
 
@@ -39,6 +40,7 @@ class HC:
         self.fixed_huffman = fixed_huffman
         self.file_size = 0
         self.m = monitor.Monitor()
+        self.need_log = need_log
 
     # ================================================= encode part ========================================================
 
@@ -67,28 +69,31 @@ class HC:
             matrix = temp_matrix
 
         self.m.restore()
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Generate the huffman dictionary.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Generate the huffman dictionary.",
+            )
         if self.fixed_huffman:
             self.__huffman_dict__()
         else:
             self.__huffman_dict__(matrix)
 
         self.m.restore()
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Convert matrix to dna motif set.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Convert matrix to dna motif set.",
+            )
         dna_motifs = []
 
         for row in range(len(matrix)):
-            self.m.output(row, len(matrix))
+            if self.need_log:
+                self.m.output(row, len(matrix))
             dna_motifs.append(
                 self.__list_to_motif__(self.__huffman_compressed__(matrix[row]))
             )
@@ -257,18 +262,20 @@ class HC:
         """
 
         self.m.restore()
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Convert DNA motifs to binary matrix.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Convert DNA motifs to binary matrix.",
+            )
 
         matrix = []
         index_binary_length = int(len(str(bin(len(dna_motifs)))) - 2)
 
         for index in range(len(dna_motifs)):
-            self.m.output(index, len(dna_motifs))
+            if self.need_log:
+                self.m.output(index, len(dna_motifs))
             matrix.append(
                 self.__huffman_decompressed__(
                     self.__motif_to_list__(dna_motifs[index]), index_binary_length
