@@ -15,12 +15,6 @@ Advantages: (1) High compressibility, maximum compressibility to 1/2 of the orig
             (3) Increase the number of sequence changes (1,536 cases), increasing data security.
 """
 
-import sys
-import os
-import numpy
-
-sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
-
 import Chamaeleo.methods.components.inherent as inherent
 import Chamaeleo.methods.components.validity as validity
 import Chamaeleo.utils.log as log
