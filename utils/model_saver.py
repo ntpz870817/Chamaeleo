@@ -25,9 +25,9 @@ def save_model(path, model, need_log=False):
 
     :param model: Current model for encoding.
                    Type: .pkl
-                   i.e. YYC or DDC.
+                   e.g. YYC.
 
-    :param need_log: need output log.
+    :param need_log: choose to output log file or not.
     """
     if need_log:
         log.output(
@@ -49,9 +49,9 @@ def load_model(path, need_log=False):
                   Type: .pkl
 
     :return: needed model.
-              i.e. YYC or DDC.
+              e.g. YYC.
 
-    :param need_log: need output log.
+    :param need_log: choose to output log file or not.
     """
     if need_log:
         log.output(

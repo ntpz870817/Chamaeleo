@@ -9,7 +9,7 @@ Current Version: 1
 
 Function(s): (1) Add Hamming error correction for origin matrix or origin list.
              (2) Remove Hamming error correction from origin matrix or origin list.
-             (2) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
+             (3) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
 """
 import sys
 
@@ -189,7 +189,7 @@ class Hm:
 
         :param row: The number of rows of the matrix to which the list belongs.
 
-        :return output_list: List that has been verified even repaired.
+        :return output_list: List that has been verified and repaired.
                              Type: One-dimensional list(int).
         """
         if row is None:
@@ -239,7 +239,7 @@ class Hm:
                 log.WARN,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "Error cannot be detected.",
+                "Multiple errors can be detected, but due to the limitation of error-correction settings, the errors cannot be located.",
             )
         else:
             if self.need_log:

@@ -79,7 +79,7 @@ class SC:
                     log.ERROR,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "mapping rule is wrong!",
+                    "Mapping rule is wrong!",
                 )
             else:
                 pass
@@ -96,14 +96,14 @@ class SC:
                     log.ERROR,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "mapping rule is wrong!",
+                    "Mapping rule is wrong!",
                 )
 
     # ================================================= encode part ========================================================
 
     def encode(self, matrix, size):
         """
-        introduction: Encode DNA motifs from the data of binary file.
+        introduction: Encode DNA sequences from the data of binary file.
 
         :param matrix: Generated binary two-dimensional matrix.
                         The data of this matrix contains only 0 or 1 (non-char).
@@ -112,7 +112,7 @@ class SC:
         :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                       Type: int
 
-        :return dna_motifs: The DNA motif of len(matrix) rows.
+        :return dna_motifs: The DNA sequence of len(matrix) rows.
                              Type: list(string).
         """
         self.file_size = size
@@ -135,12 +135,12 @@ class SC:
 
     def __list_to_motif__(self, one_list):
         """
-        introduction: from one binary list to DNA motif.
+        introduction: from one binary list to DNA sequence.
 
         :param one_list: One binary list.
                           Type: int or bit.
 
-        :return dna_motif: One DNA motif.
+        :return dna_motif: One DNA sequence.
                             Type: List(char).
         """
         dna_motif = []
@@ -174,12 +174,12 @@ class SC:
 
     def decode(self, dna_motifs):
         """
-        introduction: Decode DNA motifs to the data of binary file.
+        introduction: Decode DNA sequences to the data of binary file.
 
-        :param dna_motifs: The DNA motif of len(matrix) rows.
+        :param dna_motifs: The DNA sequence of len(matrix) rows.
                             Type: One-dimensional list(string).
 
-        :return matrix: The binary matrix corresponding to the dna motifs.
+        :return matrix: The binary matrix corresponding to the DNA sequences.
                          Type: Two-dimensional list(int).
 
         :return file_size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
@@ -191,7 +191,7 @@ class SC:
                 log.NORMAL,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "Convert DNA motifs to binary matrix.",
+                "Convert DNA sequences to binary matrix.",
             )
         matrix = []
         for index in range(len(dna_motifs)):
@@ -204,12 +204,12 @@ class SC:
 
     def __motif_to_list__(self, dna_motif):
         """
-        introduction: Convert one DNA motif to one binary list.
+        introduction: Convert one DNA sequence to one binary list.
 
-        :param dna_motif: One DNA motif.
+        :param dna_motif: One DNA sequence.
                            Type: String.
 
-        :return one_list: The binary list corresponding to the dna motif.
+        :return one_list: The binary list corresponding to the DNA sequence.
                            Type: One-dimensional list(int).
         """
         one_list = []

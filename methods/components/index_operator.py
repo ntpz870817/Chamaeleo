@@ -5,7 +5,7 @@ Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): (1) Connect index (to binary) to binary data, one or all.
+Function(s): (1) Integrate index (to binary) to binary data, one or all.
              (2) Divide index (to decimal) and binary data, one or all.
              (3) Arrange the scrambled data by indexes.
 """
@@ -18,7 +18,7 @@ import Chamaeleo.utils.log as log
 # noinspection PyProtectedMember
 def connect_all(matrix, need_log=False):
     """
-    introduction: Connect index and data from the two-dimensional matrix.
+    introduction: Integrate index and data from the two-dimensional matrix.
 
     :param matrix: Data from input.
                    Type: Two-dimensional list(int).
@@ -54,7 +54,7 @@ def connect_all(matrix, need_log=False):
 
 def connect(index, data, index_binary_length):
     """
-    introduction: Connect index and data, list 0100+111101010.
+    introduction: Integrate index and data, list 0100+111101010.
 
     :param index: The index of data.
                    Type: int.
@@ -79,7 +79,7 @@ def divide_all(matrix, need_log=False):
     """
     introduction: Separate data from indexes in binary strings.
 
-    :param matrix: The DNA motif of len(matrix) rows.
+    :param matrix: The DNA sequence of len(matrix) rows.
                    Type: Two-dimensional list(int).
 
     :param need_log: need output log.
@@ -156,7 +156,7 @@ def sort_order(indexes, data_set, need_log=False):
             log.NORMAL,
             str(__name__),
             str(sys._getframe().f_code.co_name),
-            "Restore the disrupted data order.",
+            "Restore data order according to index.",
         )
 
     # noinspection PyUnusedLocal

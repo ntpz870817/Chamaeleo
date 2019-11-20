@@ -5,7 +5,7 @@ Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): Conversion of DNA motifs and binary document
+Function(s): Conversion of DNA sequences and binary document
 """
 
 import struct
@@ -27,15 +27,16 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
     :param path: File path.
                   Type: string
 
-    :param segment_length: The cut length of DNA motif.
-                           Considering current DNA synthesis factors,
-                           we usually set 120 bases as a motif.
+    :param segment_length: The binary segment length used for DNA sequence generation.
+                           Considering current DNA synthesis technique limitation,
+                           we usually set 120 as default segment length.
 
-    :return matrix: A corresponding DNA motif string in which each row acts
-                    as a motif.
+    :param need_log: choose to output log file or not.
+
+    :return matrix: A matrix in which each row represents a binary segment that will be 
+		    used for DNA sequence generation.
                     Type: two-dimensional list(int)
 
-    :param need_log: need output log.
     """
 
     m = monitor.Monitor()
@@ -85,8 +86,8 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
                     log.WARN,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "The proportion of index may be high. "
-                    "It is recommended that the file be fragmented or the fragment length be increased.",
+                    "The proportion of index in whole sequence may be high. "
+                    "It is recommended to increase the output DNA sequences' length or to divide the file into more segment pools",
                 )
 
         return matrix, size
@@ -95,7 +96,7 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
             log.ERROR,
             str(__name__),
             str(sys._getframe().f_code.co_name),
-            "The file selection operation was not performed correctly. Please complete the operation again!",
+            "The file selection operation was not performed correctly. Please execute the operation again!",
         )
 
 
@@ -107,13 +108,13 @@ def write_all_from_binary(path, matrix, size, need_log=False):
     :param path: File path.
                   Type: string
 
-    :param matrix: A corresponding DNA motif string in which each row acts as a motif.
+    :param matrix: A matrix in which each row represents a binary segment that will be used for DNA sequence generation.
                     Type: two-dimensional list(int)
 
     :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                   Type: int
 
-    :param need_log: need output log.
+    :param need_log: choose to output log file or not.
     """
     m = monitor.Monitor()
 
@@ -148,14 +149,14 @@ def write_all_from_binary(path, matrix, size, need_log=False):
             log.ERROR,
             str(__name__),
             str(sys._getframe().f_code.co_name),
-            "The file selection operation was not performed correctly. Please complete the operation again!",
+            "The file selection operation was not performed correctly. Please execute the operation again!",
         )
 
 
 # noinspection PyBroadException,PyProtectedMember
 def read_dna_file(path, need_log=False):
     """
-    introduction: Reading DNA motif set from documents.
+    introduction: Reading DNA sequence set from documents.
 
     :param path: File path.
                   Type: string
@@ -177,7 +178,7 @@ def read_dna_file(path, need_log=False):
                     log.NORMAL,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "Read DNA motifs from file: " + path,
+                    "Read DNA sequences from file: " + path,
                 )
 
             # Read current file by line
@@ -194,22 +195,22 @@ def read_dna_file(path, need_log=False):
             log.ERROR,
             str(__name__),
             str(sys._getframe().f_code.co_name),
-            "The file selection operation was not performed correctly. Please complete the operation again!",
+            "The file selection operation was not performed correctly. Please execute the operation again!",
         )
 
 
 # noinspection PyProtectedMember,PyBroadException
 def write_dna_file(path, dna_motifs, need_log=False):
     """
-    introduction: Writing DNA motif set to documents.
+    introduction: Writing DNA sequence set to documents.
 
     :param path: File path.
                   Type: string
 
-    :param dna_motifs: A corresponding DNA sequence string in which each row acts as a sequence.
+    :param dna_motifs: Generated DNA sequences.
                         Type: one-dimensional list(string)
 
-    :param need_log: need output log.
+    :param need_log: choose to output log file or not.
     """
 
     m = monitor.Monitor()
@@ -221,7 +222,7 @@ def write_dna_file(path, dna_motifs, need_log=False):
                     log.NORMAL,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "Write DNA motifs to file: " + path,
+                    "Write DNA sequences to file: " + path,
                 )
             for row in range(len(dna_motifs)):
                 if need_log:
@@ -233,5 +234,5 @@ def write_dna_file(path, dna_motifs, need_log=False):
             log.ERROR,
             str(__name__),
             str(sys._getframe().f_code.co_name),
-            "The file selection operation was not performed correctly. Please complete the operation again!",
+            "The file selection operation was not performed correctly. Please execute the operation again!",
         )
