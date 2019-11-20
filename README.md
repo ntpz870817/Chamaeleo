@@ -6,7 +6,7 @@
 
 **Chamaeleo** is currently the only collection focused on different codec methods for DNA storage.
 This kit is mainly developed and operated by Synthetic Platform of BGI-Research, for a detailed list of authors, see [**authors.md**](https://github.com/ntpz870817/Chamaeleo/blob/master/docs/source/authors.md).
-It provides you a chance to use the classical DNA encoding and decoding methods to save files into DNA motifs or load them from DNA motifs.
+It provides you a chance to use the classical DNA encoding and decoding methods to save files into DNA sequences or load them from DNA sequences.
 
 ---
 
