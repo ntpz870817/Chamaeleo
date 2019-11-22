@@ -10,16 +10,33 @@ setup(
     author="Zhi PING, Hao-Ling ZHANG, Sha (Joe) ZHU",
     author_email="zhanghaoling@genomics.cn",
     url="https://github.com/ntpz870817/Chamaeleo",
-    packages=["Chamaeleo",
-              "Chamaeleo.methods",
-              "Chamaeleo.methods.components",
-              "Chamaeleo.methods.verifies",
-              "Chamaeleo.utils"],
+    packages=[
+        "Chamaeleo",
+        "Chamaeleo.methods",
+        "Chamaeleo.methods.components",
+        "Chamaeleo.methods.verifies",
+        "Chamaeleo.utils",
+    ],
+    package_data={
+        "Chamaeleo": [
+            "data/binaries/DNA Fountain Input Files.tar",
+            "data/binaries/Microsoft Winmine.exe",
+            "data/books/A Tale of Two Cities.pdf",
+            "data/books/The Wandering Earth.pdf",
+            "data/musics/For Elise (Ludwig van Beethoven).wma",
+            "data/musics/Grande Sonata Pathetique OP.13.mp3",
+            "data/pictures/Mona Lisa.jpg",
+            "data/pictures/United Nations Flag.bmp",
+            "data/videos/Exiting the Factory (the First Movie in the World).flv",
+            "data/videos/I have a Dream (Martin Luther King).mp4",
+        ]
+    },
     package_dir={"Chamaeleo": "."},
-    license='MIT',
+    license="MIT",
     classifiers=[
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3',
-        'Operating System :: OS Independent'],
-    keywords='DNA Storage, Coding Scheme'
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+        "Operating System :: OS Independent",
+    ],
+    keywords="DNA Storage, Coding Scheme",
 )
