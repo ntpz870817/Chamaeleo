@@ -43,6 +43,7 @@ jobs:
       - run:
           name: install from pypi
           command: |
+            . venv/bin/activate
             pip install Chamaeleo
 
       - run:
