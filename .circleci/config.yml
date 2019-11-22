@@ -41,6 +41,11 @@ jobs:
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - run:
+          name: install from pypi
+          command: |
+            pip install Chamaeleo
+
+      - run:
           name: check style
           command: |
             . venv/bin/activate
