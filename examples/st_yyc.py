@@ -15,9 +15,7 @@ import Chamaeleo.methods.yyc as yyc
 import Chamaeleo.utils.dir_checker as checker
 
 root_path = os.path.dirname(Chamaeleo.__file__)
-read_file_path = os.path.join(
-    root_path, "test", "test_files", "books", "A Tale of Two Cities.pdf"
-)
+read_file_path = os.path.join(root_path, "data", "books", "A Tale of Two Cities.pdf")
 current_path = os.path.dirname(os.path.realpath(__file__))
 generated_file_path = os.path.join(current_path, "generated_files")
 checker.check_dir_exists(generated_file_path)
