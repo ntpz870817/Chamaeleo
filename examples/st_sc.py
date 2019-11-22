@@ -23,7 +23,7 @@ generated_file_path = os.path.join(current_path, "generated_files")
 checker.check_dir_exists(generated_file_path)
 write_file_path = os.path.join(generated_file_path, "target.pdf")
 dna_path = os.path.join(generated_file_path, "target.dna")
-model_path = os.path.join(generated_file_path, "gc.pkl")
+model_path = os.path.join(generated_file_path, "sc.pkl")
 
 
 if __name__ == "__main__":

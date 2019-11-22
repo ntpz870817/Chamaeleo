@@ -8,16 +8,23 @@ Current Version: 1
 Function(s): The Feasibility of Testing the Whole Process of DDC
 """
 
+import os
+import Chamaeleo
 import Chamaeleo.codec_factory as codec_factory
 import Chamaeleo.methods.yyc as yyc
+import Chamaeleo.utils.dir_checker as checker
 
-read_file_path = "..\\..\\test\\test_files\\books\\A Tale of Two Cities.pdf"
+root_path = os.path.dirname(Chamaeleo.__file__)
+read_file_path = os.path.join(
+    root_path, "test", "test_files", "books", "A Tale of Two Cities.pdf"
+)
+current_path = os.path.dirname(os.path.realpath(__file__))
+generated_file_path = os.path.join(current_path, "generated_files")
+checker.check_dir_exists(generated_file_path)
+write_file_path = os.path.join(generated_file_path, "target.pdf")
+dna_path = os.path.join(generated_file_path, "target.dna")
+model_path = os.path.join(generated_file_path, "yyc.pkl")
 
-write_file_path = "..\\..\\test\\generated_files\\target.pdf"
-
-dna_path = "..\\..\\test\\generated_files\\target.dna"
-
-model_path = "..\\..\\test\\generated_files\\yyc.pkl"
 
 if __name__ == "__main__":
     tool = yyc.YYC()
