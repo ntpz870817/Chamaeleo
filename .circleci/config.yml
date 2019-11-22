@@ -68,10 +68,10 @@ jobs:
           name: run scripts
           command: |
            . venv/bin/activate
-           python3 examples/st_gc.py
-           python3 examples/st_hc.py
-           python3 examples/st_sc.py
-           python3 examples/st_yyc.py
+           venv/bin/python3 examples/st_gc.py
+           venv/bin/python3 examples/st_hc.py
+           venv/bin/python3 examples/st_sc.py
+           venv/bin/python3 examples/st_yyc.py
 
       - store_artifacts:
           path: test-reports
