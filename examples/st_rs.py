@@ -1,13 +1,14 @@
+# add root path for terminal
 import random
 
-from Chamaeleo.methods.verifies import hm
+from Chamaeleo.methods.verifies import rs
 
 length = 16
 
 origin = [random.randint(0, 1) for i in range(length)]
 print(origin)
 
-verify = hm.Hm()
+verify = rs.RS()
 add_list = verify.add_for_list(origin)
 print(add_list)
 
@@ -21,5 +22,5 @@ print(str(modify_list) + " error position = " + str(error_position))
 verify_list = verify.verify_for_list(modify_list)
 print(verify_list)
 
-remove_list = verify.remove_for_list(verify_list)
+remove_list = verify.remove_for_list(verify_list, length)
 print(remove_list)

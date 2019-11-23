@@ -51,7 +51,7 @@ jobs:
           command: |
             . venv/bin/activate
             pycodestyle --ignore=E501,E203,E731,W503,W292 *.py */*py
-            python3 setup.py install
+            pip install .
 
       # run tests!
       # this example uses Django's built-in test-runner
@@ -68,12 +68,10 @@ jobs:
           name: run scripts
           command: |
            . venv/bin/activate
-           # python2 chamaeleo.py -f PZ_encoding/abc -encode simple > abc.simple
-           # python2 chamaeleo.py -f abc.simple -decode simple
-           # python2 chamaeleo.py -f PZ_encoding/abc -encode huffman > abs.huffman
-           # python2 chamaeleo.py -f abs.huffman -decode huffman
-           # python2 chamaeleo.py -f PZ_encoding/abc -encode rs > abs.rs
-           # python2 chamaeleo.py -f abs.rs -decode rs
+           venv/bin/python3 examples/st_gc.py
+           venv/bin/python3 examples/st_hc.py
+           venv/bin/python3 examples/st_sc.py
+           venv/bin/python3 examples/st_yyc.py
 
       - store_artifacts:
           path: test-reports
