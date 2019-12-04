@@ -21,12 +21,7 @@ class TestEncodeDecode(unittest.TestCase):
         self.tool = yyc.YYC()
         # Rule 495
         self.tool.base_reference = [0, 1, 0, 1]
-        self.tool.current_code_matrix = [
-                [1, 1, 0, 0],
-                [1, 0, 0, 1],
-                [1, 1, 0, 0],
-                [1, 1, 0, 0],
-            ]
+        self.tool.current_code_matrix = [[1, 1, 0, 0], [1, 0, 0, 1], [1, 1, 0, 0], [1, 1, 0, 0]]
         self.tool.support_bases = ["A"]
         self.tool.support_spacing = 0
         self.tool.max_ratio = 0.8
