@@ -19,7 +19,6 @@ class TestEncodeDecode(unittest.TestCase):
         self.tool.mapping_rule = [0, 0, 1, 1]
         self.test_list = [random.randint(0, 1) for _ in range(120)]
 
-
     def test_list_to_motif(self):
         dna_motif = self.tool.__list_to_motif__(self.test_list)
         self.assertEqual(
@@ -274,7 +273,3 @@ class TestEncodeDecode(unittest.TestCase):
             ]
         )
         self.assertEqual(binary_list, self.test_list)
-
-t = TestEncodeDecode()
-t.setUp()
-t.test_list_to_motif()

@@ -319,12 +319,3 @@ class TestEncodeDecode(unittest.TestCase):
                 False
             ]
         )
-
-
-t = TestEncodeDecode()
-t.setUp()
-t.test_homopolymer()
-t.test_simple_repeat()
-t.test_inverse_repeat()
-t.test_dyad_repeat()
-t.test_cg_content()
