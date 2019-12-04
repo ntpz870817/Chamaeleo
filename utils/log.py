@@ -15,7 +15,7 @@ ERROR = 2
 
 
 # noinspection SpellCheckingInspection
-def output(info_type=0, class_name=None, method_name=None, info=None):
+def output(info_type=0, class_name=None, method_name=None, info=None, warn_terminate=False):
     """
     introduction: Output the logs in console.
                   Format is: TIME CLASS_NAME -> METHOD_NAME: INFO.
@@ -31,6 +31,7 @@ def output(info_type=0, class_name=None, method_name=None, info=None):
     :param method_name: Current method name, used to find the source of the information.
                         It is easy to get it by method "str(sys._getframe().f_code.co_name)" in the classes you need to export logs to console.
 
+    :param warn_terminate: if fased warn, the program needs be trrminated.
 
     :param info: The information hat users want to display in console.
                   Type: String
@@ -47,11 +48,7 @@ def output(info_type=0, class_name=None, method_name=None, info=None):
     elif info_type == WARN:
         # Print yellow and high light.
         print("\033[1;32;0m" + string + "\033[0m")
-        # End the program based on user selection
-        choose = input(
-            "Please enter whether you want to continue, 1 to continue, 0 to terminate: "
-        )
-        if int(choose) != 1:
+        if warn_terminate:
             exit(1)
     elif info_type == ERROR:
         # Print red and high light.
