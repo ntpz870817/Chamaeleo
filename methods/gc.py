@@ -82,12 +82,13 @@ class GC:
 
         dna_motifs = []
 
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Encode the matrix.",
-        )
+        if self.need_log:
+            log.output(
+                log.NORMAL,
+                str(__name__),
+                str(sys._getframe().f_code.co_name),
+                "Encode the matrix.",
+            )
         for row in range(len(matrix)):
             if self.need_log:
                 self.m.output(row, len(matrix))
