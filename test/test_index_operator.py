@@ -11,7 +11,7 @@ import copy
 import random
 import unittest
 
-from methods.components.index_operator import connect_all, divide_all, sort_order
+from Chamaeleo.methods.components.index_operator import connect_all, divide_all, sort_order
 
 
 class TestEncodeDecode(unittest.TestCase):
