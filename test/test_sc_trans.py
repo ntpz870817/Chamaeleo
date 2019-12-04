@@ -11,6 +11,7 @@ import random
 import unittest
 import Chamaeleo.methods.sc as sc
 
+
 class TestEncodeDecode(unittest.TestCase):
 
     def setUp(self):
