@@ -45,5 +45,3 @@ class TestEncodeDecode(unittest.TestCase):
     def test_remove_verify_from_matrix(self):
         output_matrix = self.tool.remove_for_matrix(copy.deepcopy(self.test_real_verify_matrix))
         self.assertEqual(output_matrix, self.test_binaries)
-
-
