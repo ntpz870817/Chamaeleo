@@ -24,7 +24,7 @@ class TestEncodeDecode(unittest.TestCase):
         dna_motif = self.tool.__list_to_motif__(self.test_list)
         self.assertEqual(
             dna_motif,
-            {
+            [
                 "G",
                 "A",
                 "C",
@@ -145,7 +145,7 @@ class TestEncodeDecode(unittest.TestCase):
                 "T",
                 "G",
                 "C",
-            },
+            ],
         )
 
     def test_motif_to_list(self):
