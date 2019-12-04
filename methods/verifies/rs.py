@@ -13,7 +13,7 @@ Function(s): (1) Add Reed-Solomon error correction for origin matrix or origin l
              (2) Remove Reed-Solomon error correction from origin matrix or origin list.
              (2) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
 """
-
+import sys
 import Chamaeleo.utils.log as log
 
 
@@ -28,6 +28,7 @@ class RS:
         self.check_size = check_size
         self.galois_field_exp, self.galois_field_log = self.__init_galois_field__()
         self.rs_generator = self.__obtain_generator__()
+        self.original_size = -1
         self.length_examine = False
         self.need_log = need_log
 
@@ -78,6 +79,8 @@ class RS:
                 )
         self.length_examine = True
 
+        self.original_size = len(matrix[0])
+
         verify_matrix = []
         for row in range(len(matrix)):
             verify_matrix.append(self.add_for_list(matrix[row]))
@@ -106,6 +109,9 @@ class RS:
                         "Data length is too long, encoding and decoding will take a lot of time.",
                     )
 
+        if self.original_size == -1:
+            self.original_size = len(input_list)
+
         if len(input_list) % 8 != 0:
             add_length = 8 - len(input_list) % 8
             input_list = [0 for add_bit in range(add_length)] + input_list
@@ -126,15 +132,13 @@ class RS:
         output_list = self.__decimal_to_binary__(output_list)
         return output_list
 
-    def remove_for_matrix(self, verity_matrix, original_length):
+    def remove_for_matrix(self, verity_matrix):
         """
         introduction: Remove Reed-Solomon error correction from origin matrix.
 
         :param verity_matrix: Verifiable matrix.
                               The data of this matrix contains only 0 or 1 (non-char).
                               Type: Two-dimensional list(int).
-
-        :param original_length:
 
         :return matrix: Origin matrix.
                         Type: Two-dimensional list(int).
@@ -148,10 +152,10 @@ class RS:
             )
         matrix = []
         for row in range(len(verity_matrix)):
-            matrix.append(self.remove_for_list(verity_matrix[row], original_length))
+            matrix.append(self.remove_for_list(verity_matrix[row]))
         return matrix
 
-    def remove_for_list(self, input_list, original_length):
+    def remove_for_list(self, input_list):
         """
         introduction: Remove Reed-Solomon error correction from origin list.
 
@@ -159,13 +163,11 @@ class RS:
                             The data of this matrix contains only 0 or 1 (non-char).
                             Type: One-dimensional list(int).
 
-        :param original_length:
-
         :return output_list: Origin list.
                              Type: One-dimensional list(int).
         """
         output_list = input_list[: -self.check_size * 8]
-        output_list = output_list[len(output_list) - original_length:]
+        output_list = output_list[len(output_list) - self.original_size:]
         return output_list
 
     def verify_for_matrix(self, verity_matrix):
@@ -270,14 +272,14 @@ class RS:
         ):
             if row is not None:
                 log.output(
-                    log.ERROR,
+                    log.WARN,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "Row" + str(row) + "could not be correct!",
+                    "Row " + str(row) + "could not be correct!",
                 )
             else:
                 log.output(
-                    log.ERROR,
+                    log.WARN,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
                     "Could not be correct!",
@@ -394,14 +396,14 @@ class RS:
         if errors * 2 > len(syndromes):
             if row is not None:
                 log.output(
-                    log.ERROR,
+                    log.WARN,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "Row" + str(row) + " has too many erasures to correct!",
+                    "Row " + str(row) + " has too many erasures to correct!",
                 )
             else:
                 log.output(
-                    log.ERROR,
+                    log.WARN,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
                     "Too many erasures to correct!",

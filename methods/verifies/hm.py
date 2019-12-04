@@ -236,7 +236,7 @@ class Hm:
             return input_list
         elif error >= len(output_list_copy):
             log.output(
-                log.ERROR,
+                log.WARN,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
                 "Error cannot be detected.",

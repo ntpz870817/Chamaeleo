@@ -23,6 +23,8 @@ def connect_all(matrix, need_log=False):
     :param matrix: Data from input.
                    Type: Two-dimensional list(int).
 
+    :param need_log:
+
     :return new_matrix: Data for output.
                         Type: Two-dimensional list(int).
     """
@@ -39,7 +41,8 @@ def connect_all(matrix, need_log=False):
 
     new_matrix = []
     for row in range(len(matrix)):
-        m.output(row, len(matrix))
+        if need_log:
+            m.output(row, len(matrix))
         new_matrix.append(connect(row, matrix[row], index_binary_length))
 
     m.restore()
@@ -79,6 +82,8 @@ def divide_all(matrix, need_log=False):
     :param matrix: The DNA motif of len(matrix) rows.
                    Type: Two-dimensional list(int).
 
+    :param need_log: need output log.
+
     :returns index, datas: Obtained data sets and index sets in corresponding locations.
                             Type: One-dimensional list(int), Two-dimensional list(int).
     """
@@ -97,7 +102,8 @@ def divide_all(matrix, need_log=False):
     datas = []
 
     for row in range(len(matrix)):
-        m.output(row, len(matrix))
+        if need_log:
+            m.output(row, len(matrix))
         index, data = divide(matrix[row], index_binary_length)
         indexs.append(index)
         datas.append(data)
@@ -138,6 +144,8 @@ def sort_order(indexes, data_set, need_log=False):
 
     :param data_set: The disordered data set, the locations of this are corresponding to parameter "index".
 
+    :param need_log: need output log.
+
     :returns matrix: Binary list in correct order.
                       Type: Two-dimensional list(int).
     """
@@ -155,7 +163,8 @@ def sort_order(indexes, data_set, need_log=False):
     matrix = [[0 for col in range(len(data_set[0]))] for row in range(len(indexes))]
 
     for row in range(len(indexes)):
-        m.output(row, len(indexes))
+        if need_log:
+            m.output(row, len(indexes))
         if 0 <= row < len(matrix):
             matrix[indexes[row]] = data_set[row]
 

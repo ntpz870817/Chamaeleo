@@ -18,11 +18,11 @@ class TestEncodeDecode(unittest.TestCase):
         self.tool = gc.GC([index for index in range(0, 48)])
         self.tool.segment_length = 160
         self.tool.index_binary_length = 0
-        self.test_list = [random.randint(0, 1) for index in range(160)]
+        self.test_list = [random.randint(0, 1) for _ in range(160)]
 
     def test_list_to_motif(self):
         dna_motif = self.tool.__list_to_motif__(self.test_list)
-        self.assertEquals(
+        self.assertEqual(
             dna_motif,
             [
                 "C",
@@ -213,4 +213,4 @@ class TestEncodeDecode(unittest.TestCase):
                 "T",
             ]
         )
-        self.assertEquals(binary_list, self.test_list)
+        self.assertEqual(binary_list, self.test_list)
