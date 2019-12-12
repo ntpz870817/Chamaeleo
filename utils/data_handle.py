@@ -33,8 +33,8 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
 
     :param need_log: choose to output log file or not.
 
-    :return matrix: A matrix in which each row represents a binary segment that will be 
-		    used for DNA sequence generation.
+    :return matrix: A matrix in which each row represents a binary segment that will be
+    used for DNA sequence generation.
                     Type: two-dimensional list(int)
 
     """

@@ -34,13 +34,13 @@ class YYC:
         support_spacing=0,
         max_ratio=0.8,
         search_count=1,
-        need_log=False
+        need_log=False,
     ):
         """
         introduction: The initialization method of YYC.
 
         :param base_reference: Correspondence between base and binary data (RULE 1).
-				Make sure that Two of the bases are 1 and the other two are 0, so there are only 6 case.
+        Make sure that Two of the bases are 1 and the other two are 0, so there are only 6 case.
 
         :param current_code_matrix: Conversion rule between base and binary data based on support base and current base (RULE 2).
                                      Label row is the support base, label col is the current base.
@@ -232,7 +232,7 @@ class YYC:
                     + ", "
                     + str(positions[1])
                     + "]! "
-                      "It is required by rule that these two values will have sum of 1 and product of 0.",
+                    "It is required by rule that these two values will have sum of 1 and product of 0.",
                 )
 
             left = current_code_matrix[row][positions[2]]
@@ -254,7 +254,7 @@ class YYC:
                     + ", "
                     + str(positions[3])
                     + "]! "
-                      "It is required by rule that these two values will have sum of 1 and product of 0.",
+                    "It is required by rule that these two values will have sum of 1 and product of 0.",
                 )
         # Check max ratio
         if max_ratio <= 0.5 or max_ratio >= 1:
@@ -419,12 +419,11 @@ class YYC:
                     for search_index in range(self.search_count):
                         good_index = int(good_indexes.pop())
                         bad_index = int(bad_indexes.pop())
-                        if (
-                            search_index >= self.search_count - 1
-                            or validity.check(
-                                "".join(self.__list_to_motif__(
+                        if search_index >= self.search_count - 1 or validity.check(
+                            "".join(
+                                self.__list_to_motif__(
                                     good_data_set[good_index], bad_data_set[bad_index]
-                                ))
+                                )
                             )
                         ):
                             data_set.append(good_data_set[good_index])
@@ -438,13 +437,12 @@ class YYC:
                     for search_index in range(self.search_count):
                         good_index1 = int(good_indexes.pop())
                         good_index2 = int(good_indexes.pop())
-                        if (
-                            search_index >= self.search_count - 1
-                            or validity.check(
-                                "".join(self.__list_to_motif__(
+                        if search_index >= self.search_count - 1 or validity.check(
+                            "".join(
+                                self.__list_to_motif__(
                                     good_data_set[good_index1],
                                     good_data_set[good_index2],
-                                ))
+                                )
                             )
                         ):
                             data_set.append(good_data_set[good_index1])
@@ -458,12 +456,11 @@ class YYC:
                     for search_index in range(self.search_count):
                         bad_index1 = int(bad_indexes.pop())
                         bad_index2 = int(bad_indexes.pop())
-                        if (
-                            search_index >= self.search_count - 1
-                            or validity.check(
-                                "".join(self.__list_to_motif__(
+                        if search_index >= self.search_count - 1 or validity.check(
+                            "".join(
+                                self.__list_to_motif__(
                                     bad_data_set[bad_index1], bad_data_set[bad_index2]
-                                ))
+                                )
                             )
                         ):
                             data_set.append(bad_data_set[bad_index1])
