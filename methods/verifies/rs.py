@@ -11,7 +11,7 @@ Current Version: 1
 
 Function(s): (1) Add Reed-Solomon error correction for origin matrix or origin list.
              (2) Remove Reed-Solomon error correction from origin matrix or origin list.
-             (2) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
+             (3) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
 """
 import sys
 import Chamaeleo.utils.log as log

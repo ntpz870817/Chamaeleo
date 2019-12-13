@@ -46,7 +46,7 @@ class HC:
 
     def encode(self, matrix, size):
         """
-        introduction: Encode DNA motifs from the data of binary file.
+        introduction: Encode DNA sequences from the data of binary file.
 
         :param matrix: Generated binary two-dimensional matrix.
                         The data of this matrix contains only 0 or 1 (non-char).
@@ -55,7 +55,7 @@ class HC:
         :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                       Type: int
 
-        :return dna_motifs: The DNA motif of len(matrix) rows.
+        :return dna_motifs: The DNA sequence of len(matrix) rows.
                              Type: list(list(char)).
         """
         self.file_size = size
@@ -116,7 +116,7 @@ class HC:
 
     def __huffman_compressed__(self, binary_list):
         """
-        introduction: Convert binary to ternary, compressing and facilitating the use of rotate code
+        introduction: Convert binary to ternary, compress and facilitate the use of rotate code
 
         :param binary_list: One binary list.
                              Type: int or bit.
@@ -138,12 +138,12 @@ class HC:
 
     def __list_to_motif__(self, one_list):
         """
-        introduction: Encode a DNA motif from one binary list.
+        introduction: Encode a DNA sequence from one binary list.
 
         :param one_list: One binary list.
                          Type: int or bit.
 
-        :return dna_motif: One DNA motif.
+        :return dna_motif: One DNA sequence.
                            Type: List(char).
         """
         last_base, dna_motif = "A", []
@@ -249,12 +249,12 @@ class HC:
 
     def decode(self, dna_motifs):
         """
-        introduction: Decode DNA motifs to the data of binary file.
+        introduction: Decode DNA sequences to the data of binary file.
 
-        :param dna_motifs: The DNA motif of len(matrix) rows.
+        :param dna_motifs: The DNA sequence of len(matrix) rows.
                             Type: One-dimensional list(string).
 
-        :return matrix: The binary matrix corresponding to the dna motifs.
+        :return matrix: The binary matrix corresponding to the dna sequences.
                          Type: Two-dimensional list(int).
 
         :return file_size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
@@ -267,7 +267,7 @@ class HC:
                 log.NORMAL,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "Convert DNA motifs to binary matrix.",
+                "Convert DNA sequences to binary matrix.",
             )
 
         matrix = []
@@ -294,9 +294,9 @@ class HC:
 
     def __motif_to_list__(self, dna_motif):
         """
-        introduction: Convert one DNA motif to one binary list.
+        introduction: Convert one DNA sequence to one Huffman coding list.
 
-        :param dna_motif: One DNA motif.
+        :param dna_motif: One DNA sequence.
                            Type: List(char).
 
         :return one_list: One ternary Huffman coding list.

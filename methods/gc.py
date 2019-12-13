@@ -24,9 +24,9 @@ class GC:
         """
         introduction: The initialization method of Grass Codec.
 
-        :param base_values: Assignment of 48 base pairs (0-46).
-                             Other values and their corresponding 'three bases' types will be discarded.
-                             One-dimensional list containing all values of 1-47.
+        :param base_values: Assignment of 48 base triplets (0-47).
+                             Other values and their corresponding triplets will be discarded.
+                             One-dimensional list containing all values of 0-46, 47 will be discarded.
         """
 
         if base_values is None:
@@ -56,7 +56,7 @@ class GC:
 
     def encode(self, matrix, size):
         """
-        introduction: Encode DNA motifs from the data of binary file.
+        introduction: Encode DNA sequences from the data of binary file.
 
         :param matrix: Generated binary two-dimensional matrix.
                         The data of this matrix contains only 0 or 1 (non-char).
@@ -66,7 +66,7 @@ class GC:
         :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                       Type: int
 
-        :return dna_motifs: The DNA motif of len(matrix) rows.
+        :return dna_motifs: The DNA sequence of len(matrix) rows.
                              Type: list(string).
         """
 
@@ -99,12 +99,12 @@ class GC:
 
     def __list_to_motif__(self, one_list):
         """
-        introduction: from one binary list to DNA motif.
+        introduction: from one binary list to DNA sequence.
 
         :param one_list: One binary list.
                           Type: int or bit.
 
-        :return dna_motif: One DNA motif.
+        :return dna_motif: One DNA sequence.
                             Type: list(char).
         """
 
@@ -131,13 +131,13 @@ class GC:
 
     def decode(self, dna_motifs):
         """
-        introduction: Decode DNA motifs to the data of binary file.
+        introduction: Decode DNA sequences to the data of binary file.
 
-        :param dna_motifs: The DNA motif of len(matrix) rows.
-                            The length of each DNA motifs should be a multiple of 9.
+        :param dna_motifs: The DNA sequence of len(matrix) rows.
+                            The length of each DNA sequences should be a multiple of 9.
                             Type: One-dimensional list(string).
 
-        :return matrix: The binary matrix corresponding to the dna motifs.
+        :return matrix: The binary matrix corresponding to the dna sequences.
                          Type: Two-dimensional list(int).
 
         :return file_size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
@@ -153,7 +153,7 @@ class GC:
                 log.NORMAL,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "Convert DNA motifs to binary matrix.",
+                "Convert DNA sequences to binary matrix.",
             )
 
         for index in range(len(dna_motifs)):
@@ -173,13 +173,13 @@ class GC:
 
     def __motif_to_list__(self, dna_motif):
         """
-        introduction: Convert one DNA motif to one binary list.
+        introduction: Convert one DNA sequence to one binary list.
 
-        :param dna_motif: One DNA motif.
-                           The length of DNA motif should be a multiple of 9.
+        :param dna_motif: One DNA sequence.
+                           The length of DNA sequence should be a multiple of 9.
                            Type: String.
 
-        :return one_list: The binary list corresponding to the dna motif.
+        :return one_list: The binary list corresponding to the DNA sequence.
                            Type: One-dimensional list(int).
         """
 

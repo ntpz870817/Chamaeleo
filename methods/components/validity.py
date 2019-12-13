@@ -18,7 +18,7 @@ def check(sequence, max_homopolymer=4, max_simple_segment=6, max_content=0.6):
     :param max_simple_segment: maximum length of simple segment, including (normal, inverse, dyad) motif repeat.
     :param max_content: maximum content of C and G, which means GC content is in [1 - max_content, max_content].
 
-    :return: whether the DNA sequence is validly.
+    :return: whether the DNA sequence can be considered as valid for DNA synthesis and sequencing.
     """
     if not homopolymer(sequence, max_homopolymer):
         return False
@@ -39,9 +39,9 @@ def homopolymer(sequence, max_homopolymer):
     Check the max homopolymer of requested DNA sequence.
 
     :param sequence: DNA sequence needs detecting.
-    :param max_homopolymer: aximum length of homopolymer.
+    :param max_homopolymer: maximum length of homopolymer.
 
-    :return: whether the DNA sequence is validly.
+    :return: whether the DNA sequence can be considered as valid for DNA synthesis and sequencing.
     """
     base_index = {'A': 0, 'T': 1, 'C': 2, 'G': 3}
     counts = [0, 0, 0, 0]
@@ -76,9 +76,9 @@ def motif_repeat(sequence, max_length):
     Check the motif repeat of requested DNA sequence.
 
     :param sequence: requested DNA sequence.
-    :param max_length: maximum length of simple segment, including (normal, inverse, dyad) motif repeat.
+    :param max_length: maximum repeat allowed of a normal motif.
 
-    :return: whether the DNA sequence is validly.
+    :return: whether the DNA sequence can be considered as valid for DNA synthesis and sequencing.
     """
     length = len(sequence) - 1
     while length > max_length:
@@ -97,9 +97,9 @@ def inverse_motif_repeat(sequence, max_length):
     Check the inverse motif repeat of requested DNA sequence.
 
     :param sequence: requested DNA sequence.
-    :param max_length: maximum length of simple segment, including (normal, inverse, dyad) motif repeat.
+    :param max_length: maximum repeat allowed of a normal motif.
 
-    :return: whether the DNA sequence is validly.
+    :return: whether the DNA sequence can be considered as valid for DNA synthesis and sequencing.
     """
     length = len(sequence) - 1
     while length > max_length:
@@ -118,9 +118,9 @@ def dyad_motif_repeat(sequence, max_length):
     Check the dyad motif repeat of requested DNA sequence.
 
     :param sequence: requested DNA sequence.
-    :param max_length: maximum length of simple segment, including (normal, inverse, dyad) motif repeat.
+    :param max_length: maximum repeat allowed of a normal motif.
 
-    :return: whether the DNA sequence is validly.
+    :return: whether the DNA sequence can be considered as valid for DNA synthesis and sequencing.
     """
     length = len(sequence) - 1
     dyad_motif = ""
@@ -152,6 +152,6 @@ def cg_content(motif, max_content):
     :param motif: requested DNA sequence.
     :param max_content: maximum content of C and G, which means GC content is in [1 - max_content, max_content].
 
-    :return: whether the DNA sequence is validly.
+    :return: whether the DNA sequence can be considered as valid for DNA synthesis and sequencing.
     """
     return (1 - max_content) <= float(motif.count("C") + motif.count("G")) / float(len(motif)) <= max_content

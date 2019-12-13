@@ -7,7 +7,7 @@ User manual
 
 ---
 
-**Chamaeleo** is currently the only collection focused on different codec methods for DNA storage.
+**Chamaeleo** is currently the only collection focusing on different codec methods for DNA storage.
 We hope to provide a readable, robust and high-performance learning and useful framework for researchers and engineers.
 
 ## Environment Configuration
@@ -34,7 +34,7 @@ In addition, the packages we are calling now is as follows:
 │    ├── components                   // Inherent property folder
 │    │    ├── index_operator.py       // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
-│    │    ├── motif_validity.py       // Determining whether motif is friendly to sequencing and synthesis
+│    │    ├── motif_validity.py       // Determining whether sequence is easy for synthesis and sequencing
 │    ├── verifies                     // Error-Correction Method
 │    │    ├── hm.py                   // Hamming error correction
 │    │    ├── rs.py                   // Reed-Solomon error correction
@@ -43,16 +43,16 @@ In addition, the packages we are calling now is as follows:
 │    ├── sc.py                        // SC (Simple DNA Storage Code)
 │    ├── yyc.py                       // YYC (Yin-Yang DNA Storage Code)
 ├── utils                             // Util module
-│    ├── data_handle.py               // Conversion of DNA motifs and binary document
+│    ├── data_handle.py               // Conversion between DNA sequences and binary document
 │    ├── log.py                       // Outputting the logs in console
-│    ├── model_saver.py               // Save model to file and load model from file
+│    ├── model_saver.py               // Saving model to file and load model from file
 │    ├── monitor.py                   // Getting the progress situation and the time left
 ├── codec_factory.py                  // Main calling function
 ├── README.md                         // Description document of library
 ```
 
 ## Method of Application
-In the encoding process, we first instantiate the method, and then pass the method and the necessary path into **chamaeleo**.
+In encoding process, we first instantiate the method, and then pass the method and the necessary path into **chamaeleo**.
 
 Taking Yin-Yang DNA Storage Code as an Example, the specific usage is as follows:
 
@@ -65,7 +65,7 @@ method = yyc.YYC()
 codec_factory.encode(method, input_path="C:\\init.mp4", output_path="C:\\target.dna", model_path="C:\\yyc.pkl")
 ```
 
-In the decoding process, we first instantiate the method (init method or path of model file), and then pass the method and the necessary path into **chamaeleo**.
+In decoding process, we first instantiate the method (init method or path of model file), and then pass the method and the necessary path into **chamaeleo**.
 
 Taking Yin-Yang DNA Storage Code as an Example, the specific usage (using init method) is as follows:
 

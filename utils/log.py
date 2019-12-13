@@ -25,15 +25,15 @@ def output(info_type=0, class_name=None, method_name=None, info=None, warn_termi
                       and ERROR. If the type is ERROR, we will end this program
                       immediately.
 
-    :param class_name: Current class name, used to find the source of the information.
+    :param class_name: Current class name, used to locate the source of the information.
                         It is easy to get it by method "str(__name__)" in the classes you need to export logs to console.
 
-    :param method_name: Current method name, used to find the source of the information.
+    :param method_name: Current method name, used to locate the source of the information.
                         It is easy to get it by method "str(sys._getframe().f_code.co_name)" in the classes you need to export logs to console.
 
     :param warn_terminate: if fased warn, the program needs be trrminated.
 
-    :param info: The information hat users want to display in console.
+    :param info: The information that users want to display in console.
                   Type: String
     """
 
