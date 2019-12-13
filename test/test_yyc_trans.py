@@ -31,7 +31,7 @@ class TestEncodeDecode(unittest.TestCase):
         self.test_lower_list = [random.randint(0, 1) for _ in range(120)]
 
     def test_list_to_motif(self):
-        dna_motif = self.tool.__list_to_motif__(
+        dna_motif = self.tool.__list_to_sequence__(
             self.test_upper_list, self.test_lower_list
         )
         self.assertEqual(
@@ -161,7 +161,7 @@ class TestEncodeDecode(unittest.TestCase):
         )
 
     def test_motif_to_list(self):
-        upper_row_list, lower_row_list = self.tool.__dna_motif_to_binaries__(
+        upper_row_list, lower_row_list = self.tool.__sequence_to_list__(
             [
                 "T",
                 "G",

@@ -314,9 +314,9 @@ class YYC:
                 str(sys._getframe().f_code.co_name),
                 "Convert to DNA sequence string set.",
             )
-        dna_motifs = self.__synthesis_motifs__(data_set)
+        dna_sequences = self.__synthesis_sequences__(data_set)
 
-        return dna_motifs
+        return dna_sequences
 
     def __divide_library__(self, matrix):
         """
@@ -421,7 +421,7 @@ class YYC:
                         bad_index = int(bad_indexes.pop())
                         if search_index >= self.search_count - 1 or validity.check(
                             "".join(
-                                self.__list_to_motif__(
+                                self.__list_to_sequence__(
                                     good_data_set[good_index], bad_data_set[bad_index]
                                 )
                             )
@@ -439,7 +439,7 @@ class YYC:
                         good_index2 = int(good_indexes.pop())
                         if search_index >= self.search_count - 1 or validity.check(
                             "".join(
-                                self.__list_to_motif__(
+                                self.__list_to_sequence__(
                                     good_data_set[good_index1],
                                     good_data_set[good_index2],
                                 )
@@ -458,7 +458,7 @@ class YYC:
                         bad_index2 = int(bad_indexes.pop())
                         if search_index >= self.search_count - 1 or validity.check(
                             "".join(
-                                self.__list_to_motif__(
+                                self.__list_to_sequence__(
                                     bad_data_set[bad_index1], bad_data_set[bad_index2]
                                 )
                             )
@@ -487,7 +487,7 @@ class YYC:
 
         return data_set
 
-    def __synthesis_motifs__(self, data_set):
+    def __synthesis_sequences__(self, data_set):
         """
         introduction: Synthesis sequences by two-dimensional data set.
 
@@ -504,16 +504,16 @@ class YYC:
                 self.monitor.output(row, len(data_set))
             if row < len(data_set) - 1:
                 dna_motifs.append(
-                    self.__list_to_motif__(data_set[row], data_set[row + 1])
+                    self.__list_to_sequence__(data_set[row], data_set[row + 1])
                 )
             else:
-                dna_motifs.append(self.__list_to_motif__(data_set[row], None))
+                dna_motifs.append(self.__list_to_sequence__(data_set[row], None))
 
         del data_set
 
         return dna_motifs
 
-    def __list_to_motif__(self, upper_list, lower_list):
+    def __list_to_sequence__(self, upper_list, lower_list):
         """
         introduction: from two binary list to one DNA sequence
 
@@ -527,40 +527,40 @@ class YYC:
                   Type: List(char)
         """
 
-        dna_motif = []
+        dna_sequence = []
 
         for col in range(len(upper_list)):
             if lower_list is not None:
                 if col > self.support_spacing:
-                    dna_motif.append(
+                    dna_sequence.append(
                         self.__binary_to_base__(
                             upper_list[col],
                             lower_list[col],
-                            dna_motif[col - (self.support_spacing + 1)],
+                            dna_sequence[col - (self.support_spacing + 1)],
                         )
                     )
                 else:
-                    dna_motif.append(
+                    dna_sequence.append(
                         self.__binary_to_base__(
                             upper_list[col], lower_list[col], self.support_bases[col]
                         )
                     )
             else:
                 if col > self.support_spacing:
-                    dna_motif.append(
+                    dna_sequence.append(
                         self.__binary_to_base__(
                             upper_list[col],
                             upper_list[col],
-                            dna_motif[col - (self.support_spacing + 1)],
+                            dna_sequence[col - (self.support_spacing + 1)],
                         )
                     )
                 else:
-                    dna_motif.append(
+                    dna_sequence.append(
                         self.__binary_to_base__(
                             upper_list[col], upper_list[col], self.support_bases[col]
                         )
                     )
-        return dna_motif
+        return dna_sequence
 
     def __binary_to_base__(self, upper_bit, lower_bit, support_base):
         """
@@ -594,11 +594,11 @@ class YYC:
 
     # ================================================= decode part ========================================================
 
-    def decode(self, dna_motifs):
+    def decode(self, dna_sequences):
         """
         introduction: Decode DNA sequences to the data of binary file.
 
-        :param dna_motifs: The DNA sequence of len(matrix) rows.
+        :param dna_sequences: The DNA sequence of len(matrix) rows.
                             Type: One-dimensional list(string).
 
         :return matrix: The binary matrix corresponding to the DNA sequences.
@@ -608,7 +608,7 @@ class YYC:
                             Type: int
         """
 
-        if not dna_motifs:
+        if not dna_sequences:
             log.output(
                 log.ERROR,
                 str(__name__),
@@ -624,17 +624,17 @@ class YYC:
                 str(sys._getframe().f_code.co_name),
                 "Convert DNA sequences to binary matrix.",
             )
-        matrix = self.__convert_binaries__(dna_motifs)
+        matrix = self.__convert_binaries__(dna_sequences)
 
         self.monitor.restore()
         return matrix, self.file_size
 
-    def __convert_binaries__(self, dna_motifs):
+    def __convert_binaries__(self, dna_sequences):
         """
         introduction: Convert DNA sequences to binary matrix.
                       One DNA sequence <-> two-line binaries.
 
-        :param dna_motifs: The DNA sequence of len(matrix) rows.
+        :param dna_sequences: The DNA sequence of len(matrix) rows.
                             Type: One-dimensional list(string).
 
         :return matrix: The binary matrix corresponding to the DNA sequences.
@@ -643,25 +643,25 @@ class YYC:
 
         matrix = []
 
-        for row in range(len(dna_motifs)):
+        for row in range(len(dna_sequences)):
             if self.need_log:
-                self.monitor.output(row, len(dna_motifs))
-            upper_row_datas, lower_row_datas = self.__dna_motif_to_binaries__(
-                dna_motifs[row]
+                self.monitor.output(row, len(dna_sequences))
+            upper_row_datas, lower_row_datas = self.__sequence_to_list__(
+                dna_sequences[row]
             )
             matrix.append(upper_row_datas)
             if upper_row_datas != lower_row_datas:
                 matrix.append(lower_row_datas)
 
-        del dna_motifs
+        del dna_sequences
 
         return matrix
 
-    def __dna_motif_to_binaries__(self, dna_motif):
+    def __sequence_to_list__(self, dna_sequence):
         """
         introduction: Convert one DNA sequence to two-line binary list.
 
-        :param dna_motif: The DNA sequence of len(matrix) rows.
+        :param dna_sequence: The DNA sequence of len(matrix) rows.
                             Type: One-dimensional list(string).
 
         :returns upper_row_list, lower_row_list: The binary list corresponding to the DNA sequence.
@@ -671,16 +671,16 @@ class YYC:
         upper_row_list = []
         lower_row_list = []
 
-        for col in range(len(dna_motif)):
+        for col in range(len(dna_sequence)):
             if col > self.support_spacing:
                 upper_binary, lower_binary = self.__base_to_binary__(
-                    dna_motif[col], dna_motif[col - (self.support_spacing + 1)]
+                    dna_sequence[col], dna_sequence[col - (self.support_spacing + 1)]
                 )
                 upper_row_list.append(upper_binary)
                 lower_row_list.append(lower_binary)
             else:
                 upper_binary, lower_binary = self.__base_to_binary__(
-                    dna_motif[col], self.support_bases[col]
+                    dna_sequence[col], self.support_bases[col]
                 )
                 upper_row_list.append(upper_binary)
                 lower_row_list.append(lower_binary)

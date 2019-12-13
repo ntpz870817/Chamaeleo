@@ -17,8 +17,6 @@ import Chamaeleo.utils.log as log
 import Chamaeleo.utils.monitor as monitor
 
 
-# noinspection PyUnresolvedReferences,
-# PyBroadException, PyProtectedMember, PyUnusedLocal
 # noinspection PyProtectedMember
 def read_binary_from_all(path, segment_length=120, need_log=False):
     """
@@ -56,8 +54,8 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
 
             # Set init storage matrix
             matrix = [
-                [0 for col in range(segment_length)]
-                for row in range(math.ceil(size * 8 / segment_length))
+                [0 for _ in range(segment_length)]
+                for _ in range(math.ceil(size * 8 / segment_length))
             ]
 
             row = 0
@@ -161,15 +159,15 @@ def read_dna_file(path, need_log=False):
     :param path: File path.
                   Type: string
 
-    :return dna_motifs: A corresponding DNA sequence string in which each row acts as a sequence.
-                         Type: one-dimensional list(string)
+    :return dna_sequences: A corresponding DNA sequence string in which each row acts as a sequence.
+                           Type: one-dimensional list(string)
 
     :param need_log: need output log.
     """
 
     m = monitor.Monitor()
 
-    dna_motifs = []
+    dna_sequences = []
 
     try:
         with open(path, "r") as file:
@@ -187,9 +185,9 @@ def read_dna_file(path, need_log=False):
                 if need_log:
                     m.output(index, len(lines))
                 line = lines[index]
-                dna_motifs.append([line[col] for col in range(len(line) - 1)])
+                dna_sequences.append([line[col] for col in range(len(line) - 1)])
 
-        return dna_motifs
+        return dna_sequences
     except IOError:
         log.output(
             log.ERROR,
@@ -200,15 +198,15 @@ def read_dna_file(path, need_log=False):
 
 
 # noinspection PyProtectedMember,PyBroadException
-def write_dna_file(path, dna_motifs, need_log=False):
+def write_dna_file(path, dna_sequences, need_log=False):
     """
     introduction: Writing DNA sequence set to documents.
 
     :param path: File path.
                   Type: string
 
-    :param dna_motifs: Generated DNA sequences.
-                        Type: one-dimensional list(string)
+    :param dna_sequences: Generated DNA sequences.
+                          Type: one-dimensional list(string)
 
     :param need_log: choose to output log file or not.
     """
@@ -224,11 +222,11 @@ def write_dna_file(path, dna_motifs, need_log=False):
                     str(sys._getframe().f_code.co_name),
                     "Write DNA sequences to file: " + path,
                 )
-            for row in range(len(dna_motifs)):
+            for row in range(len(dna_sequences)):
                 if need_log:
-                    m.output(row, len(dna_motifs))
-                file.write("".join(dna_motifs[row]) + "\n")
-        return dna_motifs
+                    m.output(row, len(dna_sequences))
+                file.write("".join(dna_sequences[row]) + "\n")
+        return dna_sequences
     except IOError:
         log.output(
             log.ERROR,
