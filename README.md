@@ -15,3 +15,27 @@ We recommend that you read the user manual first and then the contributor manual
 
 - If you are a learner or a engineer, please pay attention to the user manual, see [**user_manual.md**](https://github.com/ntpz870817/Chamaeleo/blob/master/docs/source/user_manual.md).
 - If you want to be a contributor, please pay attention to the contributor manual, see [**contributor_manual.md**](https://github.com/ntpz870817/Chamaeleo/blob/master/docs/source/contributor_manual.md).
+
+---
+
+Here we declare the digital file used in our library for testing.
+
+**DNA Fountain Input Files.tar: **Erlich, Y., & Zielinski, D. (2017). DNA Fountain enables a robust and efficient storage architecture. Science, 355(6328), 950-954.
+
+**Microsoft Winmine.exe: **https://www.microsoft.com/en-us/p/microsoft-minesweeper/9wzdncrfhwcn?activetab=pivot:overviewtab. 2012 Microsoft Corporation.
+
+**A Tale of Two Cities.pdf: **https://epdf.pub/a-tale-of-two-cities-penguin.html. Fictionwise.
+
+**The Wandering Earth.pdf: **https://epdf.pub/the-wandering-earth.html. Beijing Guomi Digital Technology Co., Ltd.
+
+**For Elise (Ludwig van Beethoven).wma: **
+
+**Grande Sonata Pathetique OP.13.mp3: **
+
+**Mona Lisa.jpg:  **https://en.wikipedia.org/wiki/Mona_Lisa. wiki.
+
+**United Nations Flag.bmp: **https://www.britannica.com/topic/flag-of-the-United-Nations
+
+**Exiting the Factory (the First Movie in the World).flv: **https://www.youtube.com/watch?v=DEQeIRLxaM4. Youtube.
+
+**I have a Dream (Martin Luther King).mp4: **https://www.youtube.com/watch?v=MgYzJGmBXU8. Youtube.
