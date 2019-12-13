@@ -25,17 +25,20 @@ def add_error_correction(original_list):
     print(str(add_list) + ": list after adding error correction.")
     return add_list
 
+
 # Remove error correction code in the original list.
 def remove_error_correction(original_list):
     remove_list = method.remove_for_list(original_list)
     print(str(remove_list) + ": list after removing error correction.")
     return remove_list
 
+
 # Verify error correction in the original list.
 def verify_error_correction(original_list):
     verify_list = method.verify_for_list(original_list)
     print(str(verify_list) + ": list after verifying.")
     return verify_list
+
 
 # Modify the original list in process.
 def modify_list_in_process(original_list):
@@ -63,5 +66,3 @@ if __name__ == "__main__":
     error = modify_list_in_process(in_process)
     verify = verify_error_correction(error)
     remove_error_correction(verify)
-
-
