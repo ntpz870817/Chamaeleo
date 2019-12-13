@@ -34,14 +34,13 @@ class YYC:
         support_spacing=0,
         max_ratio=0.8,
         search_count=1,
-        need_log=False
+        need_log=False,
     ):
         """
         introduction: The initialization method of YYC.
 
         :param base_reference: Correspondence between base and binary data (RULE 1).
-                                Make sure that the first and third, and the second and fourth are equal, so there are only two cases:
-                                [0, 0, 1, 1] or [1, 1, 0, 0].
+        Make sure that Two of the bases are 1 and the other two are 0, so there are only 6 case.
 
         :param current_code_matrix: Conversion rule between base and binary data based on support base and current base (RULE 2).
                                      Label row is the support base, label col is the current base.
@@ -109,8 +108,7 @@ class YYC:
         introduction: The verification of initialization parameters.
 
         :param base_reference: Correspondence between base and binary data (RULE 1).
-                                Make sure that the first and third, and the second and fourth are equal, so there are only 6 cases:
-                                Make sure that Two of the bases are 1 and the other two are 0..
+                                Make sure that Two of the bases are 1 and the other two are 0, so there are only 6 case.
 
         :param current_code_matrix: Conversion rule between base and binary data based on support base and current base (RULE 2).
                                      Label row is the support base, label col is the current base.
@@ -122,14 +120,14 @@ class YYC:
                                      Make sure that Xn + Yn = 1 and Xn * Yn = 0, n is in [1, 8].
 
         :param support_bases: Base replenishment before official data.
-                               Make sure that the count of support base must more than support spacing.
-                               Make sure that the number range of each position is {0, 1, 2, 3}, reference base index
+                               Make sure that the count of support base must be more than support spacing.
+                               Make sure that the range of each position is {0, 1, 2, 3}, and fit with reference base list.
 
         :param support_spacing: Spacing between support base and current base.
-                                 Make sure that support_spacing must less than the length of support_bases
+                                 Make sure that support_spacing must be less than the length of support_bases.
 
         :param max_ratio: The max ratio of 0 or 1.
-                           Make sure that max ratio must more than 50% and less than 100%..
+                           Make sure that max ratio must be more than 50% and less than 100%..
 
         """
         if self.need_log:
@@ -152,10 +150,10 @@ class YYC:
                     log.ERROR,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "Only A, T, C, and G can be included in the support bases, "
-                    "and the support bases["
+                    "Only A, T, C, and G can be included as support bases, "
+                    "but the support bases["
                     + str(index)
-                    + "] has entered "
+                    + "] has been detected as "
                     + str(support_bases[index] + "!"),
                 )
         if len(support_bases) < support_spacing + 1:
@@ -163,7 +161,7 @@ class YYC:
                 log.ERROR,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "The count of support base needs more than support spacing!",
+                "The count of support base needs to be more than support spacing!",
             )
 
         # Check base reference (rule 1)
@@ -173,10 +171,10 @@ class YYC:
                     log.ERROR,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "Only 0 and 1 can be included in the base reference, "
+                    "Only 0 and 1 can be included for base reference, "
                     "and base_reference["
                     + str(index)
-                    + "] has entered "
+                    + "] has been detected as "
                     + str(base_reference[index] + "!"),
                 )
         if sum(base_reference) != 2:
@@ -211,7 +209,7 @@ class YYC:
                         + str(row)
                         + ", "
                         + str(col)
-                        + "] has entered "
+                        + "] has been detected as "
                         + str(current_code_matrix[row][col] + "!"),
                     )
         for row in range(len(current_code_matrix)):
@@ -234,7 +232,7 @@ class YYC:
                     + ", "
                     + str(positions[1])
                     + "]! "
-                      "Rules are that they add up to 1 and multiply by 0.",
+                    "It is required by rule that these two values will have sum of 1 and product of 0.",
                 )
 
             left = current_code_matrix[row][positions[2]]
@@ -256,7 +254,7 @@ class YYC:
                     + ", "
                     + str(positions[3])
                     + "]! "
-                      "Rules are that they add up to 1 and multiply by 0.",
+                    "It is required by rule that these two values will have sum of 1 and product of 0.",
                 )
         # Check max ratio
         if max_ratio <= 0.5 or max_ratio >= 1:
@@ -271,7 +269,7 @@ class YYC:
 
     def encode(self, matrix, size):
         """
-        introduction: Encode DNA motifs from the data of binary file.
+        introduction: Encode DNA sequences from the data of binary file.
 
         :param matrix: Generated binary two-dimensional matrix.
                         The data of this matrix contains only 0 or 1 (non-char).
@@ -280,7 +278,7 @@ class YYC:
         :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                       Type: int
 
-        :return dna_motifs: The DNA motif of len(matrix) rows.
+        :return dna_motifs: The DNA sequence of len(matrix) rows.
                              Type: list(list(char)).
         """
         self.file_size = size
@@ -292,7 +290,7 @@ class YYC:
                 log.NORMAL,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "Separate good data from bad data.",
+                "Separate 'good' data from 'bad' data.",
             )
 
         good_data_set, bad_data_set = self.__divide_library__(matrix)
@@ -304,7 +302,7 @@ class YYC:
                 log.NORMAL,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "Random pairing and friendly testing.",
+                "Random incorporation and validity testing.",
             )
         data_set = self.__pairing__(good_data_set, bad_data_set)
 
@@ -314,7 +312,7 @@ class YYC:
                 log.NORMAL,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "Convert to DNA motif string set.",
+                "Convert to DNA sequence string set.",
             )
         dna_motifs = self.__synthesis_motifs__(data_set)
 
@@ -322,13 +320,13 @@ class YYC:
 
     def __divide_library__(self, matrix):
         """
-        introduction: Separate good and bad data from total data, and splice index and data as a list
+        introduction: Separate 'good' and 'bad' data from total data, and splice index and data as a list.
 
         :param matrix: Generated binary two-dimensional matrix
                        The data of this matrix contains only 0 or 1 (non-char).
                        Type: int or bit
 
-        :returns good_data_set, bad datas: good and bad data from total data
+        :returns good_data_set, bad datas: 'good' and 'bad' data from total data
                                         Type: list(int)
         """
 
@@ -345,8 +343,8 @@ class YYC:
                     log.WARN,
                     str(__name__),
                     str(sys._getframe().f_code.co_name),
-                    "There may be a large number of motifs that are difficult to use. "
-                    "We recommend stopping and modifying the rules.",
+                    "There may be a large number of sequences that are difficult for synthesis or sequencing. "
+                    "We recommend you to re-select the rule or take a new run.",
                 )
 
         if len(bad_indexes) == 0 and len(matrix) == 0:
@@ -380,8 +378,8 @@ class YYC:
 
     def __pairing__(self, good_data_set, bad_data_set):
         """
-        introduction: Match good data with bad data, to ensure that the overall data is better.
-                      If there are only good or bad data left, they will pair themselves up.
+        introduction: Match 'good' data with 'bad' data, to ensure that the overall data is better.
+                      If there are only 'good' or 'bad' data left, they will be selected to pair with each other.
 
         :param good_data_set: Generated binary two-dimensional matrix, the repetition rate of 0 or 1 is related low.
                             Type: Two-dimensional list(int)
@@ -421,12 +419,11 @@ class YYC:
                     for search_index in range(self.search_count):
                         good_index = int(good_indexes.pop())
                         bad_index = int(bad_indexes.pop())
-                        if (
-                            search_index >= self.search_count - 1
-                            or validity.check(
-                                "".join(self.__list_to_motif__(
+                        if search_index >= self.search_count - 1 or validity.check(
+                            "".join(
+                                self.__list_to_motif__(
                                     good_data_set[good_index], bad_data_set[bad_index]
-                                ))
+                                )
                             )
                         ):
                             data_set.append(good_data_set[good_index])
@@ -440,13 +437,12 @@ class YYC:
                     for search_index in range(self.search_count):
                         good_index1 = int(good_indexes.pop())
                         good_index2 = int(good_indexes.pop())
-                        if (
-                            search_index >= self.search_count - 1
-                            or validity.check(
-                                "".join(self.__list_to_motif__(
+                        if search_index >= self.search_count - 1 or validity.check(
+                            "".join(
+                                self.__list_to_motif__(
                                     good_data_set[good_index1],
                                     good_data_set[good_index2],
-                                ))
+                                )
                             )
                         ):
                             data_set.append(good_data_set[good_index1])
@@ -460,12 +456,11 @@ class YYC:
                     for search_index in range(self.search_count):
                         bad_index1 = int(bad_indexes.pop())
                         bad_index2 = int(bad_indexes.pop())
-                        if (
-                            search_index >= self.search_count - 1
-                            or validity.check(
-                                "".join(self.__list_to_motif__(
+                        if search_index >= self.search_count - 1 or validity.check(
+                            "".join(
+                                self.__list_to_motif__(
                                     bad_data_set[bad_index1], bad_data_set[bad_index2]
-                                ))
+                                )
                             )
                         ):
                             data_set.append(bad_data_set[bad_index1])
@@ -479,7 +474,7 @@ class YYC:
                         log.ERROR,
                         str(__name__),
                         str(sys._getframe().f_code.co_name),
-                        "Pairing wrong in YYC pairing!",
+                        "Wrong pairing for YYC!",
                     )
             else:
                 data_set.append(
@@ -494,12 +489,12 @@ class YYC:
 
     def __synthesis_motifs__(self, data_set):
         """
-        introduction: Synthesis motifs by two-dimensional data set.
+        introduction: Synthesis sequences by two-dimensional data set.
 
         :param data_set: Original data from file.
                        Type: Two-dimensional list(int).
 
-        :return dna_motifs: The DNA motifs from the original data set
+        :return dna_motifs: The DNA sequences from the original data set
                              Type: One-dimensional list(string).
         """
 
@@ -520,7 +515,7 @@ class YYC:
 
     def __list_to_motif__(self, upper_list, lower_list):
         """
-        introduction: from two binary list to DNA motif
+        introduction: from two binary list to one DNA sequence
 
         :param upper_list: The upper binary list
                             Type: List(byte)
@@ -528,7 +523,7 @@ class YYC:
         :param lower_list: The lower binary list
                             Type: List(byte)
 
-        :return: a DNA motif
+        :return: one DNA sequence
                   Type: List(char)
         """
 
@@ -601,12 +596,12 @@ class YYC:
 
     def decode(self, dna_motifs):
         """
-        introduction: Decode DNA motifs to the data of binary file.
+        introduction: Decode DNA sequences to the data of binary file.
 
-        :param dna_motifs: The DNA motif of len(matrix) rows.
+        :param dna_motifs: The DNA sequence of len(matrix) rows.
                             Type: One-dimensional list(string).
 
-        :return matrix: The binary matrix corresponding to the dna motifs.
+        :return matrix: The binary matrix corresponding to the DNA sequences.
                          Type: Two-dimensional list(int).
 
         :return file_size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
@@ -618,7 +613,7 @@ class YYC:
                 log.ERROR,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "DNA motif string set is None",
+                "DNA sequence string set is not existing",
             )
 
         self.monitor.restore()
@@ -627,7 +622,7 @@ class YYC:
                 log.NORMAL,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "Convert DNA motifs to binary matrix.",
+                "Convert DNA sequences to binary matrix.",
             )
         matrix = self.__convert_binaries__(dna_motifs)
 
@@ -636,13 +631,13 @@ class YYC:
 
     def __convert_binaries__(self, dna_motifs):
         """
-        introduction: Convert DNA motifs to binary matrix.
-                      One DNA motif <-> two-line binaries.
+        introduction: Convert DNA sequences to binary matrix.
+                      One DNA sequence <-> two-line binaries.
 
-        :param dna_motifs: The DNA motif of len(matrix) rows.
+        :param dna_motifs: The DNA sequence of len(matrix) rows.
                             Type: One-dimensional list(string).
 
-        :return matrix: The binary matrix corresponding to the dna motifs.
+        :return matrix: The binary matrix corresponding to the DNA sequences.
                          Type: Two-dimensional list(int).
         """
 
@@ -664,12 +659,12 @@ class YYC:
 
     def __dna_motif_to_binaries__(self, dna_motif):
         """
-        introduction: Convert one DNA motif to two-line binary list.
+        introduction: Convert one DNA sequence to two-line binary list.
 
-        :param dna_motif: The DNA motif of len(matrix) rows.
+        :param dna_motif: The DNA sequence of len(matrix) rows.
                             Type: One-dimensional list(string).
 
-        :returns upper_row_list, lower_row_list: The binary list corresponding to the dna motif.
+        :returns upper_row_list, lower_row_list: The binary list corresponding to the DNA sequence.
                                                 Type: One-dimensional list(int).
         """
 

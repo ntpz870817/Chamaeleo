@@ -6,7 +6,7 @@ Coder: HaoLing ZHANG (BGI-Research)[V1]
 Current Version: 1
 
 Function(s): After initializing the encoding or decoding method,
-             the conversion between DNA motif set and binary files is completed
+             the conversion between DNA sequence set and binary files is completed
              by the entry function.
 """
 import sys
@@ -28,8 +28,8 @@ def encode(
     segment_length=120,
 ):
     """
-    introduction: Use the selected method, convert the binary file to DNA motif
-                  set and output the DNA motif set.
+    introduction: Use the selected method, convert the binary file to DNA sequence
+                  set and output the DNA sequence set.
 
     :param method: Method under folder "methods/".
                     Type: Object.
@@ -37,7 +37,7 @@ def encode(
     :param input_path: The path of binary file you need to convert.
                         Type: String.
 
-    :param output_path: The path of DNA motif set you need to use to .
+    :param output_path: The path of DNA sequence set you need to use to .
                          Type: String.
 
     :param model_path: The path of model file if you want to save
@@ -47,12 +47,12 @@ def encode(
                     Type: Object.
 
     :param need_index: Declare whether the binary sequence indexes are required
-                       in the DNA motifs.
+                       in the DNA sequences.
                         Type: bool.
 
-    :param segment_length: The cut length of DNA motif.
+    :param segment_length: The cut length of DNA sequence.
                       Considering current DNA synthesis factors, we usually
-                      set 120 bases as a motif.
+                      set 120 bases as a sequence.
     """
 
     if input_path is None or len(input_path) == 0:
@@ -60,7 +60,7 @@ def encode(
             log.ERROR,
             str(__name__),
             str(sys._getframe().f_code.co_name),
-            "We did not obtain the path of file you need to encode!",
+            "The input file path is invalid!",
         )
 
     if output_path is None or len(input_path) == 0:
@@ -68,7 +68,7 @@ def encode(
             log.ERROR,
             str(__name__),
             str(sys._getframe().f_code.co_name),
-            "We did not obtain the path of generated file!",
+            "The output file path is invalid!",
         )
 
     input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length=segment_length)
@@ -97,7 +97,7 @@ def decode(
     has_index=True,
 ):
     """
-    introduction: Use the selected method, convert DNA motif set to the binary
+    introduction: Use the selected method, convert DNA sequence set to the binary
                   file and output the binary file.
 
     :param method: Method under folder "methods/".
@@ -105,7 +105,7 @@ def decode(
                     method.
                     Type: Object.
 
-    :param input_path: The path of DNA motif set you need to convert.
+    :param input_path: The path of DNA sequence set you need to convert.
                        Type: String.
 
     :param output_path: The path of binary file consistent with previous
@@ -118,7 +118,7 @@ def decode(
     :param verify: Error correction method under "methods/verifies/"
                     Type: Object.
 
-    :param has_index: Declare whether the DNA motifs contain binary sequence
+    :param has_index: Declare whether the DNA sequences contain binary sequence
                       indexes.
                        Type: bool.
     """
@@ -128,7 +128,7 @@ def decode(
             log.ERROR,
             str(__name__),
             str(sys._getframe().f_code.co_name),
-            "We did not obtain the method!",
+            "The method you select does not exist!",
         )
     else:
         if input_path is None or len(input_path) == 0:
@@ -136,7 +136,7 @@ def decode(
                 log.ERROR,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "We did not obtain the path of file you need to decode!",
+                "The input file path is not valid!",
             )
 
         if output_path is None or len(input_path) == 0:
@@ -144,7 +144,7 @@ def decode(
                 log.ERROR,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "We did not obtain the path of generated file!",
+                "The output file path is not valid!",
             )
 
         if model_path is not None:
