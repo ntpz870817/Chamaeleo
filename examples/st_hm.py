@@ -59,7 +59,6 @@ if __name__ == "__main__":
     verify = verify_error_correction(in_process)
     remove_error_correction(verify)
 
-
     print("error situation: ")
     print(str(origin) + ": original list.")
     in_process = add_error_correction(origin)
