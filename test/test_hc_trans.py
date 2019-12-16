@@ -23,7 +23,7 @@ class TestEncodeDecode(unittest.TestCase):
         self.test_list = [random.randint(0, 1) for _ in range(120)]
 
     def test_list_to_motif(self):
-        dna_motif = self.tool.__list_to_motif__(
+        dna_motif = self.tool.__list_to_sequence__(
             self.tool.__huffman_compressed__(self.test_list)
         )
         self.assertEqual(
@@ -111,7 +111,7 @@ class TestEncodeDecode(unittest.TestCase):
 
     def test_motif_to_list(self):
         binary_list = self.tool.__huffman_decompressed__(
-            self.tool.__motif_to_list__(
+            self.tool.__sequence_to_list__(
                 [
                     "T",
                     "C",

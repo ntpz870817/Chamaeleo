@@ -66,7 +66,7 @@ class GC:
         :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                       Type: int
 
-        :return dna_motifs: The DNA sequence of len(matrix) rows.
+        :return dna_sequences: The DNA sequence of len(matrix) rows.
                              Type: list(string).
         """
 
@@ -80,7 +80,7 @@ class GC:
                 temp_matrix.append([0 for col in range(16 - (self.segment_length % 16))] + matrix[row])
             matrix = temp_matrix
 
-        dna_motifs = []
+        dna_sequences = []
 
         if self.need_log:
             log.output(
@@ -92,23 +92,23 @@ class GC:
         for row in range(len(matrix)):
             if self.need_log:
                 self.m.output(row, len(matrix))
-            dna_motifs.append(self.__list_to_motif__(matrix[row]))
+            dna_sequences.append(self.__list_to_sequence__(matrix[row]))
 
         self.m.restore()
-        return dna_motifs
+        return dna_sequences
 
-    def __list_to_motif__(self, one_list):
+    def __list_to_sequence__(self, one_list):
         """
         introduction: from one binary list to DNA sequence.
 
         :param one_list: One binary list.
                           Type: int or bit.
 
-        :return dna_motif: One DNA sequence.
+        :return dna_sequence: One DNA sequence.
                             Type: list(char).
         """
 
-        dna_motif = []
+        dna_sequence = []
 
         for col in range(0, len(one_list), 16):
             decimal_number = int("".join(list(map(str, one_list[col : col + 16]))), 2)
@@ -121,19 +121,19 @@ class GC:
             decimal_number -= second
             first = decimal_number / 47
 
-            dna_motif += self.mapping_rule[0][self.mapping_rule[1].index(int(first))]
-            dna_motif += self.mapping_rule[0][self.mapping_rule[1].index(int(second))]
-            dna_motif += self.mapping_rule[0][self.mapping_rule[1].index(int(third))]
+            dna_sequence += self.mapping_rule[0][self.mapping_rule[1].index(int(first))]
+            dna_sequence += self.mapping_rule[0][self.mapping_rule[1].index(int(second))]
+            dna_sequence += self.mapping_rule[0][self.mapping_rule[1].index(int(third))]
 
-        return dna_motif
+        return dna_sequence
 
     # ================================================= decode part ========================================================
 
-    def decode(self, dna_motifs):
+    def decode(self, dna_sequences):
         """
         introduction: Decode DNA sequences to the data of binary file.
 
-        :param dna_motifs: The DNA sequence of len(matrix) rows.
+        :param dna_sequences: The DNA sequence of len(matrix) rows.
                             The length of each DNA sequences should be a multiple of 9.
                             Type: One-dimensional list(string).
 
@@ -156,10 +156,10 @@ class GC:
                 "Convert DNA sequences to binary matrix.",
             )
 
-        for index in range(len(dna_motifs)):
+        for index in range(len(dna_sequences)):
             if self.need_log:
-                self.m.output(index, len(dna_motifs))
-            matrix.append(self.__motif_to_list__(dna_motifs[index]))
+                self.m.output(index, len(dna_sequences))
+            matrix.append(self.__sequence_to_list__(dna_sequences[index]))
 
         self.m.restore()
 
@@ -171,11 +171,11 @@ class GC:
 
         return matrix, self.file_size
 
-    def __motif_to_list__(self, dna_motif):
+    def __sequence_to_list__(self, dna_sequence):
         """
         introduction: Convert one DNA sequence to one binary list.
 
-        :param dna_motif: One DNA sequence.
+        :param dna_sequence: One DNA sequence.
                            The length of DNA sequence should be a multiple of 9.
                            Type: String.
 
@@ -183,25 +183,25 @@ class GC:
                            Type: One-dimensional list(int).
         """
 
-        if len(dna_motif) % 3 != 0:
+        if len(dna_sequence) % 3 != 0:
             log.output(
                 log.ERROR,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
-                "The length of dna_motif should be a multiple of 9!",
+                "The length of dna sequence should be a multiple of 9!",
             )
 
         one_list = []
 
-        for index in range(0, len(dna_motif), 9):
+        for index in range(0, len(dna_sequence), 9):
             first = self.mapping_rule[1][
-                self.mapping_rule[0].index("".join(dna_motif[index: index + 3]))
+                self.mapping_rule[0].index("".join(dna_sequence[index: index + 3]))
             ]
             second = self.mapping_rule[1][
-                self.mapping_rule[0].index("".join(dna_motif[index + 3: index + 6]))
+                self.mapping_rule[0].index("".join(dna_sequence[index + 3: index + 6]))
             ]
             third = self.mapping_rule[1][
-                self.mapping_rule[0].index("".join(dna_motif[index + 6: index + 9]))
+                self.mapping_rule[0].index("".join(dna_sequence[index + 6: index + 9]))
             ]
 
             decimal_number = first

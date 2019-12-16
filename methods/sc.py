@@ -125,15 +125,15 @@ class SC:
                 str(sys._getframe().f_code.co_name),
                 "Encode the matrix.",
             )
-        dna_motifs = []
+        dna_sequences = []
         for row in range(len(matrix)):
             if self.need_log:
                 self.m.output(row, len(matrix))
-            dna_motifs.append(self.__list_to_motif__(matrix[row]))
+            dna_sequences.append(self.__list_to_sequence__(matrix[row]))
 
-        return dna_motifs
+        return dna_sequences
 
-    def __list_to_motif__(self, one_list):
+    def __list_to_sequence__(self, one_list):
         """
         introduction: from one binary list to DNA sequence.
 
@@ -143,7 +143,7 @@ class SC:
         :return dna_motif: One DNA sequence.
                             Type: List(char).
         """
-        dna_motif = []
+        dna_sequence = []
         if max(self.mapping_rule) == 3:
             if len(one_list) % 2 != 0:
                 log.output(
@@ -153,7 +153,7 @@ class SC:
                     "Data length cannot be odd number!",
                 )
             for index in range(0, len(one_list), 2):
-                dna_motif.append(
+                dna_sequence.append(
                     inherent.index_base.get(
                         self.mapping_rule.index(
                             one_list[index] * 2 + one_list[index + 1]
@@ -167,17 +167,17 @@ class SC:
                     for position, value in enumerate(self.mapping_rule)
                     if value == one_list[index]
                 ]
-                dna_motif.append(inherent.index_base.get(random.choice(options)))
-        return dna_motif
+                dna_sequence.append(inherent.index_base.get(random.choice(options)))
+        return dna_sequence
 
     # ================================================= decode part ========================================================
 
-    def decode(self, dna_motifs):
+    def decode(self, dna_sequences):
         """
         introduction: Decode DNA sequences to the data of binary file.
 
-        :param dna_motifs: The DNA sequence of len(matrix) rows.
-                            Type: One-dimensional list(string).
+        :param dna_sequences: The DNA sequence of len(matrix) rows.
+                              Type: One-dimensional list(string).
 
         :return matrix: The binary matrix corresponding to the DNA sequences.
                          Type: Two-dimensional list(int).
@@ -194,19 +194,19 @@ class SC:
                 "Convert DNA sequences to binary matrix.",
             )
         matrix = []
-        for index in range(len(dna_motifs)):
+        for index in range(len(dna_sequences)):
             if self.need_log:
-                self.m.output(index, len(dna_motifs))
-            matrix.append(self.__motif_to_list__(dna_motifs[index]))
+                self.m.output(index, len(dna_sequences))
+            matrix.append(self.__sequence_to_list__(dna_sequences[index]))
 
         self.m.restore()
         return matrix, self.file_size
 
-    def __motif_to_list__(self, dna_motif):
+    def __sequence_to_list__(self, dna_sequence):
         """
         introduction: Convert one DNA sequence to one binary list.
 
-        :param dna_motif: One DNA sequence.
+        :param dna_sequence: One DNA sequence.
                            Type: String.
 
         :return one_list: The binary list corresponding to the DNA sequence.
@@ -214,14 +214,14 @@ class SC:
         """
         one_list = []
         if max(self.mapping_rule) == 3:
-            for index in range(len(dna_motif)):
-                number = self.mapping_rule[inherent.base_index.get(dna_motif[index])]
+            for index in range(len(dna_sequence)):
+                number = self.mapping_rule[inherent.base_index.get(dna_sequence[index])]
                 one_list.append(1 if number >= 2 else 0)
                 one_list.append(1 if number % 2 == 1 else 0)
         else:
-            for index in range(len(dna_motif)):
+            for index in range(len(dna_sequence)):
                 one_list.append(
-                    self.mapping_rule[inherent.base_index.get(dna_motif[index])]
+                    self.mapping_rule[inherent.base_index.get(dna_sequence[index])]
                 )
 
         return one_list

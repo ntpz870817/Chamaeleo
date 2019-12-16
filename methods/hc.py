@@ -89,17 +89,17 @@ class HC:
                 str(sys._getframe().f_code.co_name),
                 "Convert matrix to dna motif set.",
             )
-        dna_motifs = []
+        dna_sequences = []
 
         for row in range(len(matrix)):
             if self.need_log:
                 self.m.output(row, len(matrix))
-            dna_motifs.append(
-                self.__list_to_motif__(self.__huffman_compressed__(matrix[row]))
+            dna_sequences.append(
+                self.__list_to_sequence__(self.__huffman_compressed__(matrix[row]))
             )
 
         self.m.restore()
-        return dna_motifs
+        return dna_sequences
 
     def __huffman_dict__(self, matrix=None):
         """
@@ -136,23 +136,23 @@ class HC:
 
         return ternary_list
 
-    def __list_to_motif__(self, one_list):
+    def __list_to_sequence__(self, one_list):
         """
         introduction: Encode a DNA sequence from one binary list.
 
         :param one_list: One binary list.
                          Type: int or bit.
 
-        :return dna_motif: One DNA sequence.
+        :return dna_sequence: One DNA sequence.
                            Type: List(char).
         """
-        last_base, dna_motif = "A", []
+        last_base, dna_sequence = "A", []
         for col in range(len(one_list)):
             current_base = inherent.rotate_codes.get(last_base)[one_list[col]]
-            dna_motif.append(current_base)
+            dna_sequence.append(current_base)
             last_base = current_base
 
-        return dna_motif
+        return dna_sequence
 
     def __get_map__(self, bit_matrix, size=None, multiple=3):
         """
@@ -247,11 +247,11 @@ class HC:
 
     # ================================================= decode part ========================================================
 
-    def decode(self, dna_motifs):
+    def decode(self, dna_sequences):
         """
         introduction: Decode DNA sequences to the data of binary file.
 
-        :param dna_motifs: The DNA sequence of len(matrix) rows.
+        :param dna_sequences: The DNA sequence of len(matrix) rows.
                             Type: One-dimensional list(string).
 
         :return matrix: The binary matrix corresponding to the dna sequences.
@@ -271,14 +271,14 @@ class HC:
             )
 
         matrix = []
-        index_binary_length = int(len(str(bin(len(dna_motifs)))) - 2)
+        index_binary_length = int(len(str(bin(len(dna_sequences)))) - 2)
 
-        for index in range(len(dna_motifs)):
+        for index in range(len(dna_sequences)):
             if self.need_log:
-                self.m.output(index, len(dna_motifs))
+                self.m.output(index, len(dna_sequences))
             matrix.append(
                 self.__huffman_decompressed__(
-                    self.__motif_to_list__(dna_motifs[index]), index_binary_length
+                    self.__sequence_to_list__(dna_sequences[index]), index_binary_length
                 )
             )
 
@@ -292,22 +292,22 @@ class HC:
 
         return matrix, self.file_size
 
-    def __motif_to_list__(self, dna_motif):
+    def __sequence_to_list__(self, dna_sequence):
         """
         introduction: Convert one DNA sequence to one Huffman coding list.
 
-        :param dna_motif: One DNA sequence.
+        :param dna_sequence: One DNA sequence.
                            Type: List(char).
 
         :return one_list: One ternary Huffman coding list.
                            Type: List(int)
         """
         last_base, one_list = "A", []
-        for index in range(len(dna_motif)):
+        for index in range(len(dna_sequence)):
             one_list.append(
-                inherent.rotate_codes.get(last_base).index(dna_motif[index])
+                inherent.rotate_codes.get(last_base).index(dna_sequence[index])
             )
-            last_base = dna_motif[index]
+            last_base = dna_sequence[index]
 
         return one_list
 
