@@ -20,8 +20,7 @@ We recommend that you read the user manual first and then the contributor manual
 
 Here we declare the digital file used in our library for testing.
 
-DNA Fountain Input Files.tar:
-Erlich, Y., & Zielinski, D. (2017). DNA Fountain enables a robust and efficient storage architecture. Science, 355(6328), 950-954.
+DNA Fountain Input Files.tar: http://files.teamerlich.org/dna_fountain/dna-fountain-input-files.tar.gz. Erlich, Y., & Zielinski, D. (2017). DNA Fountain enables a robust and efficient storage architecture. Science, 355(6328), 950-954.
 
 Microsoft Winmine.exe:
 https://www.microsoft.com/en-us/p/microsoft-minesweeper/9wzdncrfhwcn?activetab=pivot:overviewtab. 2012 Microsoft Corporation.
@@ -33,7 +32,7 @@ The Wandering Earth.pdf:
 https://epdf.pub/the-wandering-earth.html. Beijing Guomi Digital Technology Co., Ltd.
 
 For Elise.wma:
-https://www.youtube.com/watch?v=_mVW8tgGY_w. Youtube.
+https://www.youtube.com/watch?v=_mVW8tgGY_w.   Youtube.
 
 Summer.mp3:
 https://www.youtube.com/watch?v=J7or0noYfMA. Youtube.
