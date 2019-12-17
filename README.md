@@ -20,22 +20,32 @@ We recommend that you read the user manual first and then the contributor manual
 
 Here we declare the digital file used in our library for testing.
 
-**DNA Fountain Input Files.tar: **Erlich, Y., & Zielinski, D. (2017). DNA Fountain enables a robust and efficient storage architecture. Science, 355(6328), 950-954.
+DNA Fountain Input Files.tar:
+Erlich, Y., & Zielinski, D. (2017). DNA Fountain enables a robust and efficient storage architecture. Science, 355(6328), 950-954.
 
-**Microsoft Winmine.exe: **https://www.microsoft.com/en-us/p/microsoft-minesweeper/9wzdncrfhwcn?activetab=pivot:overviewtab. 2012 Microsoft Corporation.
+Microsoft Winmine.exe:
+https://www.microsoft.com/en-us/p/microsoft-minesweeper/9wzdncrfhwcn?activetab=pivot:overviewtab. 2012 Microsoft Corporation.
 
-**A Tale of Two Cities.pdf: **https://epdf.pub/a-tale-of-two-cities-penguin.html. Fictionwise.
+A Tale of Two Cities.pdf:
+https://epdf.pub/a-tale-of-two-cities-penguin.html. Fictionwise.
 
-**The Wandering Earth.pdf: **https://epdf.pub/the-wandering-earth.html. Beijing Guomi Digital Technology Co., Ltd.
+The Wandering Earth.pdf:
+https://epdf.pub/the-wandering-earth.html. Beijing Guomi Digital Technology Co., Ltd.
 
-**For Elise (Ludwig van Beethoven).wma: ** https://www.youtube.com/watch?v=_mVW8tgGY_w. Youtube.
+For Elise.wma:
+https://www.youtube.com/watch?v=_mVW8tgGY_w. Youtube.
 
-**Summer.mp3: ** https://www.youtube.com/watch?v=J7or0noYfMA. Youtube.
+Summer.mp3:
+https://www.youtube.com/watch?v=J7or0noYfMA. Youtube.
 
-**Mona Lisa.jpg:  **https://en.wikipedia.org/wiki/Mona_Lisa. wiki.
+Mona Lisa.jpg:
+https://en.wikipedia.org/wiki/Mona_Lisa. wiki.
 
-**United Nations Flag.bmp: **https://www.britannica.com/topic/flag-of-the-United-Nations
+United Nations Flag.bmp:
+https://www.britannica.com/topic/flag-of-the-United-Nations
 
-**Exiting the Factory (the First Movie in the World).flv: **https://www.youtube.com/watch?v=DEQeIRLxaM4. Youtube.
+Exiting the Factory.flv:
+https://www.youtube.com/watch?v=DEQeIRLxaM4. Youtube.
 
-**I have a Dream (Martin Luther King).mp4: **https://www.youtube.com/watch?v=MgYzJGmBXU8. Youtube.
+I have a Dream.mp4:
+https://www.youtube.com/watch?v=MgYzJGmBXU8. Youtube.
