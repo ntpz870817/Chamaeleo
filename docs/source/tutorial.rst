@@ -64,7 +64,6 @@ Cutomized transcoding
 --------------------------------
 
 In transcoding module, four transcoding algorithms are collected. The particular hyper-parameters of these four algorithms are introduced as below:
-在转码模块中，我们收集了四种转码方法。在这里，我们将分别讨论这四种方法的超参数。
 
 Simple Code is re-established via algorithms reported by Church et. al.
 Hyper-parameter, mapping_rule, in simple code describes the relationship between nucleotide and binary digit. The default setting is [0,0,1,1], which means ['A'=0, 'C'=0, 'G'=1, 'T'=1].
@@ -75,27 +74,12 @@ When user has customized request for mapping rules, it will be feasible to use t
 which means that the customized mapping rule is ['A'=1, 'T'=0, 'G'=1, 'T'=0]
 
 
-Simple Code (see sc.py, in Chamaeleo/methods/)是通过Church文中的方法创建的。
-它有一个超参数mapping_rule。
-mapping_rule描述的是碱基和电子数字之间的映射关系，其中缺省值为[0, 0, 1, 1]。
-缺省值描述的是，[0="A", 0="C", 1="G", 1="T"]。
-当我们有对mapping_rule的定制要求是，可以通过超参数传入：
-::
-	sc.SC(mapping_rule=[1, 0, 1, 0])
-
 Huffman Code is re-established via algorithm reported by Goldman et. al.
 Hyper-parameter, fixed_huffman, in Huffman code describes whether to use the fixed huffman rule obtained from Goldman's paper, the default value is True.
 When user decides to generate huffman tree according to specific file, the command will be: 
 ::
 	hc.HC(fixed_huffman=False)
 	
-Huffman Code (see hc.py, in Chamaeleo/methods/)是基于Goldman方法实现的。
-它有一个超参数fixed_huffman。
-fixed_huffman描述的是是否使用Goldman文中的固定huffman树，其中缺省值是True。
-当我们需要依据文件生成huffman树时：
-::
-	hc.HC(fixed_huffman=False)
-
 Grass Code is re-established via algorithm reported via algorithm reported by Grass et. al.
 Hyper parameter, base_value, in Grass code describes the mapping relationship between GF47 and nucleotide-triplet, the default value is [_ for _ in range(48)].
 When user needs to customize the mapping relationship, for example, the command could be:
@@ -104,15 +88,6 @@ When user needs to customize the mapping relationship, for example, the command 
 	mapping = [47 - i for i in range(48)]
 	gc.GC(base_values=mapping)
 	
-Grass Code (see gc.py, in Chamaeleo/methods/)是基于Grass方法实现的。
-它有一个超参数base_values。
-base_values描述的是，47进制与密码子之间的关系，缺省值为[_ for _ in range(48)]。
-当我们需要定制映射关系时，举个例子：
-::
-	# inverse mapping
-	mapping = [47 - i for i in range(48)]
-	gc.GC(base_values=mapping)
-
 Yin-Yang Code is the algorithm describes the collection of derivative rules reported by Ping et. al.
 Six hyper-parameters are included in this method: base_reference, current_code_matrix，support_bases，support_spacing，max_ratio,  and search_count.
 bse_referece: Yang rule, correspondence between base and bit data in the binary segment I. The default value is Rule 495, [0, 1, 0, 1].
@@ -125,24 +100,6 @@ When user need to customize YYC transcoding process, an example of command could
 ::
 	yyc.YYC(base_reference=[0, 0, 1, 1], current_code_matrix=[[0, 1, 0, 1],[0, 1, 0, 1],[0, 1, 0, 1],[0, 1, 0, 1]],
 		support_bases="AC", support_spacing=1, max_ratio=0.7, search_count=20)
-
-
-Yin-Yang Code (see yyc.py, in Chamaeleo/methods/)是一种基于Yin规则和Yang规则的一系列方法的总称。
-它有6个超参数，分别是：base_reference，current_code_matrix，support_bases，support_spacing，max_ratio, 和search_count。
-base_reference描述的是Yang rule, correspondence between base and bit data in the upper bit segment. The default value is Rule 495, [0, 1, 0, 1].
-current_code_matrix描述的是Yin rule, correspondence between base and bit data in the lower bit segment. The default value is Rule 495, 
-[[1, 1, 0, 0], [1, 0, 0, 1], [1, 1, 0, 0], [1, 1, 0, 0]].
-support_bases描述的是Base replenishment before official data. 缺省值为"A"。
-support_spacing描述的是Spacing between support base and current base. When the support base is the front of the current base, the spacing is 0. 如果support_bases="AA"，则support_spacing是1.
-max_ratio描述的是二进制序列的好坏定义的阈值。如果max_ratio=0.8，意味着0或者1的比例超过0.8，该二进制序列有比较糟糕的数据结构。缺省值为0.8。
-search_count描述的是匹配搜索的次数。因为转码的目的是最终输出DNA序列，所以我们不会为了获得完全符合规则的数据而不停地搜索。缺省值为2。
-当我们需要订制化的时候，举一个例子：
-::
-	yyc.YYC(base_reference=[0, 0, 1, 1], current_code_matrix=[[0, 1, 0, 1],[0, 1, 0, 1],[0, 1, 0, 1],[0, 1, 0, 1]],
-			support_bases="AC", support_spacing=1, max_ratio=0.7, search_count=20)
-
-
-
 			
 Customized error-correction method
 -------------------------------------
@@ -165,21 +122,3 @@ In real application, user can gain more powerful ability of error-correction (i.
 An example of using Reed-Solomon Code would be:
 ::
 	code = rs.RS(check_size=10)
-
-该library有2个纠错方法：Hamming Code和Reed-Solomon Code。
-
-通常，纠错方法一共有2组6种方法：add_for_matrix, remove_for_matrix, verify_for_matrix; add_for_list, remove_for_list, verify_for_list.
-add操作是指给对应的数据添加纠错检验。remove操作是指去除数据的纠错信息。verify操作是指使用既定的纠错码对当前的数据进行核验，如果有误则进行更正；如果无法更正则删除该数据并提示用户。
-
-Hamming Code没有实际的超参数，它是依据用户输入的数据生成带纠错信息的输出数据的。
-::
-	code = hm.Hm()
-	v_matrix = code.add_for_matrix(o_matrix)
-	c_matrix = code.verify_for_matrix(v_matrix)
-	t_matrix = code.remove_for_matrix(c_matrix)
-
-Reed-Solomon Code有一个超参数check_size，它描述的是校验码的长度，缺省值是3。
-我们可以通过增大check_size来增加更多的纠错能力，check_size的大小意味着可恢复的数据大小，例如check_size=10，则可恢复的比特数为10。
-::
-	code = rs.RS(check_size=10)
-
