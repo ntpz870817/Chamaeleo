@@ -23,7 +23,6 @@ This statement may be executed through Python programming tools such as PyCharm 
 
 
 By programming tools:
-
 ::
   	# encode part
 	import Chamaeleo.methods.yyc as yyc
@@ -35,9 +34,9 @@ By programming tools:
 	# decode part
   	codec_factory.decode(method, input_path="C:/target.dna", output_path="C:/target.mp4")
 	# codec_factory.decode(input_path="C:/target.dna", output_path="C:/target.mp4", model_path="C:/yyc.pkl")
+	
 
 By command line:
-
 ::
 	# encode part
 	$ Chamaeleo.codec_factory.encode(Chamaeleo.methods.yyc.YYC(), input_path="C:/init.mp4", output_path="C:/target.dna", model_path="C:/yyc.pkl")
@@ -45,6 +44,7 @@ By command line:
 	# decode part
 	$ Chamaeleo.methods.codec_factory.decode(Chamaeleo.methods.yyc.YYC(), input_path="C:/target.dna", output_path="C:/target.mp4")
 	$ Chamaeleo.methods.codec_factory.decode(input_path="C:/target.dna", output_path="C:/target.mp4", model_path="C:/yyc.pkl") $
+
 
 The essential parameters are: method, input_path, output_path, model_path and segment_length. Optional hyper-parameters are: verify and need_index.
 The parameters should be consistent for both encoding and decoding processes except input_path and output_path. The input_path of decoding process should be the output_path of encoding process.
