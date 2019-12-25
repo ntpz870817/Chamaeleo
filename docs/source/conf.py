@@ -47,7 +47,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "Chamaeleo"
-copyright = "2019, Haoling Zhang, Zhi Ping, Joe Zhu"
+copyright = "2019, BGI-Research"
 author = "Haoling Zhang, Zhi Ping, Joe Zhu"
 
 # The version info for the project you're documenting, acts as replacement for
