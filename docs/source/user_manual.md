@@ -27,14 +27,21 @@ In addition, the packages we are calling now is as follows:
 ## Library Tree Diagram
 ```html
 ├── docs                              // Description document folder
-│    ├── author.md                    // Author catalogue
-│    ├── contributor_manual.md        // Read Before You Want to Make a Contribution
-│    ├── user_manual.md               // Read before you want to use it
+│    ├── source                       // Source code for docs
+│    │    ├── author.md               // Author catalogue
+│    │    ├── conf.py                 // ReadTheDoc building configure
+│    │    ├── contributor_manual.md   // Read before you want to make a contribution
+│    │    ├── description.md          // Description the trans-coding process
+│    │    ├── index.rst               // Information in the index.html
+│    │    ├── installation.md         // Read before you want to build it
+│    │    ├── modules.rst             // Information in the modules.html
+│    │    ├── tutorial.rst            // Information in the tutorial.html
+│    │    ├── user_manual.md          // Read before you want to use it
 ├── methods                           // Method module
 │    ├── components                   // Inherent property folder
 │    │    ├── index_operator.py       // Processing the relationship between index and data
 │    │    ├── inherent.py             // Inherent property
-│    │    ├── motif_validity.py       // Determining whether sequence is easy for synthesis and sequencing
+│    │    ├── validity.py             // Determining whether a DNA sequence is easy or not for sequencing and synthesis
 │    ├── verifies                     // Error-Correction Method
 │    │    ├── hm.py                   // Hamming error correction
 │    │    ├── rs.py                   // Reed-Solomon error correction

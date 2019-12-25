@@ -36,9 +36,16 @@ In addition, some non-robust external packages may lead to instability or even a
 ## Library Tree Diagram
 ```html
 ├── docs                              // Description document folder
-│    ├── author.md                    // Author catalogue
-│    ├── contributor_manual.md        // Read before you want to make contribution
-│    ├── user_manual.md               // Read before usage
+│    ├── source                       // Source code for docs
+│    │    ├── author.md               // Author catalogue
+│    │    ├── conf.py                 // ReadTheDoc building configure
+│    │    ├── contributor_manual.md   // Read before you want to make a contribution
+│    │    ├── description.md          // Description the trans-coding process
+│    │    ├── index.rst               // Information in the index.html
+│    │    ├── installation.md         // Read before you want to build it
+│    │    ├── modules.rst             // Information in the modules.html
+│    │    ├── tutorial.rst            // Information in the tutorial.html
+│    │    ├── user_manual.md          // Read before you want to use it
 ├── methods                           // Method module
 │    ├── components                   // Inherent property folder
 │    │    ├── index_operator.py       // Processing the relationship between index and data
@@ -54,17 +61,14 @@ In addition, some non-robust external packages may lead to instability or even a
 ├── test                              // Test module
 │    ├── generated_files              // DNA sequence set file or binary file generated in the test
 │    │    ├── README.md               // Description document of generated files and the above folder
-│    ├── test_files                   // Files for testing
-│    ├── test_functional              // Functional test folder
-│    │    ├── ft_gc_47_trans.py       // Functional testing for GC (256^2 and 47^3)
-│    │    ├── ft_hc_huff_trans.py     // Functional testing for HC (huffman code transformation)
-│    │    ├── README.md               // Description document of the above folder
-│    ├── test_integrated              // Integrated test folder
-│    │    ├── st_yyc.py               // Symmetrical testing of YYC
-│    │    ├── st_gc.py                // Symmetrical testing of GC
-│    │    ├── st_hc.py                // Symmetrical testing of HC
-│    │    ├── st_sc.py                // Symmetrical testing of SC
-│    │    ├── README.md               // Description document of the above folder
+│    ├── test_gc_trans.py             // Functional test for the trans-coding of Grass' Code
+│    ├── test_hc_trans.py             // Functional test for the trans-coding of Goldman's Code
+│    ├── test_hm_verify.py            // Functional test for the verification of Hamming Code
+│    ├── test_index_operator.py       // Functional test for the index operator
+│    ├── test_rs_verify.py            // Functional test for the verification of Reed-Solomon Code
+│    ├── test_sc_trans.py             // Functional test for the trans-coding of Simple (Church's) Code
+│    ├── test_validity.py             // Functional test for validity screening
+│    ├── test_yyc_trans.py            // Functional test for the trans-coding of Yin-Yang Code
 ├── utils                             // Util module
 │    ├── data_handle.py               // Conversion of DNA sequences and binary document
 │    ├── log.py                       // Outputting the logs in console
@@ -115,7 +119,7 @@ Usually, the annotation includes the purpose of the function, the interpretation
 Two simple example is shown below:
 
 ```python
-
+"""
 introduction: The initialization method of YYC.
 
 :param base_reference: Correspondence between base and binary data (RULE 1).
@@ -139,13 +143,13 @@ introduction: The initialization method of YYC.
 
 :param max_ratio: The max ratio of 0 or 1.
                   When the (count/length) >= this parameter, we decide that this binary sequence is not good.
-
+"""
 ```
 
 and another is:
 
 ```python
-
+"""
 introduction: Separate 'good' and 'bad' data from total data, and splice index and data as a list
 
 :param matrix: Generated binary two-dimensional matrix
@@ -154,7 +158,7 @@ introduction: Separate 'good' and 'bad' data from total data, and splice index a
 
 :returns good_datas, bad datas: good and bad data from total data
                                 Type: list(int)
-
+"""
 ```
 
 ### Process Output Specification

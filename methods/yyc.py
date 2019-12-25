@@ -278,7 +278,7 @@ class YYC:
         :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                       Type: int
 
-        :return dna_motifs: The DNA sequence of len(matrix) rows.
+        :return dna_sequences: The DNA sequence of len(matrix) rows.
                              Type: list(list(char)).
         """
         self.file_size = size
@@ -494,24 +494,24 @@ class YYC:
         :param data_set: Original data from file.
                        Type: Two-dimensional list(int).
 
-        :return dna_motifs: The DNA sequences from the original data set
+        :return dna_sequences: The DNA sequences from the original data set
                              Type: One-dimensional list(string).
         """
 
-        dna_motifs = []
+        dna_sequences = []
         for row in range(0, len(data_set), 2):
             if self.need_log:
                 self.monitor.output(row, len(data_set))
             if row < len(data_set) - 1:
-                dna_motifs.append(
+                dna_sequences.append(
                     self.__list_to_sequence__(data_set[row], data_set[row + 1])
                 )
             else:
-                dna_motifs.append(self.__list_to_sequence__(data_set[row], None))
+                dna_sequences.append(self.__list_to_sequence__(data_set[row], None))
 
         del data_set
 
-        return dna_motifs
+        return dna_sequences
 
     def __list_to_sequence__(self, upper_list, lower_list):
         """

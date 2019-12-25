@@ -112,8 +112,8 @@ class SC:
         :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                       Type: int
 
-        :return dna_motifs: The DNA sequence of len(matrix) rows.
-                             Type: list(string).
+        :return dna_sequences: The DNA sequence of len(matrix) rows.
+                               Type: list(string).
         """
         self.file_size = size
 
