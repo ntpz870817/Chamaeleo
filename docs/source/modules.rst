@@ -4,11 +4,12 @@ Modules
 .. toctree::
    :maxdepth: 4
 
-Methods
--------
+Transcoding Methods 
+------------------------------------------
 
 .. automodule:: methods.gc
   :members:
+  :special-members: introduction
   :undoc-members:
   :show-inheritance:
 
@@ -27,8 +28,21 @@ Methods
   :undoc-members:
   :show-inheritance:
 
+Error-Correction Codes
+------------------------------------------
+
+.. automodule:: methods.verifies.hm
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+.. automodule:: methods.verifies.rs
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
 Utilities
----------
+------------------------------------------
 
 .. automodule:: utils.data_handle
   :members:

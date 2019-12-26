@@ -1,18 +1,21 @@
 """
 Name: YYC (Yin-Yang DNA Storage Code)
 
-Reference: None
+Reference:
+Ping, Z., Chen, S., Huang, X., Zhu, S., Chai, C., Zhang, H., ... & Yang, H. (2019). Towards Practical and Robust DNA-based Data Archiving by Codec System Named'Yin-Yang'. bioRxiv, 829721.
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): (1) DNA encoding by YYC.
-             (2) DNA decoding by YYC.
+Function(s):
+(1) DNA encoding by YYC.
+(2) DNA decoding by YYC.
 
-Advantages: (1) High compressibility, maximum compressibility to 1/2 of the original data.
-            (2) Prevent repetitive motifs, like ATCGATCG...
-            (3) Increase the number of sequence changes (1,536 cases), increasing data security.
+Advantages:
+(1) High compressibility, maximum compressibility to 1/2 of the original data.
+(2) Prevent repetitive motifs, like ATCGATCG...
+(3) Increase the number of sequence changes (1,536 cases), increasing data security.
 """
 import sys
 import numpy

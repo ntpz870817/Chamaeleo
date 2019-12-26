@@ -1,14 +1,16 @@
 """
 Name: Huffman Codec (DNA Storage Code based on Huffman code)
 
-Reference: Goldman N, Bertone P, Chen S, et al. Towards practical, high-capacity, low-maintenance information storage in synthesized DNA[J]. Nature, 2013, 494(7435): 77.
+Reference:
+Goldman N, Bertone P, Chen S, et al. Towards practical, high-capacity, low-maintenance information storage in synthesized DNA[J]. Nature, 2013, 494(7435): 77.
 
 Coder: HaoLing ZHANG (BGI-Research)[V1], QianLong ZHUANG (BGI-Research)
 
 Current Version: 1
 
-Function(s): (1) DNA encoding by Huffman Codec.
-             (2) DNA decoding by Huffman Codec.
+Function(s):
+(1) DNA encoding by Huffman Codec.
+(2) DNA decoding by Huffman Codec.
 """
 import sys
 import re

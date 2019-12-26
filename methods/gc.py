@@ -1,14 +1,16 @@
 """
 Name: Grass Codec (DNA Storage Code created by Grass)
 
-Reference: Grass R N, Heckel R, Puddu M, et al. Robust Chemical Preservation of Digital Information on DNA in Silica with Error‐Correcting Codes[J]. Angewandte Chemie International Edition, 2015, 54(8): 2552-2555.
+Reference:
+Grass R N, Heckel R, Puddu M, et al. Robust Chemical Preservation of Digital Information on DNA in Silica with Error‐Correcting Codes[J]. Angewandte Chemie International Edition, 2015, 54(8): 2552-2555.
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): (1) DNA encoding by Grass Codec.
-             (2) DNA decoding by Grass Codec.
+Function(s):
+(1) DNA encoding by Grass Codec.
+(2) DNA decoding by Grass Codec.
 """
 
 import sys

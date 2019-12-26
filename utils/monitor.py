@@ -5,7 +5,8 @@ Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): (1) Get the progress and the time left
+Function(s):
+Get the progress and the time left
 """
 
 from datetime import datetime
@@ -18,6 +19,9 @@ class Monitor:
         self.last_time = datetime.now()
 
     def restore(self):
+        """
+        introduction: Restore monitor settings.
+        """
         self.__init__()
 
     def output(self, current_length, total_length):

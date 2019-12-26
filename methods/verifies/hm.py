@@ -1,15 +1,17 @@
 """
 Name: Hamming Error Correction
 
-Reference: Wei V K. Generalized Hamming weights for linear codes[J]. IEEE Transactions on information theory, 1991, 37(5): 1412-1418.
+Reference:
+Wei V K. Generalized Hamming weights for linear codes[J]. IEEE Transactions on information theory, 1991, 37(5): 1412-1418.
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): (1) Add Hamming error correction for origin matrix or origin list.
-             (2) Remove Hamming error correction from origin matrix or origin list.
-             (3) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
+Function(s):
+(1) Add Hamming error correction for origin matrix or origin list.
+(2) Remove Hamming error correction from origin matrix or origin list.
+(3) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
 """
 import sys
 

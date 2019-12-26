@@ -1,17 +1,18 @@
 """
 Name: Reed-Solomon Error Correction
 
-Reference: Oz J, Naor A. Reed Solomon Encoder/Decoder on the StarCore™ SC140/SC1400 Cores, With Extended Examples[J]. 2003.
-           https://blog.csdn.net/qq_29110265/article/details/86519879
-           https://github.com/yuta1331/reedsolomon
+Reference:
+Oz J, Naor A. Reed Solomon Encoder/Decoder on the StarCore™ SC140/SC1400 Cores, With Extended Examples[J]. 2003.
+https://github.com/yuta1331/reedsolomon
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): (1) Add Reed-Solomon error correction for origin matrix or origin list.
-             (2) Remove Reed-Solomon error correction from origin matrix or origin list.
-             (3) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
+Function(s):
+(1) Add Reed-Solomon error correction for origin matrix or origin list.
+(2) Remove Reed-Solomon error correction from origin matrix or origin list.
+(3) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
 """
 import sys
 import Chamaeleo.utils.log as log
