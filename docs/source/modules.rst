@@ -4,11 +4,11 @@ Modules
 .. toctree::
    :maxdepth: 4
 
-Transcoding Methods 
+Transcoding Methods
 ------------------------------------------
 
 .. automodule:: methods.gc
-  :members:
+  :members: GC
   :special-members: introduction
   :undoc-members:
   :show-inheritance:
