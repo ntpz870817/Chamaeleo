@@ -200,7 +200,7 @@ class YYC:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                        "Convert to DNA sequence string set.")
 
-        dna_sequences = self._synthesis_sequences(data_set)
+        dna_sequences = self._synthesis_sequences(data_set, need_log)
 
         self.monitor.restore()
 
