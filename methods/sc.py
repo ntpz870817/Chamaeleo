@@ -49,12 +49,12 @@ class SC:
         if 0 <= min(self.mapping_rule) and max(self.mapping_rule) <= 1:
             if self.mapping_rule.count(0) != 2 or self.mapping_rule.count(1) != 2:
                 log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                    "Mapping rule is wrong!")
+                           "Mapping rule is wrong!")
         else:
             if (0 not in self.mapping_rule) or (1 not in self.mapping_rule) \
                     or (2 not in self.mapping_rule) or (3 not in self.mapping_rule):
                 log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                    "Mapping rule is wrong!")
+                           "Mapping rule is wrong!")
 
     # ================================================= encode part ====================================================
 
@@ -80,7 +80,7 @@ class SC:
 
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                "Encode the matrix by Simple Codec.")
+                       "Encode the matrix by Simple Codec.")
 
         dna_sequences = []
         for row in range(len(matrix)):
@@ -105,11 +105,10 @@ class SC:
             # unlimited mapping rule.
             if len(one_list) % 2 != 0:
                 log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                    "Data length cannot be odd number!")
+                           "Data length cannot be odd number!")
             for index in range(0, len(one_list), 2):
-                dna_sequence.append(
-                    inherent.index_base.get(self.mapping_rule.index(one_list[index] * 2 + one_list[index + 1]))
-                )
+                dna_sequence.append(inherent.index_base.get(self.mapping_rule.index(one_list[index] * 2
+                                                                                    + one_list[index + 1])))
         else:
             for index in range(len(one_list)):
                 options = [position for position, value in enumerate(self.mapping_rule) if value == one_list[index]]
@@ -145,7 +144,7 @@ class SC:
 
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                "Convert DNA sequences to binary matrix by Simple Codec.")
+                       "Convert DNA sequences to binary matrix by Simple Codec.")
 
         matrix = []
         for index in range(len(dna_sequences)):

@@ -131,7 +131,7 @@ class FC:
         self.prng = PRNG(K=len(matrix), delta=self.delta, c=self.c_dist)
 
         used_bc = dict()
-        while len(dna_sequences) <  final_count:
+        while len(dna_sequences) < final_count:
             seed = next(lfsr)
             if seed in used_bc:
                 continue
@@ -261,6 +261,7 @@ class FC:
                 self._update_droplets(other_droplet, matrix, done_segments, chunk_to_droplets)
 
     # ================================================= other part =====================================================
+
 
 # noinspection PyMethodMayBeStatic
 class Droplet(object):

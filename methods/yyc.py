@@ -143,10 +143,10 @@ class YYC:
             if left + right == 1 and left * right == 0:
                 continue
             else:
-                log.output( log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                            "Wrong current code matrix, the error locations are [" + str(row) + ", " + str(positions[0])
-                            + "] and [" + str(row) + ", " + str(positions[1]) + "]! "
-                            + "It is required by rule that these two values will have sum of 1 and product of 0.")
+                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                           "Wrong current code matrix, the error locations are [" + str(row) + ", " + str(positions[0])
+                           + "] and [" + str(row) + ", " + str(positions[1]) + "]! "
+                           + "It is required by rule that these two values will have sum of 1 and product of 0.")
 
             left = self.current_code_matrix[row][positions[2]]
             right = self.current_code_matrix[row][positions[3]]
@@ -190,7 +190,7 @@ class YYC:
 
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                "Random incorporation and validity testing.")
+                       "Random incorporation and validity testing.")
 
         data_set = self._pairing(good_data_set, bad_data_set)
 
@@ -198,7 +198,7 @@ class YYC:
 
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                "Convert to DNA sequence string set.")
+                       "Convert to DNA sequence string set.")
 
         dna_sequences = self._synthesis_sequences(data_set)
 
@@ -221,7 +221,7 @@ class YYC:
         """
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                "Separate 'good' data from 'bad' data.")
+                       "Separate 'good' data from 'bad' data.")
 
         bad_indexes = []
         for row in range(len(matrix)):
@@ -232,8 +232,8 @@ class YYC:
         if len(matrix) < len(bad_indexes) * 5:
             if need_log:
                 log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
-                    "There may be a large number of sequences that are difficult for synthesis or sequencing. "
-                    + "We recommend you to re-select the rule or take a new run.")
+                           "There may be a large number of sequences that are difficult for synthesis or sequencing. "
+                           + "We recommend you to re-select the rule or take a new run.")
 
         if len(bad_indexes) == 0 and len(matrix) == 0:
             return [], []
@@ -295,7 +295,7 @@ class YYC:
             bad_indexes = set(str(i) for i in range(0))
         else:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                "YYC did not receive matrix data!")
+                       "YYC did not receive matrix data!")
 
         for index in range(0, len(good_data_set) + len(bad_data_set), 2):
             if need_log:
@@ -306,9 +306,7 @@ class YYC:
                         good_index = int(good_indexes.pop())
                         bad_index = int(bad_indexes.pop())
                         if search_index >= self.search_count - 1 or validity.check(
-                                "".join(self._list_to_sequence(good_data_set[good_index], bad_data_set[bad_index])
-                            )
-                        ):
+                                "".join(self._list_to_sequence(good_data_set[good_index], bad_data_set[bad_index]))):
                             data_set.append(good_data_set[good_index])
                             data_set.append(bad_data_set[bad_index])
                             break
@@ -321,9 +319,7 @@ class YYC:
                         good_index1 = int(good_indexes.pop())
                         good_index2 = int(good_indexes.pop())
                         if search_index >= self.search_count - 1 or validity.check(
-                                "".join(self._list_to_sequence(good_data_set[good_index1], good_data_set[good_index2],)
-                            )
-                        ):
+                                "".join(self._list_to_sequence(good_data_set[good_index1], good_data_set[good_index2]))):
                             data_set.append(good_data_set[good_index1])
                             data_set.append(good_data_set[good_index2])
                             break
@@ -336,9 +332,7 @@ class YYC:
                         bad_index1 = int(bad_indexes.pop())
                         bad_index2 = int(bad_indexes.pop())
                         if search_index >= self.search_count - 1 or validity.check(
-                                "".join(self._list_to_sequence(bad_data_set[bad_index1], bad_data_set[bad_index2])
-                            )
-                        ):
+                                "".join(self._list_to_sequence(bad_data_set[bad_index1], bad_data_set[bad_index2]))):
                             data_set.append(bad_data_set[bad_index1])
                             data_set.append(bad_data_set[bad_index2])
                         else:
@@ -347,13 +341,10 @@ class YYC:
                             index -= 1
                 else:
                     log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                        "Wrong pairing for YYC!")
+                               "Wrong pairing for YYC!")
             else:
-                data_set.append(
-                    good_data_set[int(good_indexes.pop())]
-                    if len(good_indexes) != 0
-                    else bad_data_set[int(bad_indexes.pop())]
-                )
+                data_set.append(good_data_set[int(good_indexes.pop())]
+                                if len(good_indexes) != 0 else bad_data_set[int(bad_indexes.pop())])
 
         del good_indexes, good_data_set, bad_indexes, bad_data_set
 
@@ -405,7 +396,7 @@ class YYC:
             if lower_list is not None:
                 if col > self.support_spacing:
                     dna_sequence.append(self._binary_to_base(upper_list[col], lower_list[col],
-                                                             dna_sequence[col - (self.support_spacing + 1)],))
+                                                             dna_sequence[col - (self.support_spacing + 1)]))
                 else:
                     dna_sequence.append(self._binary_to_base(upper_list[col], lower_list[col], self.support_bases[col]))
             else:
