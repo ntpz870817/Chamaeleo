@@ -80,7 +80,7 @@ class GC:
 
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                "Encode the matrix.")
+                       "Encode the matrix by Grass Codec.")
 
         for row in range(len(matrix)):
             if need_log:
@@ -145,7 +145,7 @@ class GC:
 
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                "Convert DNA sequences to binary matrix.")
+                       "Convert DNA sequences to binary matrix by Grass Codec.")
 
         for index in range(len(dna_sequences)):
             if need_log:
@@ -176,20 +176,14 @@ class GC:
 
         if len(dna_sequence) % 3 != 0:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                "The length of dna sequence should be a multiple of 9!")
+                       "The length of dna sequence should be a multiple of 9!")
 
         one_list = []
 
         for index in range(0, len(dna_sequence), 9):
-            first = self.mapping_rule[1][
-                self.mapping_rule[0].index("".join(dna_sequence[index: index + 3]))
-            ]
-            second = self.mapping_rule[1][
-                self.mapping_rule[0].index("".join(dna_sequence[index + 3: index + 6]))
-            ]
-            third = self.mapping_rule[1][
-                self.mapping_rule[0].index("".join(dna_sequence[index + 6: index + 9]))
-            ]
+            first = self.mapping_rule[1][self.mapping_rule[0].index("".join(dna_sequence[index: index + 3]))]
+            second = self.mapping_rule[1][self.mapping_rule[0].index("".join(dna_sequence[index + 3: index + 6]))]
+            third = self.mapping_rule[1][self.mapping_rule[0].index("".join(dna_sequence[index + 6: index + 9]))]
 
             decimal_number = first
             decimal_number = decimal_number * 47 + second

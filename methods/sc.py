@@ -37,11 +37,12 @@ class SC:
 
         self.mapping_rule = mapping_rule
 
-        self.__init_check__()
+        self._init_check()
+
         self.file_size = 0
         self.m = monitor.Monitor()
 
-    def __init_check__(self):
+    def _init_check(self):
         """
         introduction: The verification of initialization parameters.
         """
@@ -50,11 +51,10 @@ class SC:
                 log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                     "Mapping rule is wrong!")
         else:
-            if (not 0 in self.mapping_rule) or (not 1 in self.mapping_rule) \
-                    or (not 2 in self.mapping_rule) or (not 3 in self.mapping_rule):
+            if (0 not in self.mapping_rule) or (1 not in self.mapping_rule) \
+                    or (2 not in self.mapping_rule) or (3 not in self.mapping_rule):
                 log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                     "Mapping rule is wrong!")
-
 
     # ================================================= encode part ====================================================
 

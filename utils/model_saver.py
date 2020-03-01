@@ -32,7 +32,7 @@ def save_model(path, model, need_log=False):
     """
     if need_log:
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-            "Save model to file: " + path)
+                   "Save model to file: " + path)
 
     with open(path, "wb") as file:
         pickle.dump(model, file)
@@ -53,7 +53,7 @@ def load_model(path, need_log=False):
     """
     if need_log:
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-            "Load model from file: " + path)
+                   "Load model from file: " + path)
 
     with open(path, "rb") as file:
         return pickle.load(file)

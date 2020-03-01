@@ -19,7 +19,7 @@ import Chamaeleo.methods.components.index_operator as index_operator
 
 # noinspection PyProtectedMember
 def encode(method, input_path, output_path,
-    model_path=None, verify=None, need_index=True, segment_length=120, need_log=False):
+           model_path=None, verify=None, need_index=True, segment_length=120, need_log=False):
     """
     introduction: Use the selected method, convert the binary file to DNA sequence
                   set and output the DNA sequence set.
@@ -52,11 +52,11 @@ def encode(method, input_path, output_path,
 
     if input_path is None or len(input_path) == 0:
         log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-            "The input file path is invalid!")
+                   "The input file path is invalid!")
 
     if output_path is None or len(input_path) == 0:
         log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-            "The output file path is invalid!")
+                   "The output file path is invalid!")
 
     input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length, need_log)
 
@@ -76,7 +76,7 @@ def encode(method, input_path, output_path,
 
 # noinspection PyProtectedMember
 def decode(method=None, model_path=None, input_path=None, output_path=None,
-    verify=None, has_index=True, need_log=False):
+           verify=None, has_index=True, need_log=False):
     """
     introduction: Use the selected method, convert DNA sequence set to the binary
                   file and output the binary file.
@@ -108,15 +108,15 @@ def decode(method=None, model_path=None, input_path=None, output_path=None,
 
     if method is None and model_path is None:
         log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-            "The method you select does not exist!")
+                   "The method you select does not exist!")
     else:
         if input_path is None or len(input_path) == 0:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                "The input file path is not valid!")
+                       "The input file path is not valid!")
 
         if output_path is None or len(input_path) == 0:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                "The output file path is not valid!")
+                       "The output file path is not valid!")
 
         if model_path is not None:
             method = saver.load_model(model_path)

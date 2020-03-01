@@ -66,7 +66,7 @@ class HC:
         self.m.restore()
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                "Generate the huffman dictionary.")
+                       "Generate the huffman dictionary.")
         if self.fixed_huffman:
             self._huffman_dict()
         else:
@@ -75,7 +75,7 @@ class HC:
         self.m.restore()
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                "Convert matrix to DNA sequence set.")
+                       "Convert matrix to DNA sequence set.")
         dna_sequences = []
 
         for row in range(len(matrix)):
@@ -145,7 +145,7 @@ class HC:
         self.m.restore()
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                "Convert DNA sequences to binary matrix.")
+                       "Convert DNA sequences to binary matrix.")
 
         matrix = []
         index_binary_length = int(len(str(bin(len(dna_sequences)))) - 2)

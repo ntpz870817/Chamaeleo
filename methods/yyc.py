@@ -36,7 +36,8 @@ class YYC:
         support_bases=None,
         support_spacing=0,
         max_ratio=0.8,
-        search_count=2):
+        search_count=2
+    ):
         """
         introduction: The initialization method of YYC.
 
@@ -101,23 +102,23 @@ class YYC:
             if (self.support_bases[index] != "A" and self.support_bases[index] != "T"
                     and self.support_bases[index] != "C" and self.support_bases[index] != "G"):
                 log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                    "Only A, T, C, and G can be included as support bases, "
-                    "but the support bases[" + str(index) + "] has been detected as "
+                           "Only A, T, C, and G can be included as support bases, "
+                           "but the support bases[" + str(index) + "] has been detected as "
                            + str(self.support_bases[index] + "!"))
 
         if len(self.support_bases) < self.support_spacing + 1:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                "The count of support base needs to be more than support spacing!")
+                       "The count of support base needs to be more than support spacing!")
 
         # Check base reference (rule 1)
         for index in range(len(self.base_reference)):
             if self.base_reference[index] != 0 and self.base_reference[index] != 1:
                 log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                    "Only 0 and 1 can be included for base reference, and base_reference[" + str(index)
-                    + "] has been detected as " + str(self.base_reference[index] + "!"))
+                           "Only 0 and 1 can be included for base reference, and base_reference[" + str(index)
+                           + "] has been detected as " + str(self.base_reference[index] + "!"))
         if sum(self.base_reference) != 2:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                "Wrong correspondence between base and binary data!")
+                       "Wrong correspondence between base and binary data!")
 
         positions = []
         for i in range(len(self.base_reference)):
@@ -132,9 +133,10 @@ class YYC:
             for col in range(len(self.current_code_matrix[row])):
                 if self.current_code_matrix[row][col] != 0 and self.current_code_matrix[row][col] != 1:
                     log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                        "Only 0 and 1 can be included in the current code matrix, and the current code matrix ["
-                        + str(row) + ", " + str(col) + "] has been detected as "
-                        + str(self.current_code_matrix[row][col] + "!"))
+                               "Only 0 and 1 can be included in the current code matrix, and the current code matrix ["
+                               + str(row) + ", " + str(col) + "] has been detected as "
+                               + str(self.current_code_matrix[row][col] + "!"))
+
         for row in range(len(self.current_code_matrix)):
             left = self.current_code_matrix[row][positions[0]]
             right = self.current_code_matrix[row][positions[1]]
@@ -142,9 +144,9 @@ class YYC:
                 continue
             else:
                 log.output( log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                    "Wrong current code matrix, the error locations are [" + str(row) + ", " + str(positions[0])
-                    + "] and [" + str(row) + ", " + str(positions[1]) + "]! "
-                    + "It is required by rule that these two values will have sum of 1 and product of 0.")
+                            "Wrong current code matrix, the error locations are [" + str(row) + ", " + str(positions[0])
+                            + "] and [" + str(row) + ", " + str(positions[1]) + "]! "
+                            + "It is required by rule that these two values will have sum of 1 and product of 0.")
 
             left = self.current_code_matrix[row][positions[2]]
             right = self.current_code_matrix[row][positions[3]]
@@ -152,13 +154,13 @@ class YYC:
                 continue
             else:
                 log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                    "Wrong current code matrix, the error locations are [" + str(row) + ", " + str(positions[2])
-                    + "] and [" + str(row) + ", " + str(positions[3]) + "]! "
-                    + "It is required by rule that these two values will have sum of 1 and product of 0.")
+                           "Wrong current code matrix, the error locations are [" + str(row) + ", " + str(positions[2])
+                           + "] and [" + str(row) + ", " + str(positions[3]) + "]! "
+                           + "It is required by rule that these two values will have sum of 1 and product of 0.")
         # Check max ratio
         if self.max_ratio <= 0.5 or self.max_ratio >= 1:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                "Wrong max ratio (" + str(self.max_ratio) + ")!")
+                       "Wrong max ratio (" + str(self.max_ratio) + ")!")
 
     # ================================================= encode part ====================================================
 
@@ -402,21 +404,14 @@ class YYC:
         for col in range(len(upper_list)):
             if lower_list is not None:
                 if col > self.support_spacing:
-                    dna_sequence.append(
-                        self._binary_to_base(upper_list[col], lower_list[col],
-                                             dna_sequence[col - (self.support_spacing + 1)],)
-                    )
+                    dna_sequence.append(self._binary_to_base(upper_list[col], lower_list[col],
+                                                             dna_sequence[col - (self.support_spacing + 1)],))
                 else:
-                    dna_sequence.append(
-                        self._binary_to_base(upper_list[col], lower_list[col], self.support_bases[col])
-                    )
+                    dna_sequence.append(self._binary_to_base(upper_list[col], lower_list[col], self.support_bases[col]))
             else:
                 if col > self.support_spacing:
-                    dna_sequence.append(
-                        self._binary_to_base(upper_list[col], upper_list[col],
-                                             dna_sequence[col - (self.support_spacing + 1)],
-                        )
-                    )
+                    dna_sequence.append(self._binary_to_base(upper_list[col], upper_list[col],
+                                                             dna_sequence[col - (self.support_spacing + 1)]))
                 else:
                     dna_sequence.append(self._binary_to_base(upper_list[col], upper_list[col], self.support_bases[col]))
         return dna_sequence
@@ -469,13 +464,13 @@ class YYC:
 
         if not dna_sequences:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                "DNA sequence string set is not existing")
+                       "DNA sequence string set is not existing")
 
         self.monitor.restore()
 
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                "Convert DNA sequences to binary matrix.")
+                       "Convert DNA sequences to binary matrix.")
 
         matrix = self._convert_binaries(dna_sequences, need_log)
 
@@ -529,9 +524,8 @@ class YYC:
 
         for col in range(len(dna_sequence)):
             if col > self.support_spacing:
-                upper_binary, lower_binary = self._base_to_binary(
-                    dna_sequence[col], dna_sequence[col - (self.support_spacing + 1)]
-                )
+                upper_binary, lower_binary = self._base_to_binary(dna_sequence[col],
+                                                                  dna_sequence[col - (self.support_spacing + 1)])
                 upper_row_list.append(upper_binary)
                 lower_row_list.append(lower_binary)
             else:

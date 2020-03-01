@@ -71,29 +71,16 @@ class FC:
 
         """
         if self.redundancy < 0:
-            log.output(
-                log.ERROR,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "The parameter \"redundancy\" is wrong, it is greater than or equal to 0!",
-            )
+            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                       "The parameter \"redundancy\" is wrong, it is greater than or equal to 0!")
 
         if self.header_size < 0:
-            log.output(
-                log.ERROR,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "The parameter \"header_size\" is wrong, it is greater than or equal to 0!",
-            )
+            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                       "The parameter \"header_size\" is wrong, it is greater than or equal to 0!")
 
         if self.gc_content < 0 or self.gc_content > 0.5:
-            log.output(
-                log.ERROR,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "The parameter \"gc_content\" is wrong, it is in the [0, 0.5]!",
-            )
-
+            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                       "The parameter \"gc_content\" is wrong, it is in the [0, 0.5]!")
 
     # ================================================= encode part ====================================================
 
@@ -273,9 +260,7 @@ class FC:
             for other_droplet in chunk_to_droplets[lone_chunk].copy():
                 self._update_droplets(other_droplet, matrix, done_segments, chunk_to_droplets)
 
-
     # ================================================= other part =====================================================
-
 
 # noinspection PyMethodMayBeStatic
 class Droplet(object):
