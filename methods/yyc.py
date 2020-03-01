@@ -192,7 +192,7 @@ class YYC:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                        "Random incorporation and validity testing.")
 
-        data_set = self._pairing(good_data_set, bad_data_set)
+        data_set = self._pairing(good_data_set, bad_data_set, need_log)
 
         self.monitor.restore()
 

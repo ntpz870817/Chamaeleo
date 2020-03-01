@@ -45,6 +45,7 @@ In addition, the packages we are calling now is as follows:
 │    ├── verifies                     // Error-Correction Method
 │    │    ├── hm.py                   // Hamming error correction
 │    │    ├── rs.py                   // Reed-Solomon error correction
+│    ├── fc.py                        // FC (DNA Storage Code based on Fountain code, created by Erlich et. al)
 │    ├── gc.py                        // GC (DNA Storage Code created by Grass)
 │    ├── hc.py                        // HC (DNA Storage Code based on Huffman code)
 │    ├── sc.py                        // SC (Simple DNA Storage Code)

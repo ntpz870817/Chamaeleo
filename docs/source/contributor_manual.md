@@ -54,6 +54,7 @@ In addition, some non-robust external packages may lead to instability or even a
 │    ├── verifies                     // Error-Correction Method
 │    │    ├── hm.py                   // Hamming error correction
 │    │    ├── rs.py                   // Reed-Solomon error correction
+│    ├── fc.py                        // FC (DNA Storage Code based on Fountain code, created by Erlich et. al)
 │    ├── gc.py                        // GC (DNA Storage Code created by Grass et. al)
 │    ├── hc.py                        // HC (DNA Storage Code based on Huffman code, created by Goldman et. al)
 │    ├── sc.py                        // SC (Simple DNA Storage Code, created by Church et. al)
@@ -61,6 +62,7 @@ In addition, some non-robust external packages may lead to instability or even a
 ├── test                              // Test module
 │    ├── generated_files              // DNA sequence set file or binary file generated in the test
 │    │    ├── README.md               // Description document of generated files and the above folder
+│    ├── test_fc_trans.py             // Functional test for the trans-coding of Erlich' Code
 │    ├── test_gc_trans.py             // Functional test for the trans-coding of Grass' Code
 │    ├── test_hc_trans.py             // Functional test for the trans-coding of Goldman's Code
 │    ├── test_hm_verify.py            // Functional test for the verification of Hamming Code
