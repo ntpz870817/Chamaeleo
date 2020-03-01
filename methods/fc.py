@@ -359,7 +359,6 @@ class Droplet(object):
 
         return seed
 
-
     def _xor(self, value_1, value_2):
         """
         introduction: The xor operation in Fountain Codec
@@ -406,6 +405,7 @@ class PRNG(object):
             if value > p:
                 return index + 1
         return index + 1
+
 
 # noinspection PyMethodMayBeStatic
 class LFSR(object):
