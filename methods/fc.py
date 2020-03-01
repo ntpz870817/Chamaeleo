@@ -105,19 +105,12 @@ class FC:
         self.monitor.restore()
 
         if len(matrix[0]) % 2 == 1:
-            log.output(
-                log.ERROR,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Binary sequence length should be even.",
-            )
+            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Binary sequence length should be even.")
 
         if need_log:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Encode the matrix by Fountain Codec.")
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Encode the matrix by Fountain Codec.")
 
         # calculate decode packets
         self.decode_packets = len(matrix)
@@ -149,14 +142,11 @@ class FC:
                 self.monitor.output(len(dna_sequences), final_count)
 
         if need_log:
-            log.output(
-                log.WARN,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Because Fountain codes for which the inputted matrix is of full rank in the decoding process are "
-                "decodable, the full rank depends on the parameter \"redundancy\" in the Fountain Codec. \n"
-                "Therefore, we strongly recommend that we decode it directly to verify the decodable of the DNA file"
-                " before conducting DNA synthesis experiments.")
+            log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Because Fountain codes for which the inputted matrix is of full rank in the decoding process "
+                       "are decodable, the full rank depends on the parameter \"redundancy\" in the Fountain Codec. \n"
+                       "Therefore, we strongly recommend that we decode it directly to verify the decodable "
+                       "of the DNA file before conducting DNA synthesis experiments.")
 
         self.monitor.restore()
 
@@ -186,20 +176,12 @@ class FC:
         sys.setrecursionlimit(self.recursion_depth)
 
         if self.decode_packets is None:
-            log.output(
-                log.ERROR,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "We miss the parameter \"decode_packets\", please try again after inputting this parameter.",
-            )
+            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                       "We miss the parameter \"decode_packets\", please try again after inputting this parameter.")
 
         if need_log:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Decode the matrix by Fountain Codec.",
-            )
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Decode the matrix by Fountain Codec.")
 
         # creating the solition distribution object
         self.prng = PRNG(K=self.decode_packets, delta=self.delta, c=self.c_dist)
@@ -219,12 +201,8 @@ class FC:
                 self.monitor.output(len(done_segments), self.decode_packets)
 
         if None in matrix or self.decode_packets - len(done_segments) > 0:
-            log.output(
-                log.ERROR,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Couldn't decode the whole file.",
-            )
+            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Couldn't decode the whole file.")
 
         self.monitor.restore()
 
