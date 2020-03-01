@@ -4,7 +4,7 @@ Name: Huffman Codec (DNA Storage Code based on Huffman code)
 Reference:
 Goldman N, Bertone P, Chen S, et al. Towards practical, high-capacity, low-maintenance information storage in synthesized DNA[J]. Nature, 2013, 494(7435): 77.
 
-Coder: HaoLing ZHANG (BGI-Research)[V1], QianLong ZHUANG (BGI-Research)
+Coder: HaoLing ZHANG (BGI-Research)[V1], QianLong ZHUANG (BGI-Research)[V1]
 
 Current Version: 1
 
@@ -22,31 +22,22 @@ import Chamaeleo.methods.components.inherent as inherent
 
 # noinspection PyProtectedMember,PyMethodMayBeStatic,PyTypeChecker,PyUnusedLocal
 class HC:
-    def __init__(self, fixed_huffman=True, need_log=False):
+    def __init__(self, fixed_huffman=True):
         """
         introduction: The initialization method of Huffman Codec.
 
         :param fixed_huffman: Declare whether to use the Huffman dictionary in Goldman's paper.
                                In order to reduce the possible loss of function storage, we recommend using this dictionary.
         """
-        if need_log:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Create the Huffman Codec method.",
-            )
-
         self.huffman_tree = None
         self.segment_length = 0
         self.fixed_huffman = fixed_huffman
         self.file_size = 0
         self.m = monitor.Monitor()
-        self.need_log = need_log
 
-    # ================================================= encode part ========================================================
+    # ================================================= encode part ====================================================
 
-    def encode(self, matrix, size):
+    def encode(self, matrix, size, need_log=False):
         """
         introduction: Encode DNA sequences from the data of binary file.
 
@@ -56,6 +47,8 @@ class HC:
 
         :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                       Type: int
+
+        :param need_log: show the log.
 
         :return dna_sequences: The DNA sequence of len(matrix) rows.
                              Type: list(list(char)).
@@ -71,52 +64,29 @@ class HC:
             matrix = temp_matrix
 
         self.m.restore()
-        if self.need_log:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Generate the huffman dictionary.",
-            )
+        if need_log:
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                "Generate the huffman dictionary.")
         if self.fixed_huffman:
-            self.__huffman_dict__()
+            self._huffman_dict()
         else:
-            self.__huffman_dict__(matrix)
+            self._huffman_dict(matrix)
 
         self.m.restore()
-        if self.need_log:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Convert matrix to dna motif set.",
-            )
+        if need_log:
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                "Convert matrix to DNA sequence set.")
         dna_sequences = []
 
         for row in range(len(matrix)):
-            if self.need_log:
+            if need_log:
                 self.m.output(row, len(matrix))
-            dna_sequences.append(
-                self.__list_to_sequence__(self.__huffman_compressed__(matrix[row]))
-            )
+            dna_sequences.append(self._list_to_sequence(self._huffman_compressed(matrix[row])))
 
         self.m.restore()
         return dna_sequences
 
-    def __huffman_dict__(self, matrix=None):
-        """
-        introduction: Get the dictionary of Huffman tree.
-
-        :param matrix: Generated binary two-dimensional matrix.
-                        The data of this matrix contains only 0 or 1 (non-char).
-                        Type: int or bit.
-        """
-        if matrix is None:
-            self.huffman_tree = inherent.goldman_dict
-        else:
-            self.huffman_tree = self.__get_map__(matrix, 3)
-
-    def __huffman_compressed__(self, binary_list):
+    def _huffman_compressed(self, binary_list):
         """
         introduction: Convert binary to ternary, compress and facilitate the use of rotate code
 
@@ -129,16 +99,14 @@ class HC:
         ternary_list = []
 
         for list_index in range(0, len(binary_list), 8):
-            current_number = int(
-                "".join(list(map(str, binary_list[list_index : list_index + 8]))), 2
-            )
+            current_number = int("".join(list(map(str, binary_list[list_index : list_index + 8]))), 2)
             huffman_code = self.huffman_tree[current_number]
             for code_index in range(len(huffman_code)):
                 ternary_list.append(int(huffman_code[code_index]))
 
         return ternary_list
 
-    def __list_to_sequence__(self, one_list):
+    def _list_to_sequence(self, one_list):
         """
         introduction: Encode a DNA sequence from one binary list.
 
@@ -156,7 +124,107 @@ class HC:
 
         return dna_sequence
 
-    def __get_map__(self, bit_matrix, size=None, multiple=3):
+    # ================================================= decode part ====================================================
+
+    def decode(self, dna_sequences, need_log=False):
+        """
+        introduction: Decode DNA sequences to the data of binary file.
+
+        :param dna_sequences: The DNA sequence of len(matrix) rows.
+                            Type: One-dimensional list(string).
+
+        :param need_log: show the log.
+
+        :return matrix: The binary matrix corresponding to the dna sequences.
+                         Type: Two-dimensional list(int).
+
+        :return file_size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
+                            Type: int
+        """
+
+        self.m.restore()
+        if need_log:
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                "Convert DNA sequences to binary matrix.")
+
+        matrix = []
+        index_binary_length = int(len(str(bin(len(dna_sequences)))) - 2)
+
+        for index in range(len(dna_sequences)):
+            if need_log:
+                self.m.output(index, len(dna_sequences))
+            matrix.append(
+                self._huffman_decompressed(self._sequence_to_list(dna_sequences[index]), index_binary_length)
+            )
+
+        if len(matrix[0]) != self.segment_length:
+            temp_matrix = []
+            for row in range(len(matrix)):
+                temp_matrix.append(matrix[row][self.segment_length % 8:])
+            matrix = temp_matrix
+
+        self.m.restore()
+
+        return matrix, self.file_size
+
+    def _sequence_to_list(self, dna_sequence):
+        """
+        introduction: Convert one DNA sequence to one Huffman coding list.
+
+        :param dna_sequence: One DNA sequence.
+                           Type: List(char).
+
+        :return one_list: One ternary Huffman coding list.
+                           Type: List(int)
+        """
+        last_base, one_list = "A", []
+        for index in range(len(dna_sequence)):
+            one_list.append(inherent.rotate_codes.get(last_base).index(dna_sequence[index]))
+            last_base = dna_sequence[index]
+
+        return one_list
+
+    def _huffman_decompressed(self, ternary_list, index_binary_length):
+        """
+        introduction: Conversion of ternary Huffman coding to binary coding.
+
+        :param ternary_list: The ternary Huffman coding.
+
+        :return binary_list: The binary list.
+                              Type: list(int).
+        """
+        temp_ternary, binary_list = "", []
+        for index in range(len(ternary_list)):
+            temp_ternary += str(ternary_list[index])
+
+            for tree_index in range(len(self.huffman_tree)):
+                if temp_ternary == self.huffman_tree[tree_index]:
+                    if len(binary_list) + 8 < self.segment_length + index_binary_length:
+                        binary_list += list(map(int, list(str(bin(tree_index))[2:].zfill(8))))
+                    else:
+                        remaining_length = (self.segment_length + index_binary_length - len(binary_list))
+                        binary_list += list(map(int, list(str(bin(tree_index))[2:].zfill(remaining_length))))
+                    temp_ternary = ""
+                    break
+
+        return binary_list
+
+    # ================================================= other part =====================================================
+
+    def _huffman_dict(self, matrix=None):
+        """
+        introduction: Get the dictionary of Huffman tree.
+
+        :param matrix: Generated binary two-dimensional matrix.
+                        The data of this matrix contains only 0 or 1 (non-char).
+                        Type: int or bit.
+        """
+        if matrix is None:
+            self.huffman_tree = inherent.goldman_dict
+        else:
+            self.huffman_tree = self._get_map(matrix, 3)
+
+    def _get_map(self, bit_matrix, size=None, multiple=3):
         """
         introduction: Customize Huffman tree based on the bit matrix.
 
@@ -174,7 +242,7 @@ class HC:
             size = len(bit_matrix) * len(bit_matrix[0])
 
         # Replace the bit matrix with one-dimensional decimal byte list
-        decimal_list = self.__get_decimal_list__(bit_matrix, size)
+        decimal_list = self._get_decimal_list(bit_matrix, size)
 
         # Store elements and their weights, their codes
         weight, code = {}, {}
@@ -221,7 +289,7 @@ class HC:
 
         return tree
 
-    def __get_decimal_list__(self, bit_matrix, size):
+    def _get_decimal_list(self, bit_matrix, size):
         """
         introduction: Decimal list generated by the bit matrix.
 
@@ -246,103 +314,3 @@ class HC:
                     bit_index, temp_byte = 0, 0
 
         return decimal_list
-
-    # ================================================= decode part ========================================================
-
-    def decode(self, dna_sequences):
-        """
-        introduction: Decode DNA sequences to the data of binary file.
-
-        :param dna_sequences: The DNA sequence of len(matrix) rows.
-                            Type: One-dimensional list(string).
-
-        :return matrix: The binary matrix corresponding to the dna sequences.
-                         Type: Two-dimensional list(int).
-
-        :return file_size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
-                            Type: int
-        """
-
-        self.m.restore()
-        if self.need_log:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Convert DNA sequences to binary matrix.",
-            )
-
-        matrix = []
-        index_binary_length = int(len(str(bin(len(dna_sequences)))) - 2)
-
-        for index in range(len(dna_sequences)):
-            if self.need_log:
-                self.m.output(index, len(dna_sequences))
-            matrix.append(
-                self.__huffman_decompressed__(
-                    self.__sequence_to_list__(dna_sequences[index]), index_binary_length
-                )
-            )
-
-        if len(matrix[0]) != self.segment_length:
-            temp_matrix = []
-            for row in range(len(matrix)):
-                temp_matrix.append(matrix[row][self.segment_length % 8:])
-            matrix = temp_matrix
-
-        self.m.restore()
-
-        return matrix, self.file_size
-
-    def __sequence_to_list__(self, dna_sequence):
-        """
-        introduction: Convert one DNA sequence to one Huffman coding list.
-
-        :param dna_sequence: One DNA sequence.
-                           Type: List(char).
-
-        :return one_list: One ternary Huffman coding list.
-                           Type: List(int)
-        """
-        last_base, one_list = "A", []
-        for index in range(len(dna_sequence)):
-            one_list.append(
-                inherent.rotate_codes.get(last_base).index(dna_sequence[index])
-            )
-            last_base = dna_sequence[index]
-
-        return one_list
-
-    def __huffman_decompressed__(self, ternary_list, index_binary_length):
-        """
-        introduction: Conversion of ternary Huffman coding to binary coding.
-
-        :param ternary_list: The ternary Huffman coding.
-
-        :return binary_list: The binary list.
-                              Type: list(int).
-        """
-        temp_ternary, binary_list = "", []
-        for index in range(len(ternary_list)):
-            temp_ternary += str(ternary_list[index])
-
-            for tree_index in range(len(self.huffman_tree)):
-                if temp_ternary == self.huffman_tree[tree_index]:
-                    if len(binary_list) + 8 < self.segment_length + index_binary_length:
-                        binary_list += list(
-                            map(int, list(str(bin(tree_index))[2:].zfill(8)))
-                        )
-                    else:
-                        remaining_length = (
-                            self.segment_length + index_binary_length - len(binary_list)
-                        )
-                        binary_list += list(
-                            map(
-                                int,
-                                list(str(bin(tree_index))[2:].zfill(remaining_length)),
-                            )
-                        )
-                    temp_ternary = ""
-                    break
-
-        return binary_list

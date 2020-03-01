@@ -79,7 +79,7 @@ class TestEncodeDecode(unittest.TestCase):
     def test_simple_repeat(self):
         results = []
         for sequence in self.sequences:
-            results.append(validity.motif_repeat(sequence, self.repeat_length))
+            results.append(validity.repeat(sequence, self.repeat_length))
 
         self.assertEqual(
             results,
@@ -140,7 +140,7 @@ class TestEncodeDecode(unittest.TestCase):
     def test_inverse_repeat(self):
         results = []
         for sequence in self.sequences:
-            results.append(validity.inverse_motif_repeat(sequence, self.repeat_length))
+            results.append(validity.inverse_repeat(sequence, self.repeat_length))
 
         self.assertEqual(
             results,
@@ -201,7 +201,7 @@ class TestEncodeDecode(unittest.TestCase):
     def test_dyad_repeat(self):
         results = []
         for sequence in self.sequences:
-            results.append(validity.dyad_motif_repeat(sequence, self.repeat_length))
+            results.append(validity.dyad_repeat(sequence, self.repeat_length))
 
         self.assertEqual(
             results,

@@ -45,18 +45,10 @@ class GC:
         self.segment_length = 0
         self.file_size = 0
         self.m = monitor.Monitor()
-        self.need_log = need_log
-        if self.need_log:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Create the Grass method.",
-            )
 
-    # ================================================= encode part ========================================================
+    # ================================================= encode part ====================================================
 
-    def encode(self, matrix, size):
+    def encode(self, matrix, size, need_log=False):
         """
         introduction: Encode DNA sequences from the data of binary file.
 
@@ -67,6 +59,8 @@ class GC:
 
         :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                       Type: int
+
+        :param need_log: show the log.
 
         :return dna_sequences: The DNA sequence of len(matrix) rows.
                              Type: list(string).
@@ -84,22 +78,19 @@ class GC:
 
         dna_sequences = []
 
-        if self.need_log:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Encode the matrix.",
-            )
+        if need_log:
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                "Encode the matrix.")
+
         for row in range(len(matrix)):
-            if self.need_log:
+            if need_log:
                 self.m.output(row, len(matrix))
-            dna_sequences.append(self.__list_to_sequence__(matrix[row]))
+            dna_sequences.append(self._list_to_sequence(matrix[row]))
 
         self.m.restore()
         return dna_sequences
 
-    def __list_to_sequence__(self, one_list):
+    def _list_to_sequence(self, one_list):
         """
         introduction: from one binary list to DNA sequence.
 
@@ -129,9 +120,9 @@ class GC:
 
         return dna_sequence
 
-    # ================================================= decode part ========================================================
+    # ================================================= decode part ====================================================
 
-    def decode(self, dna_sequences):
+    def decode(self, dna_sequences, need_log=False):
         """
         introduction: Decode DNA sequences to the data of binary file.
 
@@ -142,6 +133,8 @@ class GC:
         :return matrix: The binary matrix corresponding to the dna sequences.
                          Type: Two-dimensional list(int).
 
+        :param need_log: show the log.
+
         :return file_size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
                             Type: int
         """
@@ -150,18 +143,14 @@ class GC:
 
         matrix = []
 
-        if self.need_log:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Convert DNA sequences to binary matrix.",
-            )
+        if need_log:
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                "Convert DNA sequences to binary matrix.")
 
         for index in range(len(dna_sequences)):
-            if self.need_log:
+            if need_log:
                 self.m.output(index, len(dna_sequences))
-            matrix.append(self.__sequence_to_list__(dna_sequences[index]))
+            matrix.append(self._sequence_to_list(dna_sequences[index]))
 
         self.m.restore()
 
@@ -173,7 +162,7 @@ class GC:
 
         return matrix, self.file_size
 
-    def __sequence_to_list__(self, dna_sequence):
+    def _sequence_to_list(self, dna_sequence):
         """
         introduction: Convert one DNA sequence to one binary list.
 
@@ -186,12 +175,8 @@ class GC:
         """
 
         if len(dna_sequence) % 3 != 0:
-            log.output(
-                log.ERROR,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "The length of dna sequence should be a multiple of 9!",
-            )
+            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                "The length of dna sequence should be a multiple of 9!")
 
         one_list = []
 

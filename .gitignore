@@ -107,5 +107,9 @@ venv.bak/
 test/generated_files/*
 !test/generated_files/*.md
 
+# example middleware
+examples/generated_files/*
+!examples/generated_files/*.md
+
 # .idea/
 .idea/

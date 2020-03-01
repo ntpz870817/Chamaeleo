@@ -15,7 +15,7 @@ from datetime import datetime
 class Monitor:
 
     def __init__(self):
-        self.position = -1
+        self.position = 0
         self.last_time = datetime.now()
 
     def restore(self):
@@ -34,31 +34,31 @@ class Monitor:
         :param total_length: Total length of the "for" sentence.
                               Type: int
         """
-        position = int(current_length / total_length * 100)
+        position = round(current_length / total_length * 100)
 
         if self.position < position:
             self.position = position
             string = "["
             for index in range(100):
-                if position + 1 > index:
+                if position > index:
                     string += "|"
                 else:
                     string += " "
             string += "]  "
-            if 10 < self.position + 1 < 100:
+            if 10 < self.position < 100:
                 string += " "
-            elif self.position + 1 < 10:
+            elif self.position < 10:
                 string += "  "
 
             time_left = (datetime.now() - self.last_time).total_seconds()
 
-            if (self.position + 1) < 100:
-                string += str(position + 1) + "%, will be completed in " + str(
+            if self.position < 100:
+                string += str(position) + "%, will be completed in " + str(
                     round(time_left * (100 - position) / (position + 1), 2)) + " seconds."
             else:
-                string += str(position + 1) + "%, was spent " + str(round(time_left, 2)) + " seconds."
+                string += str(position) + "%, was spent " + str(round(time_left, 2)) + " seconds."
 
             print("\r" + string, end=" ")
 
-            if self.position + 1 >= 100:
+            if self.position >= 100:
                 print()

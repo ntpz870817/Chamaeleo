@@ -32,12 +32,8 @@ def connect_all(matrix, need_log=False):
     index_binary_length = int(len(str(bin(len(matrix)))) - 2)
 
     if need_log:
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Add index in the binary matrix.",
-        )
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+            "Add index in the binary matrix.")
 
     new_matrix = []
     for row in range(len(matrix)):
@@ -91,12 +87,8 @@ def divide_all(matrix, need_log=False):
     index_binary_length = int(len(str(bin(len(matrix)))) - 2)
 
     if need_log:
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Divide index and data from binary matrix.",
-        )
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+            "Divide index and data from binary matrix.")
 
     indexs = []
     datas = []
@@ -152,12 +144,8 @@ def sort_order(indexes, data_set, need_log=False):
     m = monitor.Monitor()
 
     if need_log:
-        log.output(
-            log.NORMAL,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "Restore data order according to index.",
-        )
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+            "Restore data order according to index.")
 
     # noinspection PyUnusedLocal
     matrix = [[0 for col in range(len(data_set[0]))] for row in range(len(indexes))]

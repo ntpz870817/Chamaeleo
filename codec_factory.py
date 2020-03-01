@@ -18,15 +18,8 @@ import Chamaeleo.methods.components.index_operator as index_operator
 
 
 # noinspection PyProtectedMember
-def encode(
-    method,
-    input_path,
-    output_path,
-    model_path=None,
-    verify=None,
-    need_index=True,
-    segment_length=120,
-):
+def encode(method, input_path, output_path,
+    model_path=None, verify=None, need_index=True, segment_length=120, need_log=False):
     """
     introduction: Use the selected method, convert the binary file to DNA sequence
                   set and output the DNA sequence set.
@@ -53,49 +46,37 @@ def encode(
     :param segment_length: The cut length of DNA sequence.
                       Considering current DNA synthesis factors, we usually
                       set 120 bases as a sequence.
+
+    :param need_log: Show the log.
     """
 
     if input_path is None or len(input_path) == 0:
-        log.output(
-            log.ERROR,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "The input file path is invalid!",
-        )
+        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+            "The input file path is invalid!")
 
     if output_path is None or len(input_path) == 0:
-        log.output(
-            log.ERROR,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "The output file path is invalid!",
-        )
+        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+            "The output file path is invalid!")
 
-    input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length=segment_length)
+    input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length, need_log)
 
     if verify is not None:
-        input_matrix = verify.add_for_matrix(input_matrix)
+        input_matrix = verify.add_for_matrix(input_matrix, need_log)
 
     if need_index:
-        input_matrix = index_operator.connect_all(input_matrix)
+        input_matrix = index_operator.connect_all(input_matrix, need_log)
 
-    dna_motifs = method.encode(input_matrix, size)
+    dna_sequences = method.encode(input_matrix, size, need_log)
 
     if model_path is not None:
         saver.save_model(model_path, method)
 
-    data_handle.write_dna_file(output_path, dna_motifs)
+    data_handle.write_dna_file(output_path, dna_sequences, need_log)
 
 
 # noinspection PyProtectedMember
-def decode(
-    method=None,
-    model_path=None,
-    input_path=None,
-    output_path=None,
-    verify=None,
-    has_index=True,
-):
+def decode(method=None, model_path=None, input_path=None, output_path=None,
+    verify=None, has_index=True, need_log=False):
     """
     introduction: Use the selected method, convert DNA sequence set to the binary
                   file and output the binary file.
@@ -121,45 +102,35 @@ def decode(
     :param has_index: Declare whether the DNA sequences contain binary sequence
                       indexes.
                        Type: bool.
+
+    :param need_log: Show the log.
     """
 
     if method is None and model_path is None:
-        log.output(
-            log.ERROR,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "The method you select does not exist!",
-        )
+        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+            "The method you select does not exist!")
     else:
         if input_path is None or len(input_path) == 0:
-            log.output(
-                log.ERROR,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "The input file path is not valid!",
-            )
+            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                "The input file path is not valid!")
 
         if output_path is None or len(input_path) == 0:
-            log.output(
-                log.ERROR,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "The output file path is not valid!",
-            )
+            log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                "The output file path is not valid!")
 
         if model_path is not None:
             method = saver.load_model(model_path)
 
-        dna_motifs = data_handle.read_dna_file(input_path)
+        dna_sequences = data_handle.read_dna_file(input_path, need_log)
 
-        output_matrix, size = method.decode(dna_motifs)
+        output_matrix, size = method.decode(dna_sequences, need_log)
 
         if has_index:
-            indexes, data_set = index_operator.divide_all(output_matrix)
-            output_matrix = index_operator.sort_order(indexes, data_set)
+            indexes, data_set = index_operator.divide_all(output_matrix, need_log)
+            output_matrix = index_operator.sort_order(indexes, data_set, need_log)
 
         if verify is not None:
-            output_matrix = verify.verify_for_matrix(output_matrix)
-            output_matrix = verify.remove_for_matrix(output_matrix)
+            output_matrix = verify.verify_for_matrix(output_matrix, need_log)
+            output_matrix = verify.remove_for_matrix(output_matrix, need_log)
 
-        data_handle.write_all_from_binary(output_path, output_matrix, size)
+        data_handle.write_all_from_binary(output_path, output_matrix, size, need_log)

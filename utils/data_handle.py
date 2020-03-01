@@ -43,19 +43,13 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
         with open(path, mode="rb") as file:
 
             if need_log:
-                log.output(
-                    log.NORMAL,
-                    str(__name__),
-                    str(sys._getframe().f_code.co_name),
-                    "Read binary matrix from file: " + path,
-                )
+                log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                    "Read binary matrix from file: " + path)
+
             size = os.path.getsize(path)
 
             # Set init storage matrix
-            matrix = [
-                [0 for _ in range(segment_length)]
-                for _ in range(math.ceil(size * 8 / segment_length))
-            ]
+            matrix = [[0 for _ in range(segment_length)] for _ in range(math.ceil(size * 8 / segment_length))]
 
             row = 0
             col = 0
@@ -64,12 +58,7 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
                     m.output(byte_index, size)
                 # Read a file as bytes
                 one_byte = file.read(1)
-                element = list(
-                    map(
-                        int,
-                        list(str(bin(struct.unpack("B", one_byte)[0]))[2:].zfill(8)),
-                    )
-                )
+                element = list(map(int, list(str(bin(struct.unpack("B", one_byte)[0]))[2:].zfill(8))))
                 for bit_index in range(8):
                     matrix[row][col] = element[bit_index]
                     col += 1
@@ -79,22 +68,15 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
 
         if int(len(str(bin(len(matrix)))) - 2) * 7 > segment_length:
             if need_log:
-                log.output(
-                    log.WARN,
-                    str(__name__),
-                    str(sys._getframe().f_code.co_name),
+                log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
                     "The proportion of index in whole sequence may be high. "
-                    "It is recommended to increase the output DNA sequences' length or to divide the file into more segment pools",
-                )
+                    "It is recommended to increase the output DNA sequences' "
+                    "length or to divide the file into more segment pools")
 
         return matrix, size
     except IOError:
-        log.output(
-            log.ERROR,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "The file selection operation was not performed correctly. Please execute the operation again!",
-        )
+        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+            "The file selection operation was not performed correctly. Please execute the operation again!")
 
 
 # noinspection PyBroadException,PyProtectedMember
@@ -118,12 +100,8 @@ def write_all_from_binary(path, matrix, size, need_log=False):
     try:
         with open(path, "wb+") as file:
             if need_log:
-                log.output(
-                    log.NORMAL,
-                    str(__name__),
-                    str(sys._getframe().f_code.co_name),
-                    "Write file from binary matrix: " + path,
-                )
+                log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                    "Write file from binary matrix: " + path)
 
             # Change bit to byte (8 -> 1), and write a file as bytes
             bit_index = 0
@@ -142,12 +120,8 @@ def write_all_from_binary(path, matrix, size, need_log=False):
                             temp_byte = 0
                             size -= 1
     except IOError:
-        log.output(
-            log.ERROR,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "The file selection operation was not performed correctly. Please execute the operation again!",
-        )
+        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+            "The file selection operation was not performed correctly. Please execute the operation again!")
 
 
 # noinspection PyBroadException,PyProtectedMember
@@ -171,12 +145,8 @@ def read_dna_file(path, need_log=False):
     try:
         with open(path, "r") as file:
             if need_log:
-                log.output(
-                    log.NORMAL,
-                    str(__name__),
-                    str(sys._getframe().f_code.co_name),
-                    "Read DNA sequences from file: " + path,
-                )
+                log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                    "Read DNA sequences from file: " + path)
 
             # Read current file by line
             lines = file.readlines()
@@ -188,12 +158,8 @@ def read_dna_file(path, need_log=False):
 
         return dna_sequences
     except IOError:
-        log.output(
-            log.ERROR,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "The file selection operation was not performed correctly. Please execute the operation again!",
-        )
+        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+            "The file selection operation was not performed correctly. Please execute the operation again!")
 
 
 # noinspection PyProtectedMember,PyBroadException
@@ -215,21 +181,13 @@ def write_dna_file(path, dna_sequences, need_log=False):
     try:
         with open(path, "w") as file:
             if need_log:
-                log.output(
-                    log.NORMAL,
-                    str(__name__),
-                    str(sys._getframe().f_code.co_name),
-                    "Write DNA sequences to file: " + path,
-                )
+                log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                    "Write DNA sequences to file: " + path)
             for row in range(len(dna_sequences)):
                 if need_log:
                     m.output(row, len(dna_sequences))
                 file.write("".join(dna_sequences[row]) + "\n")
         return dna_sequences
     except IOError:
-        log.output(
-            log.ERROR,
-            str(__name__),
-            str(sys._getframe().f_code.co_name),
-            "The file selection operation was not performed correctly. Please execute the operation again!",
-        )
+        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+            "The file selection operation was not performed correctly. Please execute the operation again!")

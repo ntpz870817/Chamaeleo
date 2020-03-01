@@ -31,6 +31,7 @@ if __name__ == "__main__":
         output_path=dna_path,
         model_path=model_path,
         need_index=False,
+        need_log=True
     )
     del tool
     codec_factory.decode(
@@ -38,4 +39,5 @@ if __name__ == "__main__":
         input_path=dna_path,
         output_path=write_file_path,
         has_index=False,
+        need_log=True
     )

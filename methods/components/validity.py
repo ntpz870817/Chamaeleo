@@ -22,11 +22,11 @@ def check(sequence, max_homopolymer=4, max_simple_segment=6, max_content=0.6):
     """
     if not homopolymer(sequence, max_homopolymer):
         return False
-    if not motif_repeat(sequence, max_simple_segment):
+    if not repeat(sequence, max_simple_segment):
         return False
-    if not dyad_motif_repeat(sequence, max_simple_segment):
+    if not dyad_repeat(sequence, max_simple_segment):
         return False
-    if not inverse_motif_repeat(sequence, max_simple_segment):
+    if not inverse_repeat(sequence, max_simple_segment):
         return False
     if not cg_content(sequence, max_content):
         return False
@@ -43,35 +43,18 @@ def homopolymer(sequence, max_homopolymer):
 
     :return: whether the DNA sequence can be considered as valid for DNA synthesis and sequencing.
     """
-    base_index = {'A': 0, 'T': 1, 'C': 2, 'G': 3}
-    counts = [0, 0, 0, 0]
-    last_base = None
-    save_base = None
-    current_count = 1
-
-    for index in range(len(sequence)):
-        if last_base is not None:
-            if sequence[index] != last_base:
-                if counts[base_index[save_base]] < current_count:
-                    counts[base_index[save_base]] = current_count
-                current_count = 1
-                last_base = sequence[index]
-                save_base = last_base
-            else:
-                if index == len(sequence) - 1:
-                    if counts[base_index[save_base]] < current_count:
-                        counts[base_index[save_base]] = current_count
-                else:
-                    current_count += 1
-
-        else:
-            last_base = sequence[index]
-            save_base = last_base
-
-    return max(counts) <= max_homopolymer
+    missing_segments = [
+        "A" * (1 + max_homopolymer),
+        "C" * (1 + max_homopolymer),
+        "G" * (1 + max_homopolymer),
+        "T" * (1 + max_homopolymer)]
+    for missing_segment in missing_segments:
+        if missing_segment in "".join(sequence):
+            return False
+    return True
 
 
-def motif_repeat(sequence, max_length):
+def repeat(sequence, max_length):
     """
     Check the motif repeat of requested DNA sequence.
 
@@ -92,7 +75,7 @@ def motif_repeat(sequence, max_length):
     return True
 
 
-def inverse_motif_repeat(sequence, max_length):
+def inverse_repeat(sequence, max_length):
     """
     Check the inverse motif repeat of requested DNA sequence.
 
@@ -113,7 +96,7 @@ def inverse_motif_repeat(sequence, max_length):
     return True
 
 
-def dyad_motif_repeat(sequence, max_length):
+def dyad_repeat(sequence, max_length):
     """
     Check the dyad motif repeat of requested DNA sequence.
 
