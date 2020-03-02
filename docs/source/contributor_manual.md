@@ -1,9 +1,8 @@
 Contributor Manual
 ==================
 
-<p align="center">
-<img src="./_static/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
-</p>
+![logo](_static/logo.png)
+
 
 **Chamaeleo** is currently the only collection focused on different codec methods for DNA storage.
 We hope to provide a readable, robust and high-performance learning and useful framework for researchers and engineers.
