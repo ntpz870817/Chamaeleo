@@ -32,7 +32,7 @@ class FC:
             self,
             homopolymer=4,
             gc_content=0.2,
-            redundancy=0.1,
+            redundancy=0.5,
             c_dist=0.1,
             delta=0.5,
             header_size=4,
@@ -43,7 +43,7 @@ class FC:
 
         :param homopolymer: maximum length of homopolymer, type = int.
         :param gc_content: the fraction of gc content above/below 0.5 (0.1 means 0.4-0.6).
-        :param redundancy: artificial redundancy for decode successfully (0.1 generate 10% more fragments),type = float.
+        :param redundancy: artificial redundancy for decode successfully (0.5 generate 50% more fragments),type = float.
         :param c_dist: Degree distribution tuning parameter,type = float.
         :param delta: Degree distribution tuning parameter,type = float.
         :param header_size: number of bytes for the header, type = int.
