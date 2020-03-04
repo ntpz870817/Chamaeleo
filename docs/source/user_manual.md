@@ -1,9 +1,8 @@
 User manual
 ===========
 
-<p align="center">
-<img src="./_static/logo.png" alt="Chamaeleo" title="Chamaeleo" width="60%"/>
-</p>
+![logo](_static/logo.png)
+
 
 ---
 
