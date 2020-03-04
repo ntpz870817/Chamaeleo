@@ -68,6 +68,7 @@ jobs:
           name: run scripts
           command: |
            . venv/bin/activate
+           venv/bin/python3 examples/st_fc.py
            venv/bin/python3 examples/st_gc.py
            venv/bin/python3 examples/st_hc.py
            venv/bin/python3 examples/st_sc.py
