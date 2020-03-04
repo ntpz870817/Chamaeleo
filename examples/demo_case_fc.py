@@ -5,7 +5,7 @@ Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): The Feasibility of Testing the Whole Process of FC
+Function(s): The demo case of Fountain Codec (DNA Fountain).
 """
 
 import os

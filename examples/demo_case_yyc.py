@@ -1,17 +1,17 @@
 """
-Name: Symmetrical testing for Simple Codec
+Name: Symmetrical testing for YYC
 
 Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): The Feasibility of Testing the Whole Process of Simple
+Function(s): The demo case of Yin-Yang Code.
 """
 
 import os
 import Chamaeleo
 import Chamaeleo.codec_factory as codec_factory
-import Chamaeleo.methods.sc as sc
+import Chamaeleo.methods.yyc as yyc
 import Chamaeleo.utils.dir_checker as checker
 
 root_path = os.path.dirname(Chamaeleo.__file__)
@@ -21,11 +21,11 @@ generated_file_path = os.path.join(current_path, "generated_files")
 checker.check_dir_exists(generated_file_path)
 write_file_path = os.path.join(generated_file_path, "target.pdf")
 dna_path = os.path.join(generated_file_path, "target.dna")
-model_path = os.path.join(generated_file_path, "sc.pkl")
+model_path = os.path.join(generated_file_path, "yyc.pkl")
 
 
 if __name__ == "__main__":
-    tool = sc.SC()
+    tool = yyc.YYC()
     codec_factory.encode(
         method=tool,
         input_path=read_file_path,

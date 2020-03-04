@@ -209,7 +209,6 @@ class FC:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                        "System crash from the excessive recursive calls.")
 
-
         self.monitor.restore()
 
         return matrix, self.file_size
