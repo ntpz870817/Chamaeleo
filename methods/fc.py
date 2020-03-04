@@ -25,7 +25,7 @@ from Chamaeleo.methods.components import inherent
 from Chamaeleo.methods.components import validity
 
 
-# noinspection PyMethodMayBeStatic, PyProtectedMember
+# noinspection PyMethodMayBeStatic, PyProtectedMember,PyBroadException
 class FC:
 
     def __init__(
@@ -144,7 +144,7 @@ class FC:
         if need_log:
             log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
                        "Because Fountain codes for which the inputted matrix is of full rank in the decoding process "
-                       "are decodable, the full rank depends on the parameter \"redundancy\" in the Fountain Codec. \n"
+                       "are decodable, the full rank depends on the hyper-parameter \"redundancy\" of the Fountain Codec. \n"
                        "Therefore, we strongly recommend that we decode it directly to verify the decodable "
                        "of the DNA file before conducting DNA synthesis experiments.")
 
@@ -190,19 +190,25 @@ class FC:
         done_segments = set()
         chunk_to_droplets = defaultdict(set)
 
-        for dna_sequence in dna_sequences:
-            droplet = Droplet()
-            droplet.init_binaries(self.prng, dna_sequence, self.header_size)
-            for chunk_num in droplet.chuck_indices:
-                chunk_to_droplets[chunk_num].add(droplet)
-            self._update_droplets(droplet, matrix, done_segments, chunk_to_droplets)
+        try:
+            for dna_sequence in dna_sequences:
+                droplet = Droplet()
+                droplet.init_binaries(self.prng, dna_sequence, self.header_size)
+                for chunk_num in droplet.chuck_indices:
+                    chunk_to_droplets[chunk_num].add(droplet)
+                self._update_droplets(droplet, matrix, done_segments, chunk_to_droplets)
 
-            if need_log:
-                self.monitor.output(len(done_segments), self.decode_packets)
+                if need_log:
+                    self.monitor.output(len(done_segments), self.decode_packets)
 
-        if None in matrix or self.decode_packets - len(done_segments) > 0:
+            if None in matrix or self.decode_packets - len(done_segments) > 0:
+                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                           "Couldn't decode the whole file.")
+
+        except BaseException:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Couldn't decode the whole file.")
+                       "System crash from the excessive recursive calls.")
+
 
         self.monitor.restore()
 
@@ -285,6 +291,15 @@ class Droplet(object):
         return dna_sequence
 
     def init_binaries(self, prng, dna_sequence, header_size):
+        """
+        introduction: Initialize the bit segment by initial information.
+
+        :param prng: The pseudo-random number generator created in the Fountain Codec.
+
+        :param dna_sequence: The current obtained DNA sequence.
+
+        :param header_size: Header size mentioned in the Fountain Codec.
+        """
         # recover the bit segment
         bit_segment = []
         for base in dna_sequence:
@@ -353,6 +368,15 @@ class Droplet(object):
 class PRNG(object):
 
     def __init__(self, K, delta, c):
+        """
+        introduction: The initialization method of Pseudo-Random Number Generator.
+
+        :param K: The number of segments.
+
+        :param delta: The parameter that determine the distribution.
+
+        :param c: The parameter that determine the distribution.
+        """
         self.K = K
         self.delta = delta
         self.c = c
@@ -360,12 +384,30 @@ class PRNG(object):
         self.cdf, self.Z = self._gen_rsd_cdf(K, self.S, self.delta)
 
     def get_src_blocks_wrap(self, seed):
+        """
+        introduction: A wrapper function to get source blocks.
+
+        :param seed: The current random seed.
+
+        :return: the random number group from the random seed.
+        """
         random.seed(seed)
         p = random.random()
         d = self._sample_degree(p)
         return random.sample(range(int(self.K)), d)
 
     def _gen_rsd_cdf(self, K, S, delta):
+        """
+        introduction: The CDF of the RSD on block degree, precomputed for sampling speed.
+
+        :param K: The number of segments.
+
+        :param S: A helper function to calculate S, the expected number of degree=1 nodes.
+
+        :param delta: The parameter that determine the distribution.
+
+        :return: The Robust part of the Robust Soliton Distribution on the degree of transmitted blocks and the Ideal Soliton Distribution.
+        """
         pivot = int(math.floor(K / S))
         val1 = [S / K * 1 / d for d in range(1, pivot)]
         val2 = [S / K * math.log(S / delta)]
@@ -378,6 +420,13 @@ class PRNG(object):
         return cdf, Z
 
     def _sample_degree(self, p):
+        """
+        introduction: Samples degree given the precomputed distributions.
+
+        :param p: The precomputed distribution.
+
+        :return: The sample degree.
+        """
         index = None
         for index, value in enumerate(self.cdf):
             if value > p:

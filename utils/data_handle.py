@@ -69,9 +69,9 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
         if int(len(str(bin(len(matrix)))) - 2) * 7 > segment_length:
             if need_log:
                 log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
-                           "The proportion of index in whole sequence may be high. "
-                           "It is recommended to increase the output DNA sequences' "
-                           "length or to divide the file into more segment pools")
+                           "The proportion of index in whole sequence may be high. \n"
+                           "It is recommended to increase the length of output DNA sequences "
+                           "or to divide the file into more segment pools")
 
         return matrix, size
     except IOError:
