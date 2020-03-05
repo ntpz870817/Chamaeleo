@@ -143,8 +143,8 @@ class FC:
 
         if need_log:
             log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Because Fountain codes for which the inputted matrix is of full rank in the decoding process "
-                       "are decodable, the full rank depends on the hyper-parameter \"redundancy\" of the Fountain Codec. \n"
+                       "Fountain codes for which the inputted matrix is of full rank in the decoding process are "
+                       "decodable, the full rank depends on the hyper-parameter \"redundancy\" in the Fountain Codec.\n"
                        "Therefore, we strongly recommend that we decode it directly to verify the decodable "
                        "of the DNA file before conducting DNA synthesis experiments.")
 
@@ -180,6 +180,13 @@ class FC:
                        "We miss the parameter \"decode_packets\", please try again after inputting this parameter.")
 
         if need_log:
+            log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
+                       "If we get the system crash named -1073741571(0xC00000FD), "
+                       "it is caused by the excessive function (_update_droplets) recursive calls.\n"
+                       "Please reduce the hyper-parameter \"redundancy\" or split the original digital file"
+                       " in the encoding process.")
+
+        if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                        "Decode the matrix by Fountain Codec.")
 
@@ -190,24 +197,21 @@ class FC:
         done_segments = set()
         chunk_to_droplets = defaultdict(set)
 
-        try:
-            for dna_sequence in dna_sequences:
-                droplet = Droplet()
-                droplet.init_binaries(self.prng, dna_sequence, self.header_size)
-                for chunk_num in droplet.chuck_indices:
-                    chunk_to_droplets[chunk_num].add(droplet)
-                self._update_droplets(droplet, matrix, done_segments, chunk_to_droplets)
+        for dna_sequence in dna_sequences:
+            droplet = Droplet()
+            droplet.init_binaries(self.prng, dna_sequence, self.header_size)
 
-                if need_log:
-                    self.monitor.output(len(done_segments), self.decode_packets)
+            for chunk_num in droplet.chuck_indices:
+                chunk_to_droplets[chunk_num].add(droplet)
 
-            if None in matrix or self.decode_packets - len(done_segments) > 0:
-                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Couldn't decode the whole file.")
+            self._update_droplets(droplet, matrix, done_segments, chunk_to_droplets)
 
-        except BaseException:
+            if need_log:
+                self.monitor.output(len(done_segments), self.decode_packets)
+
+        if None in matrix or self.decode_packets - len(done_segments) > 0:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                       "System crash from the excessive recursive calls.")
+                       "Couldn't decode the whole file.")
 
         self.monitor.restore()
 
