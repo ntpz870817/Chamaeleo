@@ -203,12 +203,11 @@ class RS:
             output_list = []
             for one_byte in self.tool.decode(bytearray(byte_list)):
                 string = str(one_byte)
-                print(string)
-                # if platform.system() == "Linux":
-                #     string = str(one_byte)
-                # else:
-                #     str(one_byte)
-                temp_bits = list(map(int, list(bin(int(str(one_byte), 10)))[2:]))
+                print("string = " + str(string))
+                if platform.system() == "Linux":
+                    string = str(one_byte).replace("\\", "\/")
+                    print("linux value = " + str(int(string, 10)))
+                temp_bits = list(map(int, list(bin(int(string, 10)))[2:]))
                 temp_bits = [0 for _ in range(8 - len(temp_bits))] + temp_bits
                 output_list += temp_bits
         except ReedSolomonError:
