@@ -201,6 +201,8 @@ class RS:
         try:
             output_list = []
             for one_byte in self.tool.decode(bytearray(byte_list)):
+                print("one_byte = " + str(one_byte))
+                print("type(one_byte) = " + str(type(one_byte)))
                 temp_bits = list(map(int, list(bin(one_byte))[2:]))
                 temp_bits = [0 for _ in range(8 - len(temp_bits))] + temp_bits
                 output_list += temp_bits
