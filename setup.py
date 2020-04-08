@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name="Chamaeleo",
-    version="1.13",
+    version="1.15",
     description="library for the well accepted coding schemes of DNA storage",
     long_description="Chamaeleo is currently the only collection focused on different codec methods for DNA storage. This kit is mainly developed and operated by BGI-Research (Shenzhen). It provides you a chance to use the classical DNA encoding and decoding methods to save files into DNA sequences or load them from DNA sequences.",
     author="Zhi PING, Hao-Ling ZHANG, Sha (Joe) ZHU",
