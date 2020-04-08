@@ -30,7 +30,7 @@ if __name__ == "__main__":
         input_path=read_file_path,
         output_path=dna_path,
         model_path=model_path,
-        need_index=False,
+        need_index=True,
         need_log=True
     )
     del tool
@@ -38,6 +38,6 @@ if __name__ == "__main__":
         model_path=model_path,
         input_path=dna_path,
         output_path=write_file_path,
-        has_index=False,
+        has_index=True,
         need_log=True
     )

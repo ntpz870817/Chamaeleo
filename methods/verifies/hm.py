@@ -16,14 +16,16 @@ Function(s):
 import sys
 
 import Chamaeleo.utils.log as log
+from Chamaeleo.utils import monitor
 
 
 # noinspection PyProtectedMember,PyMethodMayBeStatic
 class Hm:
-    def __init__(self, need_log=False):
-        self.need_log = need_log
 
-    def add_for_matrix(self, matrix):
+    def __init__(self):
+        self.m = monitor.Monitor()
+
+    def add_for_matrix(self, matrix, need_log=False):
         """
         introduction: Add Hamming error correction for origin matrix.
 
@@ -31,16 +33,20 @@ class Hm:
                        The data of this matrix contains only 0 or 1 (non-char).
                        Type: Two-dimensional list(int).
 
+        :param need_log: Show the log.
+
         :return verity_matrix: Verifiable matrix.
                                Type: Two-dimensional list(int).
         """
-        if self.need_log:
+        if need_log:
             log.output(
                 log.NORMAL,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
                 "Add the error correction for matrix.",
             )
+
+        self.m.restore()
 
         # Calculate the length needed for detection site.
         detect_site_length = 0
@@ -50,7 +56,11 @@ class Hm:
         verity_matrix = []
 
         for row in range(len(matrix)):
+            if need_log:
+                self.m.output(row, len(matrix))
             verity_matrix.append(self.add_for_list(matrix[row], detect_site_length))
+
+        self.m.restore()
 
         return verity_matrix
 
@@ -109,65 +119,77 @@ class Hm:
 
         return output_list
 
-    def remove_for_matrix(self, verity_matrix):
-        """
-        introduction: Remove Hamming error correction from origin matrix.
-
-        :param verity_matrix: Verifiable matrix.
-                              The data of this matrix contains only 0 or 1 (non-char).
-                              Type: Two-dimensional list(int).
-
-        :return matrix: Origin matrix.
-                        Type: Two-dimensional list(int).
-        """
-        if self.need_log:
-            log.output(
-                log.NORMAL,
-                str(__name__),
-                str(sys._getframe().f_code.co_name),
-                "Remove the error correction for matrix.",
-            )
-        matrix = []
-        for row in range(len(verity_matrix)):
-            matrix.append(self.remove_for_list(verity_matrix[row]))
-        return matrix
-
-    def remove_for_list(self, input_list):
-        """
-        introduction: Remove Hamming error correction from one list.
-
-        :param input_list: The binary list requiring removing validation.
-                           Type: One-dimensional list(int).
-
-        :return output_list: The binary list completing processing.
-                             Type: One-dimensional list(int).
-        """
-        input_list.reverse()
-
-        detect_site, output_list = 0, []
-        # Remove the detection site.
-        for index in range(len(input_list)):
-            if pow(2, detect_site) == index + 1:
-                detect_site += 1
-            else:
-                output_list.append(input_list[index])
-
-        output_list.reverse()
-
-        return output_list
+    # def remove_for_matrix(self, verity_matrix, need_log=False):
+    #     """
+    #     introduction: Remove Hamming error correction from origin matrix.
+    #
+    #     :param verity_matrix: Verifiable matrix.
+    #                           The data of this matrix contains only 0 or 1 (non-char).
+    #                           Type: Two-dimensional list(int).
+    #
+    #     :param need_log: Show the log.
+    #
+    #     :return matrix: Origin matrix.
+    #                     Type: Two-dimensional list(int).
+    #     """
+    #     if need_log:
+    #         log.output(
+    #             log.NORMAL,
+    #             str(__name__),
+    #             str(sys._getframe().f_code.co_name),
+    #             "Remove the error correction for matrix.",
+    #         )
+    #
+    #     self.m.restore()
+    #
+    #     matrix = []
+    #     for row in range(len(verity_matrix)):
+    #         if need_log:
+    #             self.m.output(row, len(verity_matrix))
+    #         matrix.append(self.remove_for_list(verity_matrix[row]))
+    #
+    #     self.m.restore()
+    #
+    #     return matrix
+    #
+    # def remove_for_list(self, input_list):
+    #     """
+    #     introduction: Remove Hamming error correction from one list.
+    #
+    #     :param input_list: The binary list requiring removing validation.
+    #                        Type: One-dimensional list(int).
+    #
+    #     :return output_list: The binary list completing processing.
+    #                          Type: One-dimensional list(int).
+    #     """
+    #     input_list.reverse()
+    #
+    #     detect_site, output_list = 0, []
+    #     # Remove the detection site.
+    #     for index in range(len(input_list)):
+    #         if pow(2, detect_site) == index + 1:
+    #             detect_site += 1
+    #         else:
+    #             output_list.append(input_list[index])
+    #
+    #     output_list.reverse()
+    #
+    #     return output_list
 
     # noinspection PyProtectedMember
-    def verify_for_matrix(self, verity_matrix):
+    def verify_for_matrix(self, verity_matrix, need_log=False):
         """
         introduction: Verify the correctness of the matrix and repair the error information to a certain extent.
 
         :param verity_matrix: Matrix waiting for validation.
                               Type: Two-dimensional list(int).
 
+        :param need_log: Show the log.
+
         :return matrix: Matrix that has been verified even repaired.
                         Type: Two-dimensional list(int).
         """
-        if self.need_log:
+        if need_log:
             log.output(
                 log.NORMAL,
                 str(__name__),
@@ -175,14 +197,20 @@ class Hm:
                 "Verify and repair the matrix.",
             )
 
+        self.m.restore()
+
         matrix = []
         for row in range(len(verity_matrix)):
+            if need_log:
+                self.m.output(row, len(verity_matrix))
             matrix.append(self.verify_for_list(verity_matrix[row], row))
+
+        self.m.restore()
 
         return matrix
 
     # noinspection PyProtectedMember
-    def verify_for_list(self, input_list, row=None):
+    def verify_for_list(self, input_list, row=None, need_log=False):
         """
         introduction: Verify the correctness of the list and repair the error information to a certain extent.
 
@@ -191,11 +219,13 @@ class Hm:
 
         :param row: The number of rows of the matrix to which the list belongs.
 
+        :param need_log: Show the log.
+
         :return output_list: List that has been verified and repaired.
                              Type: One-dimensional list(int).
         """
         if row is None:
-            if self.need_log:
+            if need_log:
                 log.output(
                     log.NORMAL,
                     str(__name__),
@@ -233,18 +263,16 @@ class Hm:
             for index, parity_list in enumerate(parity_list[::-1])
         )
 
-        if error == 0:
-            input_list.reverse()
-            return input_list
-        elif error >= len(output_list_copy):
+        if error >= len(output_list_copy):
             log.output(
                 log.WARN,
                 str(__name__),
                 str(sys._getframe().f_code.co_name),
                 "Multiple errors can be detected, but due to the limitation of error-correction settings, the errors cannot be located.",
             )
-        else:
-            if self.need_log:
+            return None
+        elif error > 0:
+            if need_log:
                 if row is not None:
                     log.output(
                         log.WARN,
@@ -268,6 +296,15 @@ class Hm:
                 output_list_copy[error - 1] = 1
             else:
                 output_list_copy[error - 1] = 0
-            # output_list_copy[error - 1] = int(output_list_copy[error - 1] is False)
-            output_list_copy.reverse()
-            return output_list_copy
+
+        detect_site, output_list = 0, []
+        # Remove the detection site.
+        for index in range(len(output_list_copy)):
+            if pow(2, detect_site) == index + 1:
+                detect_site += 1
+            else:
+                output_list.append(output_list_copy[index])
+
+        output_list.reverse()
+
+        return output_list

@@ -60,16 +60,16 @@ def encode(method, input_path, output_path,
 
     input_matrix, size = data_handle.read_binary_from_all(input_path, segment_length, need_log)
 
-    if verify is not None:
-        input_matrix = verify.add_for_matrix(input_matrix, need_log)
-
     if need_index:
         input_matrix = index_operator.connect_all(input_matrix, need_log)
+
+    if verify is not None:
+        input_matrix = verify.add_for_matrix(input_matrix, need_log)
 
     dna_sequences = method.encode(input_matrix, size, need_log)
 
     if model_path is not None:
-        saver.save_model(model_path, method)
+        saver.save_model(model_path, {"method": method, "verify": verify})
 
     data_handle.write_dna_file(output_path, dna_sequences, need_log)
 
@@ -119,18 +119,19 @@ def decode(method=None, model_path=None, input_path=None, output_path=None,
                        "The output file path is not valid!")
 
         if model_path is not None:
-            method = saver.load_model(model_path)
+            model = saver.load_model(model_path)
+            method = model.get("method")
+            verify = model.get("verify")
 
         dna_sequences = data_handle.read_dna_file(input_path, need_log)
 
         output_matrix, size = method.decode(dna_sequences, need_log)
 
+        if verify is not None:
+            output_matrix = verify.verify_for_matrix(output_matrix, need_log)
+
         if has_index:
             indexes, data_set = index_operator.divide_all(output_matrix, need_log)
             output_matrix = index_operator.sort_order(indexes, data_set, need_log)
-
-        if verify is not None:
-            output_matrix = verify.verify_for_matrix(output_matrix, need_log)
-            output_matrix = verify.remove_for_matrix(output_matrix, need_log)
 
         data_handle.write_all_from_binary(output_path, output_matrix, size, need_log)
