@@ -36,6 +36,16 @@ In addition, the packages we are calling now is as follows:
 │    │    ├── modules.rst             // Information in the modules.html
 │    │    ├── tutorial.rst            // Information in the tutorial.html
 │    │    ├── user_manual.md          // Read before you want to use it
+├── examples                          // Example module
+│    ├── generated_files              // DNA sequence set file or binary file generated in the test
+│    │    ├── README.md               // Description document of generated files and the above folder
+│    ├── demo_case_fc.py              // Demo case of Erlich' Code
+│    ├── demo_case_gc.py              // Demo case of Grass' Code
+│    ├── demo_case_hc.py              // Demo case of Goldman's Code
+│    ├── demo_case_sc.py              // Demo case of Simple (Church's) Code
+│    ├── demo_case_sc_with_hm.py      // Demo case of Simple (Church's) Code with Hamming Code
+│    ├── demo_case_sc_with_rs.py      // Demo case of Simple (Church's) Code with Reed-Solomon Code
+│    ├── demo_case_yyc.py             // Demo case of Yin-Yang Code
 ├── methods                           // Method module
 │    ├── components                   // Inherent property folder
 │    │    ├── index_operator.py       // Processing the relationship between index and data
@@ -99,12 +109,12 @@ In the encoding process, we need to to instantiate the validation function:
 
 ```python
 import Chamaeleo.codec_factory as codec_factory
-import Chamaeleo.methods.verifies.rs as rs
+import Chamaeleo.methods.verifies.rs as hm
 
 method = yyc.YYC()
-verify = rs.RS(3)
+verify = hm.Hm()
 
-codec_factory.decode(method, input_path="C:\\target.dna", output_path="C:\\target.mp4", verify=verify, need_index=True)
+codec_factory.decode(method, input_path="C:\\target.dna", output_path="C:\\target.mp4", model_path="C:\\yyc+hm.pkl", verify=verify, need_index=True)
 ```
 
 Also in the decoding process:
@@ -113,7 +123,5 @@ Also in the decoding process:
 import Chamaeleo.codec_factory as codec_factory
 import Chamaeleo.methods.verifies.rs as rs
 
-verify = rs.RS(3)
-
-codec_factory.decode(input_path="C:\\target.dna", output_path="C:\\target.mp4", model_path="C:\\yyc.pkl", verify=verify, has_index=True)
+codec_factory.decode(input_path="C:\\target.dna", output_path="C:\\target.mp4", model_path="C:\\yyc+hm.pkl", has_index=True)
 ```

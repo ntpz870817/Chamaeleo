@@ -130,7 +130,6 @@ An example would be:
 	code = hm.Hm()
 	v_matrix = code.add_for_matrix(o_matrix)
 	c_matrix = code.verify_for_matrix(v_matrix)
-	t_matrix = code.remove_for_matrix(c_matrix)
 
 For Reed-Solomon Code, the library provides a hyper-parameter to indicate the length of error-correction code, the default value is 3.
 In real application, user can gain more powerful ability of error-correction (i.e. to correct more errors in one segments) by increasing check_size, the value of check_size equals to the number of errors the function can correct.
@@ -139,3 +138,7 @@ An example of using Reed-Solomon Code would be:
 .. code-block:: python
 
 	code = rs.RS(check_size=10)
+	v_matrix = code.add_for_matrix(o_matrix)
+	c_matrix = code.verify_for_matrix(v_matrix)
+
+If you set Reed-Solomon Code in your encoding process with out saving model, you need to remember additional length mentioned in the prompt. This value (v) needs to be inputted in RS(additional_size=v) in the decoding process.
