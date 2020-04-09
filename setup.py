@@ -15,6 +15,7 @@ setup(
         "Chamaeleo.methods",
         "Chamaeleo.methods.components",
         "Chamaeleo.methods.verifies",
+        "Chamaeleo.examples"
         "Chamaeleo.utils",
     ],
     package_data={
