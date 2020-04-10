@@ -18,8 +18,15 @@ class TestEncodeDecode(unittest.TestCase):
         for index in range(0, len(byte_list), 8):
             target_list.append(int(str("".join(list(map(str, byte_list[index: index + 8])))), 2))
 
-        v_seq = self.tool.encode(target_list)
-        v_seq = self.tool.decode(v_seq)
+        print("ord list before encode = " + str(target_list))
+
+        v_seq = list(self.tool.encode(target_list))
+
+        print("ord list after encode = " + str(v_seq))
+
+        v_seq = list(self.tool.decode(v_seq))
+
+        print("ord list after decode = " + str(v_seq))
 
         output_list = []
         for one_byte in v_seq:

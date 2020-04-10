@@ -114,7 +114,6 @@ class RS:
                 "Add the error correction for list.",
             )
 
-
         if row is None:
             self.additional_size = 8 - len(input_list) % 8
             log.output(
