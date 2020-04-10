@@ -1,6 +1,7 @@
 import random
 import unittest
 from reedsolo import RSCodec
+import platform
 
 
 class TestEncodeDecode(unittest.TestCase):
@@ -23,6 +24,9 @@ class TestEncodeDecode(unittest.TestCase):
         print("ord list after encode = " + str(v_seq))
 
         v_seq = self.tool.decode(list(v_seq))
+        if platform.system() == "Linux":
+            v_seq = v_seq[0]
+
         print("ord list after decode = " + str(v_seq))
 
         output_list = []
