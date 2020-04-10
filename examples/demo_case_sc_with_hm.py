@@ -10,7 +10,7 @@ Function(s): The demo case of Yin-Yang Code.
 
 import os
 import Chamaeleo
-import codec_factory as codec_factory
+import Chamaeleo.codec_factory as codec_factory
 import Chamaeleo.utils.dir_checker as checker
 from Chamaeleo.methods import sc
 from Chamaeleo.methods.verifies import hm
