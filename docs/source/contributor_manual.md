@@ -22,7 +22,7 @@ The packages we are calling now is as follows:
 - [x] datetime
 - [x] numpy
 - [x] pickle
-
+- [x] reedsolo
 
 If you have other packages, Please add them here.
 

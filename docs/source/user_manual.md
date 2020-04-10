@@ -22,6 +22,7 @@ In addition, the packages we are calling now is as follows:
 - [x] datetime
 - [x] numpy
 - [x] pickle
+- [x] reedsolo
 
 ## Library Tree Diagram
 ```html

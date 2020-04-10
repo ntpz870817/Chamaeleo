@@ -14,6 +14,7 @@ Function(s):
 (2) Remove Reed-Solomon error correction from origin matrix or origin list.
 (3) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
 """
+import platform
 import sys
 import Chamaeleo.utils.log as log
 from Chamaeleo.utils import monitor
@@ -202,7 +203,11 @@ class RS:
         try:
             output_list = []
             for one_byte in self.tool.decode(bytearray(byte_list)):
-                temp_bits = list(map(int, list(bin(int(str(one_byte), 10)))[2:]))
+                string = str(one_byte)
+                if platform.system() == "Linux":
+                    string = one_byte.decode()
+                    print("string = " + str(string))
+                temp_bits = list(map(int, list(bin(int(string, 10)))[2:]))
                 temp_bits = [0 for _ in range(8 - len(temp_bits))] + temp_bits
                 output_list += temp_bits
         except ReedSolomonError:
