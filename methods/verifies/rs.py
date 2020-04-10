@@ -130,10 +130,7 @@ class RS:
             byte_list.append(int(str("".join(list(map(str, input_list[index: index + 8])))), 2))
 
         output_list = []
-        v_seq = list(self.tool.encode(byte_list))
-        print("v_seq in encode: " + str(v_seq))
-
-        for one_byte in v_seq:
+        for one_byte in list(self.tool.encode(byte_list)):
             temp_bits = list(map(int, list(bin(one_byte))[2:]))
             temp_bits = [0 for _ in range(8 - len(temp_bits))] + temp_bits
             output_list += temp_bits
@@ -201,15 +198,13 @@ class RS:
             byte_list.append(int(str("".join(list(map(str, input_list[index: index + 8])))), 2))
 
         try:
-            v_seq = list(self.tool.decode(byte_list))
-            print("original decode = " + str(v_seq))
+            decode_byte_list = list(self.tool.decode(byte_list))
 
             if platform.system() == "Linux":
-                v_seq = v_seq[0]
-                print("linux decode = " + str(v_seq))
+                decode_byte_list = decode_byte_list[0]
 
             output_list = []
-            for one_byte in list(v_seq):
+            for one_byte in list(decode_byte_list):
                 temp_bits = list(map(int, list(bin(one_byte))[2:]))
                 temp_bits = [0 for _ in range(8 - len(temp_bits))] + temp_bits
                 output_list += temp_bits
