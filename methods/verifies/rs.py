@@ -131,7 +131,6 @@ class RS:
             byte_list.append(int(str("".join(list(map(str, input_list[index: index + 8])))), 2))
 
         v_seq = self.tool.encode(bytearray(byte_list))
-
         output_list = []
         for one_byte in v_seq:
             temp_bits = list(map(int, list(bin(int(str(one_byte), 10)))[2:]))
@@ -202,12 +201,9 @@ class RS:
 
         try:
             output_list = []
-            for one_byte in self.tool.decode(bytearray(byte_list)):
-                string = str(one_byte)
-                if platform.system() == "Linux":
-                    string = one_byte.decode()
-                    print("string = " + str(string))
-                temp_bits = list(map(int, list(bin(int(string, 10)))[2:]))
+            v_seq = self.tool.decode(bytearray(byte_list))
+            for one_byte in v_seq:
+                temp_bits = list(map(int, list(bin(int(str(one_byte), 10)))[2:]))
                 temp_bits = [0 for _ in range(8 - len(temp_bits))] + temp_bits
                 output_list += temp_bits
         except ReedSolomonError:
