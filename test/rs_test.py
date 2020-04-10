@@ -7,16 +7,13 @@ class TestEncodeDecode(unittest.TestCase):
 
     def setUp(self):
         random.seed(30)
-        self.test_bit_list = [random.randint(0, 1) for _ in range(12)]
-        self.test_verify_list = [0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1]
-
+        self.test_bit_list = [random.randint(0, 1) for _ in range(120)]
         self.tool = RSCodec(1)
 
     def test_total(self):
-        byte_list = [0, 0, 0, 0] + self.test_bit_list
         target_list = []
-        for index in range(0, len(byte_list), 8):
-            target_list.append(int(str("".join(list(map(str, byte_list[index: index + 8])))), 2))
+        for index in range(0, len(self.test_bit_list), 8):
+            target_list.append(int(str("".join(list(map(str, self.test_bit_list[index: index + 8])))), 2))
 
         print("ord list before encode = " + str(target_list))
         print("type v_seq[0] = " + str(type(target_list[0])))
@@ -33,5 +30,3 @@ class TestEncodeDecode(unittest.TestCase):
             temp_bits = list(map(int, list(bin(one_byte))[2:]))
             temp_bits = [0 for _ in range(8 - len(temp_bits))] + temp_bits
             output_list += temp_bits
-
-        self.assertEqual(output_list[4:], self.test_bit_list)
