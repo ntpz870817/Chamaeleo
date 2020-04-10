@@ -130,9 +130,8 @@ class RS:
         for index in range(0, len(input_list), 8):
             byte_list.append(int(str("".join(list(map(str, input_list[index: index + 8])))), 2))
 
-        v_seq = self.tool.encode(bytearray(byte_list))
         output_list = []
-        for one_byte in v_seq:
+        for one_byte in list(self.tool.encode(byte_list)):
             temp_bits = list(map(int, list(bin(int(str(one_byte), 10)))[2:]))
             temp_bits = [0 for _ in range(8 - len(temp_bits))] + temp_bits
             output_list += temp_bits
@@ -198,11 +197,9 @@ class RS:
         byte_list = []
         for index in range(0, len(input_list), 8):
             byte_list.append(int(str("".join(list(map(str, input_list[index: index + 8])))), 2))
-
         try:
             output_list = []
-            v_seq = self.tool.decode(bytearray(byte_list))
-            for one_byte in v_seq:
+            for one_byte in list(self.tool.decode(byte_list)):
                 temp_bits = list(map(int, list(bin(int(str(one_byte), 10)))[2:]))
                 temp_bits = [0 for _ in range(8 - len(temp_bits))] + temp_bits
                 output_list += temp_bits
