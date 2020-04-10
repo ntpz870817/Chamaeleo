@@ -14,7 +14,7 @@ Function(s):
 (2) Remove Reed-Solomon error correction from origin matrix or origin list.
 (3) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
 """
-import platform
+
 import sys
 import Chamaeleo.utils.log as log
 from Chamaeleo.utils import monitor
@@ -38,7 +38,7 @@ class RS:
             self.additional_size = 0
 
         self.m = monitor.Monitor()
-        self.tool = RSCodec(10)
+        self.tool = RSCodec(check_size)
 
     def add_for_matrix(self, matrix, need_log=False):
         """
