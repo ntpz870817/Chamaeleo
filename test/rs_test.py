@@ -12,7 +12,6 @@ class TestEncodeDecode(unittest.TestCase):
 
         self.tool = RSCodec(1)
 
-
     def test_total(self):
         byte_list = [0, 0, 0, 0] + self.test_bit_list
         target_list = []
