@@ -49,3 +49,18 @@ https://www.youtube.com/watch?v=DEQeIRLxaM4. Youtube.
 
 - I have a Dream.mp4:
 https://www.youtube.com/watch?v=MgYzJGmBXU8. Youtube.
+
+---
+
+If you think this repo helps or being used in your research, please consider refer this paper. [Chamaeleo: a robust library for DNA storage coding schemes](https://www.biorxiv.org/content/10.1101/2020.01.02.892588v3)
+
+Thank you!
+
+````
+@article{ping2020chamaeleo,
+  title={Chamaeleo: a robust library for DNA storage coding schemes},
+  author={Ping, Zhi and Zhang, Haoling and Chen, Shihong and Zhuang, Qianlong and Zhu, Sha and Shen, Yue},
+  journal={bioRxiv},
+  year={2020},
+  publisher={Cold Spring Harbor Laboratory}
+}````
