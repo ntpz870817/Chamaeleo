@@ -52,7 +52,9 @@ https://www.youtube.com/watch?v=MgYzJGmBXU8. Youtube.
 
 ---
 
-If you think this repo helps or being used in your research, please consider refer this paper. [Chamaeleo: a robust library for DNA storage coding schemes](https://www.biorxiv.org/content/10.1101/2020.01.02.892588v3)
+If you think this repo helps or being used in your research, please consider refer this paper. 
+
+[Chamaeleo: a robust library for DNA storage coding schemes](https://www.biorxiv.org/content/10.1101/2020.01.02.892588v3)
 
 Thank you!
 
