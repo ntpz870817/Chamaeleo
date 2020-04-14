@@ -48,13 +48,21 @@ In addition, some non-robust external packages may lead to instability or even a
 ├── examples                          // Example module
 │    ├── generated_files              // DNA sequence set file or binary file generated in the test
 │    │    ├── README.md               // Description document of generated files and the above folder
-│    ├── demo_case_fc.py              // Demo case of Erlich' Code
+│    ├── demo_case_fc.py              // Demo case of DNA Fountain Code
+│    ├── demo_case_fc_with_hm.py      // Demo case of DNA Fountain Code with Hamming Code
+│    ├── demo_case_fc_with_rs.py      // Demo case of DNA Fountain Code with Reed-Solomon Code
 │    ├── demo_case_gc.py              // Demo case of Grass' Code
+│    ├── demo_case_gc_with_hm.py      // Demo case of Grass' Code with Hamming Code
+│    ├── demo_case_gc_with_rs.py      // Demo case of Grass' Code with Reed-Solomon Code
 │    ├── demo_case_hc.py              // Demo case of Goldman's Code
+│    ├── demo_case_hc_with_hm.py      // Demo case of Goldman's Code with Hamming Code
+│    ├── demo_case_hc_with_rs.py      // Demo case of Goldman's Code with Reed-Solomon Code
 │    ├── demo_case_sc.py              // Demo case of Simple (Church's) Code
 │    ├── demo_case_sc_with_hm.py      // Demo case of Simple (Church's) Code with Hamming Code
 │    ├── demo_case_sc_with_rs.py      // Demo case of Simple (Church's) Code with Reed-Solomon Code
 │    ├── demo_case_yyc.py             // Demo case of Yin-Yang Code
+│    ├── demo_case_yyc_with_hm.py     // Demo case of Yin-Yang Code with Hamming Code
+│    ├── demo_case_yyc_with_rs.py     // Demo case of Yin-Yang Code with Reed-Solomon Code
 ├── methods                           // Method module
 │    ├── components                   // Inherent property folder
 │    │    ├── index_operator.py       // Processing the relationship between index and data

@@ -15,7 +15,6 @@ Function(s):
 (3) Verify the correctness of the matrix or the list and repair the error information to a certain extent.
 """
 import sys
-import platform
 import Chamaeleo.utils.log as log
 from Chamaeleo.utils import monitor
 from reedsolo import RSCodec, ReedSolomonError

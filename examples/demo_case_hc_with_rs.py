@@ -12,7 +12,7 @@ import os
 import Chamaeleo
 import Chamaeleo.codec_factory as codec_factory
 import Chamaeleo.utils.dir_checker as checker
-from Chamaeleo.methods import sc
+from Chamaeleo.methods import hc
 from Chamaeleo.methods.verifies import rs
 from Chamaeleo.utils import data_handle
 
@@ -23,11 +23,11 @@ generated_file_path = os.path.join(current_path, "generated_files")
 checker.check_dir_exists(generated_file_path)
 write_file_path = os.path.join(generated_file_path, "target.jpg")
 dna_path = os.path.join(generated_file_path, "target.dna")
-model_path = os.path.join(generated_file_path, "sc+rs.pkl")
+model_path = os.path.join(generated_file_path, "hc+rs.pkl")
 
 
 if __name__ == "__main__":
-    tool = sc.SC()
+    tool = hc.HC()
     verify = rs.RS()
     codec_factory.encode(
         method=tool,
@@ -38,7 +38,7 @@ if __name__ == "__main__":
         need_index=True,
         need_log=True
     )
-    del tool, verify
+    # del tool, verify
     codec_factory.decode(
         model_path=model_path,
         input_path=dna_path,
@@ -52,4 +52,4 @@ if __name__ == "__main__":
     matrix_2, _ = data_handle.read_binary_from_all(write_file_path, 120, False)
     print("source digital file == target digital file: " + str(matrix_1 == matrix_2))
     if matrix_1 != matrix_2:
-        raise RuntimeError("Simple Code with Reed-Solomon Code has error!")
+        raise RuntimeError("Goldman Code with Reed-Solomon Code has error!")
