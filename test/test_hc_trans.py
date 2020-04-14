@@ -53,7 +53,6 @@ class TestEncodeDecode(unittest.TestCase):
                     "G", "C", "T", "C", "G", "C", "G", "T", "C", "A",
                     "C", "A", "C", "G", "T", "G", "A",
                 ]
-            ),
-            2,
+            )
         )
         self.assertEqual(binary_list, self.test_list)
