@@ -199,9 +199,10 @@ class RS:
 
         try:
             decode_byte_list = list(self.tool.decode(byte_list))
-
-            if platform.system() == "Linux":
-                decode_byte_list = decode_byte_list[0]
+            # fix error in Linux or Mac OS
+            # TypeError: 'bytearray' object cannot be interpreted as an integer
+            if type(decode_byte_list[0]) is not int:
+                decode_byte_list = list(decode_byte_list[0])
 
             output_list = []
             for one_byte in list(decode_byte_list):
