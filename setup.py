@@ -33,6 +33,9 @@ setup(
         ]
     },
     package_dir={"Chamaeleo": "."},
+    install_requires=[
+        "reedsolo",
+    ],
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
