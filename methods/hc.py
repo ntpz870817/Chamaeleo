@@ -60,7 +60,7 @@ class HC:
         if self.segment_length % 8 != 0:
             temp_matrix = []
             for row in range(len(matrix)):
-                temp_matrix.append([0 for col in range(self.segment_length % 8)] + matrix[row])
+                temp_matrix.append([0 for col in range(8 - self.segment_length % 8)] + matrix[row])
             matrix = temp_matrix
 
         self.m.restore()
@@ -148,19 +148,18 @@ class HC:
                        "Convert DNA sequences to binary matrix.")
 
         matrix = []
-        index_binary_length = int(len(str(bin(len(dna_sequences)))) - 2)
 
         for index in range(len(dna_sequences)):
             if need_log:
                 self.m.output(index, len(dna_sequences))
             matrix.append(
-                self._huffman_decompressed(self._sequence_to_list(dna_sequences[index]), index_binary_length)
+                self._huffman_decompressed(self._sequence_to_list(dna_sequences[index]))
             )
 
         if len(matrix[0]) != self.segment_length:
             temp_matrix = []
             for row in range(len(matrix)):
-                temp_matrix.append(matrix[row][self.segment_length % 8:])
+                temp_matrix.append(matrix[row][8 - self.segment_length % 8:])
             matrix = temp_matrix
 
         self.m.restore()
@@ -184,7 +183,7 @@ class HC:
 
         return one_list
 
-    def _huffman_decompressed(self, ternary_list, index_binary_length):
+    def _huffman_decompressed(self, ternary_list):
         """
         introduction: Conversion of ternary Huffman coding to binary coding.
 
@@ -196,16 +195,10 @@ class HC:
         temp_ternary, binary_list = "", []
         for index in range(len(ternary_list)):
             temp_ternary += str(ternary_list[index])
-
-            for tree_index in range(len(self.huffman_tree)):
-                if temp_ternary == self.huffman_tree[tree_index]:
-                    if len(binary_list) + 8 < self.segment_length + index_binary_length:
-                        binary_list += list(map(int, list(str(bin(tree_index))[2:].zfill(8))))
-                    else:
-                        remaining_length = (self.segment_length + index_binary_length - len(binary_list))
-                        binary_list += list(map(int, list(str(bin(tree_index))[2:].zfill(remaining_length))))
-                    temp_ternary = ""
-                    break
+            if temp_ternary in self.huffman_tree:
+                tree_index = self.huffman_tree.index(temp_ternary)
+                binary_list += list(map(int, list(str(bin(tree_index))[2:].zfill(8))))
+                temp_ternary = ""
 
         return binary_list
 
