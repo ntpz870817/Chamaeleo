@@ -5,7 +5,7 @@ Coder: HaoLing ZHANG (BGI-Research)[V1]
 
 Current Version: 1
 
-Function(s): The demo case of Yin-Yang Code.
+Function(s): The demo case of Simple Codec (Church et al Code) with Reed-Solomon Code.
 """
 
 import os
