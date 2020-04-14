@@ -7,8 +7,8 @@ Current Version: 1
 
 Function(s): The demo case of Simple Codec (Church et al Code).
 """
-
 import os
+import filecmp
 import Chamaeleo
 import Chamaeleo.codec_factory as codec_factory
 import Chamaeleo.methods.sc as sc
@@ -42,3 +42,4 @@ if __name__ == "__main__":
         has_index=True,
         need_log=True
     )
+    print("Source and target files are same: " + str(filecmp.cmp(read_file_path, write_file_path)))
