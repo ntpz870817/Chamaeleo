@@ -2,7 +2,7 @@ import copy
 import random
 import unittest
 
-from methods.verifies import hm
+from Chamaeleo.methods.verifies import hm
 
 
 class TestEncodeDecode(unittest.TestCase):
