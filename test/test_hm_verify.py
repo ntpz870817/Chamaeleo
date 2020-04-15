@@ -2,7 +2,7 @@ import copy
 import random
 import unittest
 
-from Chamaeleo.methods.verifies import hm
+from methods.verifies import hm
 
 
 class TestEncodeDecode(unittest.TestCase):
@@ -40,4 +40,4 @@ class TestEncodeDecode(unittest.TestCase):
         for output_list, real_list in zip(output_matrix, self.test_binaries):
             results.append(output_list == real_list)
 
-        self.assertEqual(results, [True, True, False])
+        self.assertEqual(results, [True, True])

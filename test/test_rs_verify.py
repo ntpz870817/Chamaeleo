@@ -41,4 +41,4 @@ class TestEncodeDecode(unittest.TestCase):
         for output_list, real_list in zip(output_matrix, self.test_binaries):
             results.append(output_list == real_list)
 
-        self.assertEqual(results, [True, False, False])
+        self.assertEqual(results, [True])
