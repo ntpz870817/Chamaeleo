@@ -119,63 +119,6 @@ class Hm:
 
         return output_list
 
-    # def remove_for_matrix(self, verity_matrix, need_log=False):
-    #     """
-    #     introduction: Remove Hamming error correction from origin matrix.
-    #
-    #     :param verity_matrix: Verifiable matrix.
-    #                           The data of this matrix contains only 0 or 1 (non-char).
-    #                           Type: Two-dimensional list(int).
-    #
-    #     :param need_log: Show the log.
-    #
-    #     :return matrix: Origin matrix.
-    #                     Type: Two-dimensional list(int).
-    #     """
-    #     if need_log:
-    #         log.output(
-    #             log.NORMAL,
-    #             str(__name__),
-    #             str(sys._getframe().f_code.co_name),
-    #             "Remove the error correction for matrix.",
-    #         )
-    #
-    #     self.m.restore()
-    #
-    #     matrix = []
-    #     for row in range(len(verity_matrix)):
-    #         if need_log:
-    #             self.m.output(row, len(verity_matrix))
-    #         matrix.append(self.remove_for_list(verity_matrix[row]))
-    #
-    #     self.m.restore()
-    #
-    #     return matrix
-    #
-    # def remove_for_list(self, input_list):
-    #     """
-    #     introduction: Remove Hamming error correction from one list.
-    #
-    #     :param input_list: The binary list requiring removing validation.
-    #                        Type: One-dimensional list(int).
-    #
-    #     :return output_list: The binary list completing processing.
-    #                          Type: One-dimensional list(int).
-    #     """
-    #     input_list.reverse()
-    #
-    #     detect_site, output_list = 0, []
-    #     # Remove the detection site.
-    #     for index in range(len(input_list)):
-    #         if pow(2, detect_site) == index + 1:
-    #             detect_site += 1
-    #         else:
-    #             output_list.append(input_list[index])
-    #
-    #     output_list.reverse()
-    #
-    #     return output_list
-
     # noinspection PyProtectedMember
     def verify_for_matrix(self, verity_matrix, need_log=False):
         """
@@ -203,7 +146,10 @@ class Hm:
         for row in range(len(verity_matrix)):
             if need_log:
                 self.m.output(row, len(verity_matrix))
-            matrix.append(self.verify_for_list(verity_matrix[row], row))
+                
+            data_list = self.verify_for_list(verity_matrix[row], row)
+            if data_list is not None:
+                matrix.append(data_list)
 
         self.m.restore()
 

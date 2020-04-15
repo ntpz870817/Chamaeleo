@@ -162,7 +162,9 @@ class RS:
         for row in range(len(verity_matrix)):
             if need_log:
                 self.m.output(row, len(verity_matrix))
-            matrix.append(self.verify_for_list(verity_matrix[row], row))
+            data_list = self.verify_for_list(verity_matrix[row], row)
+            if data_list is not None:
+                matrix.append(data_list)
 
         self.m.restore()
 
