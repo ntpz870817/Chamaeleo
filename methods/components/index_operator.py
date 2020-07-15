@@ -147,14 +147,31 @@ def sort_order(indexes, data_set, need_log=False):
         log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
             "Restore data order according to index.")
 
-    # noinspection PyUnusedLocal
-    matrix = [[0 for col in range(len(data_set[0]))] for row in range(len(indexes))]
+    # additional information checker
+    flag_index = 0
+    if max(indexes) > len(indexes):
+        while True:
+            if flag_index + 1 not in indexes:
+                # index to length
+                flag_index += 1
+                break
+            flag_index += 1
 
-    for row in range(len(indexes)):
+    if need_log and flag_index > 0:
+        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+            "There are " + str(flag_index) + " required bit segments and " +
+                   str(len(indexes) - flag_index) + " additional bit segments")
+
+    # noinspection PyUnusedLocal
+    if flag_index > 0:
+        matrix = [[0 for _ in range(len(data_set[0]))] for _ in range(flag_index)]
+    else:
+        matrix = [[0 for _ in range(len(data_set[0]))] for _ in range(len(indexes))]
+
+    for index in range(len(matrix)):
+        matrix[index] = data_set[indexes.index(index)]
         if need_log:
-            m.output(row, len(indexes))
-        if 0 <= row < len(matrix):
-            matrix[indexes[row]] = data_set[row]
+            m.output(index + 1, len(indexes))
 
     m.restore()
 

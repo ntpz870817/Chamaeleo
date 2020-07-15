@@ -14,6 +14,7 @@ import Chamaeleo.codec_factory as codec_factory
 import Chamaeleo.methods.yyc as yyc
 import Chamaeleo.utils.dir_checker as checker
 from Chamaeleo.utils import data_handle
+from Chamaeleo.methods.components.inherent import get_yyc_rule_by_index
 
 root_path = os.path.dirname(Chamaeleo.__file__)
 read_file_path = os.path.join(root_path, "data", "pictures", "Mona Lisa.jpg")
@@ -26,7 +27,9 @@ model_path = os.path.join(generated_file_path, "yyc.pkl")
 
 
 if __name__ == "__main__":
-    tool = yyc.YYC()
+    [support_base, rule1, rule2] = get_yyc_rule_by_index(495, True)
+    tool = yyc.YYC(support_bases=support_base, base_reference=rule1, current_code_matrix=rule2,
+                   search_count=100, max_homopolymer=4, max_content=0.6)
     codec_factory.encode(
         method=tool,
         input_path=read_file_path,

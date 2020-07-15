@@ -17,7 +17,10 @@ Advantages:
 (2) Prevent repetitive motifs, like ATCGATCG...
 (3) Increase the number of sequence changes (1,536 cases), increasing data security.
 """
+import random
 import sys
+
+import math
 import numpy
 
 import Chamaeleo.methods.components.inherent as inherent
@@ -36,7 +39,10 @@ class YYC:
         support_bases=None,
         support_spacing=0,
         max_ratio=0.8,
-        search_count=2
+        search_count=2,
+        max_homopolymer=math.inf,
+        max_simple_segment=math.inf,
+        max_content=1
     ):
         """
         introduction: The initialization method of YYC.
@@ -63,6 +69,11 @@ class YYC:
         :param max_ratio: The max ratio of 0 or 1.
                            When the (count/length) >= this parameter, we decide that this binary sequence is not good.
 
+        :param max_homopolymer: maximum length of homopolymer.
+
+        :param max_simple_segment: maximum length of simple segment, including (normal, inverse, dyad) motif repeat.
+
+        :param max_content: maximum content of C and G, which means GC content is in [1 - max_content, max_content].
         """
 
         # Set default values for Rules 1 and 2 (RULE 495)
@@ -85,6 +96,10 @@ class YYC:
         self.support_spacing = support_spacing
         self.max_ratio = max_ratio
         self.search_count = search_count
+
+        self.max_homopolymer = max_homopolymer
+        self.max_simple_segment = max_simple_segment
+        self.max_content = max_content
 
         # Detect parameters correctness
         self._init_check()
@@ -241,14 +256,14 @@ class YYC:
             good_data_set = []
             for row in range(len(matrix)):
                 if need_log:
-                    self.monitor.output(row, len(matrix))
+                    self.monitor.output(row + 1, len(matrix))
                 good_data_set.append(matrix[row])
             return good_data_set, []
         elif len(bad_indexes) == len(matrix):
             bad_data_set = []
             for row in range(len(matrix)):
                 if need_log:
-                    self.monitor.output(row, len(matrix))
+                    self.monitor.output(row + 1, len(matrix))
                 bad_data_set.append(matrix[row])
             return [], bad_data_set
         else:
@@ -256,7 +271,7 @@ class YYC:
             bad_data_set = []
             for row in range(len(matrix)):
                 if need_log:
-                    self.monitor.output(row, len(matrix))
+                    self.monitor.output(row + 1, len(matrix))
                 if row in bad_indexes:
                     bad_data_set.append(matrix[row])
                 else:
@@ -280,75 +295,130 @@ class YYC:
         :returns data_set: Matched results
                          Type: Two-dimensional list(int)
         """
-
         data_set = []
-        good_indexes = None
-        bad_indexes = None
-        if good_data_set is not None and bad_data_set is not None:
-            good_indexes = set(str(i) for i in range(len(good_data_set)))
-            bad_indexes = set(str(i) for i in range(len(bad_data_set)))
-        elif good_data_set is None and bad_data_set is not None:
-            good_indexes = set(str(i) for i in range(0))
-            bad_indexes = set(str(i) for i in range(len(bad_data_set)))
-        elif good_data_set is not None and bad_data_set is None:
-            good_indexes = set(str(i) for i in range(len(good_data_set)))
-            bad_indexes = set(str(i) for i in range(0))
-        else:
+        if good_data_set is None and bad_data_set is None:
             log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                        "YYC did not receive matrix data!")
 
-        for index in range(0, len(good_data_set) + len(bad_data_set), 2):
-            if need_log:
-                self.monitor.output(index, len(good_data_set) + len(bad_data_set))
-            if index < len(good_data_set) + len(bad_data_set) - 1:
-                if len(good_indexes) != 0 and len(bad_indexes) != 0:
-                    for search_index in range(self.search_count):
-                        good_index = int(good_indexes.pop())
-                        bad_index = int(bad_indexes.pop())
-                        if search_index >= self.search_count - 1 or validity.check(
-                                "".join(self._list_to_sequence(good_data_set[good_index], bad_data_set[bad_index]))):
-                            data_set.append(good_data_set[good_index])
-                            data_set.append(bad_data_set[bad_index])
-                            break
-                        else:
-                            good_indexes.add(str(good_index))
-                            bad_indexes.add(str(bad_index))
-                            index -= 1
-                elif len(bad_indexes) == 0:
-                    for search_index in range(self.search_count):
-                        good_index1 = int(good_indexes.pop())
-                        good_index2 = int(good_indexes.pop())
-                        if search_index >= self.search_count - 1 or validity.check(
-                                "".join(self._list_to_sequence(good_data_set[good_index1], good_data_set[good_index2]))):
-                            data_set.append(good_data_set[good_index1])
-                            data_set.append(good_data_set[good_index2])
-                            break
-                        else:
-                            good_indexes.add(str(good_index1))
-                            good_indexes.add(str(good_index2))
-                            index -= 1
-                elif len(good_indexes) == 0:
-                    for search_index in range(self.search_count):
-                        bad_index1 = int(bad_indexes.pop())
-                        bad_index2 = int(bad_indexes.pop())
-                        if search_index >= self.search_count - 1 or validity.check(
-                                "".join(self._list_to_sequence(bad_data_set[bad_index1], bad_data_set[bad_index2]))):
-                            data_set.append(bad_data_set[bad_index1])
-                            data_set.append(bad_data_set[bad_index2])
-                        else:
-                            bad_indexes.add(str(bad_index1))
-                            bad_indexes.add(str(bad_index2))
-                            index -= 1
-                else:
-                    log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                               "Wrong pairing for YYC!")
-            else:
-                data_set.append(good_data_set[int(good_indexes.pop())]
-                                if len(good_indexes) != 0 else bad_data_set[int(bad_indexes.pop())])
+        total_count = len(good_data_set) + len(bad_data_set)
 
-        del good_indexes, good_data_set, bad_indexes, bad_data_set
+        index_bit_length = int(len(str(bin(total_count))) - 2)
+
+        search_counts = [0 for _ in range(self.search_count + 1)]
+        additional = 0
+        while len(good_data_set) + len(bad_data_set) > 0:
+            if len(good_data_set) > 0 and  len(bad_data_set) > 0:
+                fixed_list = random.sample(bad_data_set, 1)[0]
+                bad_data_set.remove(fixed_list)
+                another_list, is_upper, search_count = self._searching_results(fixed_list, good_data_set,
+                                                                               index_bit_length, total_count)
+
+                if search_count >= 0:
+                    good_data_set.remove(another_list)
+                    search_counts[search_count] += 1
+                else:
+                    additional += 1
+
+                if is_upper:
+                    data_set.append(fixed_list)
+                    data_set.append(another_list)
+                else:
+                    data_set.append(another_list)
+                    data_set.append(fixed_list)
+
+            elif len(good_data_set) > 0:
+                fixed_list = random.sample(good_data_set, 1)[0]
+                good_data_set.remove(fixed_list)
+                another_list, is_upper, search_count = self._searching_results(fixed_list, good_data_set,
+                                                                               index_bit_length, total_count)
+
+                if search_count >= 0:
+                    good_data_set.remove(another_list)
+                    search_counts[search_count] += 1
+                else:
+                    additional += 1
+
+                if is_upper:
+                    data_set.append(fixed_list)
+                    data_set.append(another_list)
+                else:
+                    data_set.append(another_list)
+                    data_set.append(fixed_list)
+
+            elif len(bad_data_set) > 0:
+                fixed_list = random.sample(bad_data_set, 1)[0]
+                bad_data_set.remove(fixed_list)
+                another_list, is_upper, search_count = self._searching_results(fixed_list, bad_data_set,
+                                                                               index_bit_length, total_count)
+
+                if search_count >= 0:
+                    bad_data_set.remove(another_list)
+                    search_counts[search_count] += 1
+                else:
+                    additional += 1
+
+                if is_upper:
+                    data_set.append(fixed_list)
+                    data_set.append(another_list)
+                else:
+                    data_set.append(another_list)
+                    data_set.append(fixed_list)
+
+            else:
+                log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
+                           "Wrong pairing for Yin-Yang Code!")
+
+            if need_log:
+                self.monitor.output(total_count - (len(good_data_set) + len(bad_data_set)), total_count)
+
+        del good_data_set, bad_data_set
+
+        if need_log:
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "Number of additional bit segment is " + str(additional) +
+                       " in original " + str(total_count) + " bit segments.")
+            log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
+                       "In addition, the actual search counts is " + str(search_counts))
 
         return data_set
+
+    def _searching_results(self, fixed_list, other_lists, index_length, total_count):
+        if len(other_lists) > 0:
+            for search_index in range(self.search_count + 1):
+                another_list = random.sample(other_lists, 1)[0]
+                n_dna = "".join(self._list_to_sequence(fixed_list, another_list))
+                c_dna = "".join(self._list_to_sequence(another_list, fixed_list))
+                if validity.check(n_dna,
+                                  max_homopolymer=self.max_homopolymer,
+                                  max_simple_segment=self.max_simple_segment,
+                                  max_content=self.max_content):
+                    return another_list, True, search_index
+                if validity.check(c_dna,
+                                  max_homopolymer=self.max_homopolymer,
+                                  max_simple_segment=self.max_simple_segment,
+                                  max_content=self.max_content):
+
+                    return another_list, False, search_index
+
+        # insert at least 2 interval
+        random_index = random.randint(total_count + 3, math.pow(2, index_length) - 1)
+        index_list = list(map(int, list(str(bin(random_index))[2:].zfill(index_length))))
+        while True:
+            random_list = index_list + [random.randint(0, 1) for _ in range(len(fixed_list) - index_length)]
+            n_dna = "".join(self._list_to_sequence(fixed_list, random_list))
+            c_dna = "".join(self._list_to_sequence(random_list, fixed_list))
+            if validity.check(n_dna,
+                              max_homopolymer=self.max_homopolymer,
+                              max_simple_segment=self.max_simple_segment,
+                              max_content=self.max_content):
+                return random_list, True, -1
+            if validity.check(c_dna,
+                              max_homopolymer=self.max_homopolymer,
+                              max_simple_segment=self.max_simple_segment,
+                              max_content=self.max_content):
+
+                return random_list, False, -1
+
 
     def _synthesis_sequences(self, data_set, need_log):
         """
@@ -367,10 +437,7 @@ class YYC:
         for row in range(0, len(data_set), 2):
             if need_log:
                 self.monitor.output(row, len(data_set))
-            if row < len(data_set) - 1:
-                dna_sequences.append(self._list_to_sequence(data_set[row], data_set[row + 1]))
-            else:
-                dna_sequences.append(self._list_to_sequence(data_set[row], None))
+            dna_sequences.append(self._list_to_sequence(data_set[row], data_set[row + 1]))
 
         del data_set
 
@@ -393,18 +460,12 @@ class YYC:
         dna_sequence = []
 
         for col in range(len(upper_list)):
-            if lower_list is not None:
-                if col > self.support_spacing:
-                    dna_sequence.append(self._binary_to_base(upper_list[col], lower_list[col],
-                                                             dna_sequence[col - (self.support_spacing + 1)]))
-                else:
-                    dna_sequence.append(self._binary_to_base(upper_list[col], lower_list[col], self.support_bases[col]))
+            if col > self.support_spacing:
+                dna_sequence.append(self._binary_to_base(upper_list[col], lower_list[col],
+                                                         dna_sequence[col - (self.support_spacing + 1)]))
             else:
-                if col > self.support_spacing:
-                    dna_sequence.append(self._binary_to_base(upper_list[col], upper_list[col],
-                                                             dna_sequence[col - (self.support_spacing + 1)]))
-                else:
-                    dna_sequence.append(self._binary_to_base(upper_list[col], upper_list[col], self.support_bases[col]))
+                dna_sequence.append(self._binary_to_base(upper_list[col], lower_list[col],
+                                                         self.support_bases[col]))
         return dna_sequence
 
     def _binary_to_base(self, upper_bit, lower_bit, support_base):
