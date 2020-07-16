@@ -48,7 +48,6 @@ if __name__ == "__main__":
         need_log=True
     )
 
-
     print()
     matrix_1, _ = data_handle.read_binary_from_all(read_file_path, 120, False)
     dna_sequences = data_handle.read_dna_file(dna_path, False)
