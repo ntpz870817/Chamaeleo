@@ -27,9 +27,7 @@ model_path = os.path.join(generated_file_path, "yyc.pkl")
 
 
 if __name__ == "__main__":
-    [support_base, rule1, rule2] = get_yyc_rule_by_index(495, True)
-    tool = yyc.YYC(support_bases=support_base, base_reference=rule1, current_code_matrix=rule2,
-                   search_count=100, max_homopolymer=4, max_content=0.6)
+    tool = yyc.YYC(search_count=100, max_homopolymer=4, max_content=0.6)
     codec_factory.encode(
         method=tool,
         input_path=read_file_path,

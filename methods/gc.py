@@ -83,9 +83,9 @@ class GC:
                        "Encode the matrix by Grass Codec.")
 
         for row in range(len(matrix)):
-            if need_log:
-                self.m.output(row, len(matrix))
             dna_sequences.append(self._list_to_sequence(matrix[row]))
+            if need_log:
+                self.m.output(row + 1, len(matrix))
 
         self.m.restore()
         return dna_sequences
@@ -148,9 +148,9 @@ class GC:
                        "Convert DNA sequences to binary matrix by Grass Codec.")
 
         for index in range(len(dna_sequences)):
-            if need_log:
-                self.m.output(index, len(dna_sequences))
             matrix.append(self._sequence_to_list(dna_sequences[index]))
+            if need_log:
+                self.m.output(index + 1, len(dna_sequences))
 
         self.m.restore()
 

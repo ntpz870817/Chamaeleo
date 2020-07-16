@@ -38,7 +38,7 @@ def connect_all(matrix, need_log=False):
     new_matrix = []
     for row in range(len(matrix)):
         if need_log:
-            m.output(row, len(matrix))
+            m.output(row + 1, len(matrix))
         new_matrix.append(connect(row, matrix[row], index_binary_length))
 
     m.restore()
@@ -95,7 +95,7 @@ def divide_all(matrix, need_log=False):
 
     for row in range(len(matrix)):
         if need_log:
-            m.output(row, len(matrix))
+            m.output(row + 1, len(matrix))
         index, data = divide(matrix[row], index_binary_length)
         indexs.append(index)
         datas.append(data)

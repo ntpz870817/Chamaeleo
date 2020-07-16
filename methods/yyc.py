@@ -41,7 +41,6 @@ class YYC:
         max_ratio=0.8,
         search_count=2,
         max_homopolymer=math.inf,
-        max_simple_segment=math.inf,
         max_content=1
     ):
         """
@@ -71,8 +70,6 @@ class YYC:
 
         :param max_homopolymer: maximum length of homopolymer.
 
-        :param max_simple_segment: maximum length of simple segment, including (normal, inverse, dyad) motif repeat.
-
         :param max_content: maximum content of C and G, which means GC content is in [1 - max_content, max_content].
         """
 
@@ -98,7 +95,6 @@ class YYC:
         self.search_count = search_count
 
         self.max_homopolymer = max_homopolymer
-        self.max_simple_segment = max_simple_segment
         self.max_content = max_content
 
         # Detect parameters correctness
@@ -312,7 +308,6 @@ class YYC:
                 bad_data_set.remove(fixed_list)
                 another_list, is_upper, search_count = self._searching_results(fixed_list, good_data_set,
                                                                                index_bit_length, total_count)
-
                 if search_count >= 0:
                     good_data_set.remove(another_list)
                     search_counts[search_count] += 1
@@ -331,13 +326,11 @@ class YYC:
                 good_data_set.remove(fixed_list)
                 another_list, is_upper, search_count = self._searching_results(fixed_list, good_data_set,
                                                                                index_bit_length, total_count)
-
                 if search_count >= 0:
                     good_data_set.remove(another_list)
                     search_counts[search_count] += 1
                 else:
                     additional += 1
-
                 if is_upper:
                     data_set.append(fixed_list)
                     data_set.append(another_list)
@@ -350,7 +343,6 @@ class YYC:
                 bad_data_set.remove(fixed_list)
                 another_list, is_upper, search_count = self._searching_results(fixed_list, bad_data_set,
                                                                                index_bit_length, total_count)
-
                 if search_count >= 0:
                     bad_data_set.remove(another_list)
                     search_counts[search_count] += 1
@@ -371,14 +363,18 @@ class YYC:
             if need_log:
                 self.monitor.output(total_count - (len(good_data_set) + len(bad_data_set)), total_count)
 
-        del good_data_set, bad_data_set
+        results = {}
+        for index, count in enumerate(search_counts):
+            results[index] = count
 
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                        "Number of additional bit segment is " + str(additional) +
                        " in original " + str(total_count) + " bit segments.")
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "In addition, the actual search counts is " + str(search_counts))
+                       "In addition, the actual search counts is " + str(results))
+
+        del good_data_set, bad_data_set
 
         return data_set
 
@@ -390,12 +386,10 @@ class YYC:
                 c_dna = "".join(self._list_to_sequence(another_list, fixed_list))
                 if validity.check(n_dna,
                                   max_homopolymer=self.max_homopolymer,
-                                  max_simple_segment=self.max_simple_segment,
                                   max_content=self.max_content):
                     return another_list, True, search_index
                 if validity.check(c_dna,
                                   max_homopolymer=self.max_homopolymer,
-                                  max_simple_segment=self.max_simple_segment,
                                   max_content=self.max_content):
 
                     return another_list, False, search_index
@@ -409,12 +403,10 @@ class YYC:
             c_dna = "".join(self._list_to_sequence(random_list, fixed_list))
             if validity.check(n_dna,
                               max_homopolymer=self.max_homopolymer,
-                              max_simple_segment=self.max_simple_segment,
                               max_content=self.max_content):
                 return random_list, True, -1
             if validity.check(c_dna,
                               max_homopolymer=self.max_homopolymer,
-                              max_simple_segment=self.max_simple_segment,
                               max_content=self.max_content):
 
                 return random_list, False, -1
@@ -436,7 +428,7 @@ class YYC:
         dna_sequences = []
         for row in range(0, len(data_set), 2):
             if need_log:
-                self.monitor.output(row, len(data_set))
+                self.monitor.output(row + 2, len(data_set))
             dna_sequences.append(self._list_to_sequence(data_set[row], data_set[row + 1]))
 
         del data_set
@@ -548,7 +540,7 @@ class YYC:
 
         for row in range(len(dna_sequences)):
             if need_log:
-                self.monitor.output(row, len(dna_sequences))
+                self.monitor.output(row + 1, len(dna_sequences))
 
             upper_row_datas, lower_row_datas = self._sequence_to_list(dna_sequences[row])
             matrix.append(upper_row_datas)

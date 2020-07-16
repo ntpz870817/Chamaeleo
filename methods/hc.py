@@ -79,9 +79,9 @@ class HC:
         dna_sequences = []
 
         for row in range(len(matrix)):
-            if need_log:
-                self.m.output(row, len(matrix))
             dna_sequences.append(self._list_to_sequence(self._huffman_compressed(matrix[row])))
+            if need_log:
+                self.m.output(row + 1, len(matrix))
 
         self.m.restore()
         return dna_sequences
@@ -150,11 +150,11 @@ class HC:
         matrix = []
 
         for index in range(len(dna_sequences)):
-            if need_log:
-                self.m.output(index, len(dna_sequences))
             matrix.append(
                 self._huffman_decompressed(self._sequence_to_list(dna_sequences[index]))
             )
+            if need_log:
+                self.m.output(index + 1, len(dna_sequences))
 
         if len(matrix[0]) != self.segment_length:
             temp_matrix = []

@@ -54,8 +54,6 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
             row = 0
             col = 0
             for byte_index in range(size):
-                if need_log:
-                    m.output(byte_index, size)
                 # Read a file as bytes
                 one_byte = file.read(1)
                 element = list(map(int, list(str(bin(struct.unpack("B", one_byte)[0]))[2:].zfill(8))))
@@ -65,6 +63,8 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
                     if col == segment_length:
                         col = 0
                         row += 1
+                if need_log:
+                    m.output(byte_index + 1, size)
 
         if int(len(str(bin(len(matrix)))) - 2) * 7 > segment_length:
             if need_log:
@@ -107,8 +107,6 @@ def write_all_from_binary(path, matrix, size, need_log=False):
             bit_index = 0
             temp_byte = 0
             for row in range(len(matrix)):
-                if need_log:
-                    m.output(row, len(matrix))
                 for col in range(len(matrix[0])):
                     bit_index += 1
                     temp_byte *= 2
@@ -119,6 +117,8 @@ def write_all_from_binary(path, matrix, size, need_log=False):
                             bit_index = 0
                             temp_byte = 0
                             size -= 1
+                if need_log:
+                    m.output(row + 1, len(matrix))
     except IOError:
         log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                    "The file selection operation was not performed correctly. Please execute the operation again!")
@@ -152,7 +152,7 @@ def read_dna_file(path, need_log=False):
             lines = file.readlines()
             for index in range(len(lines)):
                 if need_log:
-                    m.output(index, len(lines))
+                    m.output(index + 1, len(lines))
                 line = lines[index]
                 dna_sequences.append([line[col] for col in range(len(line) - 1)])
 
@@ -185,9 +185,39 @@ def write_dna_file(path, dna_sequences, need_log=False):
                            "Write DNA sequences to file: " + path)
             for row in range(len(dna_sequences)):
                 if need_log:
-                    m.output(row, len(dna_sequences))
+                    m.output(row + 1, len(dna_sequences))
                 file.write("".join(dna_sequences[row]) + "\n")
         return dna_sequences
     except IOError:
         log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
                    "The file selection operation was not performed correctly. Please execute the operation again!")
+
+
+class DensityCalculator(object):
+
+    def __init__(self, bit_matrix):
+        """
+        introduction: Initialize calculator by original bit matrix.
+
+        :param bit_matrix: original bit matrix from digital data.
+        """
+        self.original = len(bit_matrix) * len(bit_matrix[0])
+        self.actual = 0
+
+    def set_final(self, dna_sequences):
+        """
+        introduction: Set final DNA sequences after the encoding process.
+
+        :param dna_sequences: final DNA sequences.
+        """
+        for dna_sequence in dna_sequences:
+            self.actual += len(dna_sequence)
+
+    def get_density(self):
+        """
+        introduction: Get actual density.
+
+        :return: Actual density.
+        """
+        theoretical = self.original / 2
+        return 2 * (theoretical / self.actual)
