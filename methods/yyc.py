@@ -303,7 +303,7 @@ class YYC:
         search_counts = [0 for _ in range(self.search_count + 1)]
         additional = 0
         while len(good_data_set) + len(bad_data_set) > 0:
-            if len(good_data_set) > 0 and  len(bad_data_set) > 0:
+            if len(good_data_set) > 0 and len(bad_data_set) > 0:
                 fixed_list = random.sample(bad_data_set, 1)[0]
                 bad_data_set.remove(fixed_list)
                 another_list, is_upper, search_count = self._searching_results(fixed_list, good_data_set,
@@ -369,8 +369,8 @@ class YYC:
 
         if need_log:
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                       "Number of additional bit segment is " + str(additional) +
-                       " in original " + str(total_count) + " bit segments.")
+                       "Number of additional bit segment is " + str(additional)
+                       + " in original " + str(total_count) + " bit segments.")
             log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
                        "In addition, the actual search counts is " + str(results))
 
@@ -410,7 +410,6 @@ class YYC:
                               max_content=self.max_content):
 
                 return random_list, False, -1
-
 
     def _synthesis_sequences(self, data_set, need_log):
         """
