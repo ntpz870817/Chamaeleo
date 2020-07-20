@@ -17,6 +17,7 @@ Advantages:
 (2) Prevent repetitive motifs, like ATCGATCG...
 (3) Increase the number of sequence changes (1,536 cases), increasing data security.
 """
+import copy
 import random
 import sys
 
@@ -382,33 +383,31 @@ class YYC:
         if len(other_lists) > 0:
             for search_index in range(self.search_count + 1):
                 another_list = random.sample(other_lists, 1)[0]
-                n_dna = "".join(self._list_to_sequence(fixed_list, another_list))
-                c_dna = "".join(self._list_to_sequence(another_list, fixed_list))
-                if validity.check(n_dna,
+
+                n_dna, _ = self._list_to_sequence(fixed_list, another_list)
+                if validity.check("".join(n_dna),
                                   max_homopolymer=self.max_homopolymer,
                                   max_content=self.max_content):
                     return another_list, True, search_index
-                if validity.check(c_dna,
+
+                c_dna, _ = self._list_to_sequence(another_list, fixed_list)
+                if validity.check("".join(c_dna),
                                   max_homopolymer=self.max_homopolymer,
                                   max_content=self.max_content):
 
                     return another_list, False, search_index
 
-        # insert at least 2 interval
-        random_index = random.randint(total_count + 3, math.pow(2, index_length) - 1)
-        index_list = list(map(int, list(str(bin(random_index))[2:].zfill(index_length))))
         while True:
-            random_list = index_list + [random.randint(0, 1) for _ in range(len(fixed_list) - index_length)]
-            n_dna = "".join(self._list_to_sequence(fixed_list, random_list))
-            c_dna = "".join(self._list_to_sequence(random_list, fixed_list))
-            if validity.check(n_dna,
-                              max_homopolymer=self.max_homopolymer,
-                              max_content=self.max_content):
-                return random_list, True, -1
-            if validity.check(c_dna,
-                              max_homopolymer=self.max_homopolymer,
-                              max_content=self.max_content):
+            # insert at least 2 interval
+            random_index = random.randint(total_count + 3, math.pow(2, index_length) - 1)
+            index_list = list(map(int, list(str(bin(random_index))[2:].zfill(index_length))))
 
+            n_dna, random_list = self._list_to_sequence(fixed_list, index_list)
+            if n_dna is not None:
+                return random_list, True, -1
+
+            c_dna, random_list = self._list_to_sequence(index_list, fixed_list)
+            if c_dna is not None:
                 return random_list, False, -1
 
     def _synthesis_sequences(self, data_set, need_log):
@@ -428,7 +427,8 @@ class YYC:
         for row in range(0, len(data_set), 2):
             if need_log:
                 self.monitor.output(row + 2, len(data_set))
-            dna_sequences.append(self._list_to_sequence(data_set[row], data_set[row + 1]))
+            dna_sequence, _ = self._list_to_sequence(data_set[row], data_set[row + 1])
+            dna_sequences.append(dna_sequence)
 
         del data_set
 
@@ -444,20 +444,71 @@ class YYC:
         :param lower_list: The lower binary list
                             Type: List(byte)
 
-        :return: one DNA sequence
-                  Type: List(char)
+        :return: one DNA sequence and additional bit payload.
+                  Type: List(char), List(byte).
         """
 
         dna_sequence = []
 
-        for col in range(len(upper_list)):
-            if col > self.support_spacing:
-                dna_sequence.append(self._binary_to_base(upper_list[col], lower_list[col],
-                                                         dna_sequence[col - (self.support_spacing + 1)]))
+        if len(upper_list) == len(lower_list):
+            for index, (upper_bit, lower_bit) in enumerate(zip(upper_list, lower_list)):
+                if index > self.support_spacing:
+                    support_base = dna_sequence[index - (self.support_spacing + 1)]
+                else:
+                    support_base = self.support_bases[index]
+
+                dna_sequence.append(self._binary_to_base(upper_bit, lower_bit, support_base))
+
+            return dna_sequence, None
+
+        addition_length = abs(len(upper_list) - len(lower_list))
+
+        if len(upper_list) > len(lower_list):
+            flag = -1
+            re_upper_list = copy.deepcopy(upper_list)
+            re_lower_list = copy.deepcopy(lower_list + [-1 for _ in range(addition_length)])
+        else:
+            flag = 1
+            re_upper_list = copy.deepcopy(upper_list + [-1 for _ in range(addition_length)])
+            re_lower_list = copy.deepcopy(lower_list)
+
+        for index, (upper_bit, lower_bit) in enumerate(zip(re_upper_list, re_lower_list)):
+            if index > self.support_spacing:
+                support_base = dna_sequence[index - (self.support_spacing + 1)]
             else:
-                dna_sequence.append(self._binary_to_base(upper_list[col], lower_list[col],
-                                                         self.support_bases[col]))
-        return dna_sequence
+                support_base = self.support_bases[index]
+
+            if upper_bit != -1 and lower_bit != -1:
+                dna_sequence.append(self._binary_to_base(upper_bit, lower_bit, support_base))
+            elif upper_bit == -1:
+                is_chosen = False
+                for chosen_bit in [0, 1]:
+                    current_base = self._binary_to_base(chosen_bit, lower_bit, support_base)
+                    if validity.check("".join(dna_sequence) + current_base,
+                                      max_homopolymer=self.max_homopolymer, max_content=self.max_content):
+                        re_upper_list[index] = chosen_bit
+                        dna_sequence.append(current_base)
+                        is_chosen = True
+                        break
+                if not is_chosen:
+                    return None, re_upper_list
+            else:
+                is_chosen = False
+                for chosen_bit in [0, 1]:
+                    current_base = self._binary_to_base(upper_bit, chosen_bit, support_base)
+                    if validity.check("".join(dna_sequence) + current_base,
+                                      max_homopolymer=self.max_homopolymer, max_content=self.max_content):
+                        re_lower_list[index] = chosen_bit
+                        dna_sequence.append(current_base)
+                        is_chosen = True
+                        break
+                if not is_chosen:
+                    return None, re_lower_list
+
+        if flag == 1:
+            return dna_sequence, re_upper_list
+        else:
+            return dna_sequence, re_lower_list
 
     def _binary_to_base(self, upper_bit, lower_bit, support_base):
         """

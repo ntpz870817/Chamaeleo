@@ -171,7 +171,7 @@ def sort_order(indexes, data_set, need_log=False):
     for index in range(len(matrix)):
         matrix[index] = data_set[indexes.index(index)]
         if need_log:
-            m.output(index + 1, len(indexes))
+            m.output(index + 1, len(matrix))
 
     m.restore()
 

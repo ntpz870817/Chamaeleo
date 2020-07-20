@@ -30,7 +30,7 @@ class TestEncodeDecode(unittest.TestCase):
         self.test_lower_list = [random.randint(0, 1) for _ in range(120)]
 
     def test_list_to_sequence(self):
-        dna_sequence = self.tool._list_to_sequence(
+        dna_sequence, _ = self.tool._list_to_sequence(
             self.test_upper_list, self.test_lower_list
         )
         self.assertEqual(
