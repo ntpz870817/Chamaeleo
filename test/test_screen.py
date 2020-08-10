@@ -1,8 +1,8 @@
 import random
 import unittest
 
-from Chamaeleo.methods.components.inherent import index_base
-from Chamaeleo.methods.components import validity
+from Chamaeleo.methods.inherent import index_base
+from Chamaeleo.utils import screen
 
 
 class TestEncodeDecode(unittest.TestCase):
@@ -17,7 +17,7 @@ class TestEncodeDecode(unittest.TestCase):
     def test_homopolymer(self):
         results = []
         for sequence in self.sequences:
-            results.append(validity.homopolymer(sequence, self.max_homopolymer))
+            results.append(screen.homopolymer(sequence, self.max_homopolymer))
         self.assertEqual(
             results,
             [
@@ -77,7 +77,7 @@ class TestEncodeDecode(unittest.TestCase):
     def test_cg_content(self):
         results = []
         for sequence in self.sequences:
-            results.append(validity.cg_content(sequence, self.max_content))
+            results.append(screen.gc_content(sequence, self.max_content))
 
         self.assertEqual(
             results,

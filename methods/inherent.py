@@ -1,18 +1,6 @@
-"""
-Name: Inherent property
-
-Coder: HaoLing ZHANG (BGI-Research)[V1]
-
-Current Version: 1
-
-Function(s): (1) Common attributes in constraint methods.
-.
-"""
 import itertools
-import sys
 
 import numpy
-import Chamaeleo.utils.log as log
 import Chamaeleo.utils.monitor as monitor
 
 """
@@ -83,9 +71,7 @@ def get_yyc_rule_by_index(index, need_log=False):
 
 
     if need_log:
-        # noinspection PyProtectedMember
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Find all the available Yin-Yang rules.")
+        print("Find all the available Yin-Yang rules.")
 
     count = 0
     step = 0
@@ -104,14 +90,10 @@ def get_yyc_rule_by_index(index, need_log=False):
                     m.output(step, len(temp_rule1) * len(temp_rule2) * 4)
 
     if index < 0 or index >= len(rules):
-        # noinspection PyProtectedMember
-        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                   "We have " + str(len(rules)) + " rules, index " + str(index) + " is wrong!")
+        raise ValueError("We have " + str(len(rules)) + " rules, index " + str(index) + " is wrong!")
 
     if need_log:
-        # noinspection PyProtectedMember
-        log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                   "Current Rule is " + str(rules[index].get_info()) + ".")
+        print("Current Rule is " + str(rules[index].get_info()) + ".")
 
     return rules[index].get_info()
 

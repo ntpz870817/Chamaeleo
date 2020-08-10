@@ -1,53 +1,65 @@
-"""
-Name: Data Handle
-
-Coder: HaoLing ZHANG (BGI-Research)[V1]
-
-Current Version: 1
-
-Function(s):
-Conversion of DNA sequences and binary document
-"""
-
+import pickle
 import struct
+from warnings import warn
+
 import math
-import sys
 import os
 
-import Chamaeleo.utils.log as log
-import Chamaeleo.utils.monitor as monitor
+from Chamaeleo.utils.monitor import Monitor
 
 
-# noinspection PyProtectedMember
-def read_binary_from_all(path, segment_length=120, need_log=False):
-    """
-    introduction: Reading binary matrix from document.
+def read_bits_from_str(string, segment_length=120, need_tips=False):
+    monitor = Monitor()
 
-    :param path: File path.
-                  Type: string
+    if need_tips:
+        print("Read binary matrix from string: " + string)
 
-    :param segment_length: The binary segment length used for DNA sequence generation.
-                           Considering current DNA synthesis technique limitation,
-                           we usually set 120 as default segment length.
+    data = []
 
-    :param need_log: choose to output log file or not.
+    for value in bytes(string, encoding="utf8"):
+        data += list(map(int, list(str(bin(value))[2:].zfill(8))))
 
-    :return matrix: A matrix in which each row represents a binary segment that will be used for DNA sequence generation.
-                    Type: two-dimensional list(int)
-    """
+    matrix = []
+    for index in range(0, len(data), segment_length):
+        if index + segment_length < len(data):
+            matrix.append(data[index: index + segment_length])
+        else:
+            matrix.append(data[index:] + [0] * (segment_length - len(data[index:])))
 
-    m = monitor.Monitor()
-    try:
+        if need_tips:
+            monitor.output(max(index + segment_length, len(data)), len(data))
 
-        # Open selected file
-        with open(path, mode="rb") as file:
+    return matrix, len(data)
 
-            if need_log:
-                log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Read binary matrix from file: " + path)
 
-            size = os.path.getsize(path)
+def write_bits_to_str(matrix, bit_size, need_tips=False):
+    if need_tips:
+        print("Write binary matrix to string.")
+    monitor = Monitor()
 
+    temp_list = []
+    for index, row in enumerate(matrix):
+        temp_list += row
+        if need_tips:
+            monitor.output(index, len(matrix))
+    temp_list = temp_list[: bit_size]
+    values = []
+    for index in range(0, len(temp_list), 8):
+        values.append(int("".join(list(map(str, temp_list[index: index + 8]))), 2))
+
+    return str(bytes(values), encoding="utf8")
+
+
+def read_bits_from_file(path, segment_length=120, need_tips=False):
+    monitor = Monitor()
+
+    with open(path, mode="rb") as file:
+        if need_tips:
+            print("Read binary matrix from file: " + path)
+
+        size = os.path.getsize(path)
+
+        if segment_length > 0:
             # Set init storage matrix
             matrix = [[0 for _ in range(segment_length)] for _ in range(math.ceil(size * 8 / segment_length))]
 
@@ -63,161 +75,101 @@ def read_binary_from_all(path, segment_length=120, need_log=False):
                     if col == segment_length:
                         col = 0
                         row += 1
-                if need_log:
-                    m.output(byte_index + 1, size)
+                if need_tips:
+                    monitor.output(byte_index + 1, size)
+        else:
+            matrix = []
+            for byte_index in range(size):
+                # Read a file as bytes
+                one_byte = file.read(1)
+                matrix += list(map(int, list(str(bin(struct.unpack("B", one_byte)[0]))[2:].zfill(8))))
 
-        if int(len(str(bin(len(matrix)))) - 2) * 7 > segment_length:
-            if need_log:
-                log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
-                           "The proportion of index in whole sequence may be high. \n"
-                           "It is recommended to increase the length of output DNA sequences "
-                           "or to divide the file into more segment pools")
+            matrix = [matrix]
+    if int(len(str(bin(len(matrix)))) - 2) * 4 > segment_length:
+        if need_tips:
+            warn("The proportion of index in whole sequence may be high. \n"
+                 "It is recommended to increase the length of output DNA sequences "
+                 "or to divide the file into more segment pools")
 
-        return matrix, size
-    except IOError:
-        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                   "The file selection operation was not performed correctly. Please execute the operation again!")
-
-
-# noinspection PyBroadException,PyProtectedMember
-def write_all_from_binary(path, matrix, size, need_log=False):
-    """
-    introduction: Writing binary matrix to document.
-
-    :param path: File path.
-                  Type: string
-
-    :param matrix: A matrix in which each row represents a binary segment that will be used for DNA sequence generation.
-                    Type: two-dimensional list(int)
-
-    :param size: This refers to file size, to reduce redundant bits when transferring DNA to binary files.
-                  Type: int
-
-    :param need_log: choose to output log file or not.
-    """
-    m = monitor.Monitor()
-
-    try:
-        with open(path, "wb+") as file:
-            if need_log:
-                log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Write file from binary matrix: " + path)
-
-            # Change bit to byte (8 -> 1), and write a file as bytes
-            bit_index = 0
-            temp_byte = 0
-            for row in range(len(matrix)):
-                for col in range(len(matrix[0])):
-                    bit_index += 1
-                    temp_byte *= 2
-                    temp_byte += matrix[row][col]
-                    if bit_index == 8:
-                        if size >= 0:
-                            file.write(struct.pack("B", int(temp_byte)))
-                            bit_index = 0
-                            temp_byte = 0
-                            size -= 1
-                if need_log:
-                    m.output(row + 1, len(matrix))
-    except IOError:
-        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                   "The file selection operation was not performed correctly. Please execute the operation again!")
+    return matrix, size * 8
 
 
-# noinspection PyBroadException,PyProtectedMember
-def read_dna_file(path, need_log=False):
-    """
-    introduction: Reading DNA sequence set from documents.
+def write_bits_to_file(path, matrix, bit_size, need_tips=False):
+    monitor = Monitor()
 
-    :param path: File path.
-                  Type: string
+    with open(path, "wb+") as file:
+        if need_tips:
+            print("Write file from binary matrix: " + path)
 
-    :return dna_sequences: A corresponding DNA sequence string in which each row acts as a sequence.
-                           Type: one-dimensional list(string)
+        byte_size = int(bit_size / 8)
+        # Change bit to byte (8 -> 1), and write a file as bytes
+        bit_index = 0
+        temp_byte = 0
+        for row in range(len(matrix)):
+            for col in range(len(matrix[0])):
+                bit_index += 1
+                temp_byte *= 2
+                temp_byte += matrix[row][col]
+                if bit_index == 8:
+                    if byte_size >= 0:
+                        file.write(struct.pack("B", int(temp_byte)))
+                        bit_index = 0
+                        temp_byte = 0
+                        byte_size -= 1
+            if need_tips:
+                monitor.output(row + 1, len(matrix))
 
-    :param need_log: need output log.
-    """
+    return True
 
-    m = monitor.Monitor()
+
+def read_dna_file(path, need_tips=False):
+    monitor = Monitor()
 
     dna_sequences = []
 
-    try:
-        with open(path, "r") as file:
-            if need_log:
-                log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Read DNA sequences from file: " + path)
+    with open(path, "r") as file:
+        if need_tips:
+            print("Read DNA sequences from file: " + path)
 
-            # Read current file by line
-            lines = file.readlines()
-            for index in range(len(lines)):
-                if need_log:
-                    m.output(index + 1, len(lines))
-                line = lines[index]
-                dna_sequences.append([line[col] for col in range(len(line) - 1)])
+        # Read current file by line
+        lines = file.readlines()
 
-        return dna_sequences
-    except IOError:
-        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                   "The file selection operation was not performed correctly. Please execute the operation again!")
+        for index, line in enumerate(lines):
+            dna_sequences.append(list(line.replace("\n", "")))
+
+            if need_tips:
+                monitor.output(index + 1, len(lines))
+
+    return dna_sequences
 
 
-# noinspection PyProtectedMember,PyBroadException
-def write_dna_file(path, dna_sequences, need_log=False):
-    """
-    introduction: Writing DNA sequence set to documents.
+def write_dna_file(path, dna_sequences, need_tips=False):
+    monitor = Monitor()
 
-    :param path: File path.
-                  Type: string
+    with open(path, "w") as file:
+        if need_tips:
+            print("Read DNA sequences from file: " + path)
 
-    :param dna_sequences: Generated DNA sequences.
-                          Type: one-dimensional list(string)
+        for index, dna_sequence in enumerate(dna_sequences):
+            file.write("".join(dna_sequence) + "\n")
 
-    :param need_log: choose to output log file or not.
-    """
+            if need_tips:
+                monitor.output(index + 1, len(dna_sequences))
 
-    m = monitor.Monitor()
-
-    try:
-        with open(path, "w") as file:
-            if need_log:
-                log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-                           "Write DNA sequences to file: " + path)
-            for row in range(len(dna_sequences)):
-                if need_log:
-                    m.output(row + 1, len(dna_sequences))
-                file.write("".join(dna_sequences[row]) + "\n")
-        return dna_sequences
-    except IOError:
-        log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-                   "The file selection operation was not performed correctly. Please execute the operation again!")
+    return True
 
 
-class DensityCalculator(object):
+def save_model(path, model, need_tips=False):
+    if need_tips:
+        print("Save model to file: " + path)
 
-    def __init__(self, bit_matrix):
-        """
-        introduction: Initialize calculator by original bit matrix.
+    with open(path, "wb") as file:
+        pickle.dump(model, file)
 
-        :param bit_matrix: original bit matrix from digital data.
-        """
-        self.original = len(bit_matrix) * len(bit_matrix[0])
-        self.actual = 0
 
-    def set_final(self, dna_sequences):
-        """
-        introduction: Set final DNA sequences after the encoding process.
+def load_model(path, need_tips=False):
+    if need_tips:
+        print("Load model from file: " + path)
 
-        :param dna_sequences: final DNA sequences.
-        """
-        for dna_sequence in dna_sequences:
-            self.actual += len(dna_sequence)
-
-    def get_density(self):
-        """
-        introduction: Get actual density.
-
-        :return: Actual density.
-        """
-        theoretical = self.original / 2
-        return 2 * (theoretical / self.actual)
+    with open(path, "rb") as file:
+        return pickle.load(file)

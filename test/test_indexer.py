@@ -1,17 +1,8 @@
-"""
-Name: Functional testing for index operator
-
-Coder: HaoLing ZHANG (BGI-Research)[V1]
-
-Current Version: 1
-
-Function(s): The reliability of index operator
-"""
 import copy
 import random
 import unittest
 
-from Chamaeleo.methods.components.index_operator import connect_all, divide_all, sort_order
+from Chamaeleo.utils.indexer import connect_all, divide_all, sort_order
 
 
 class TestEncodeDecode(unittest.TestCase):
@@ -26,7 +17,7 @@ class TestEncodeDecode(unittest.TestCase):
             self.test_i_matrix.append(data + data)
 
     def test_add_indices(self):
-        i_matrix = connect_all(copy.deepcopy(self.test_o_matrix))
+        i_matrix, _ = connect_all(copy.deepcopy(self.test_o_matrix))
         self.assertEqual(i_matrix, self.test_i_matrix)
 
     def test_sort_indices(self):

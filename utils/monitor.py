@@ -1,14 +1,3 @@
-"""
-Name: Progress Monitor
-
-Coder: HaoLing ZHANG (BGI-Research)[V1]
-
-Current Version: 1
-
-Function(s):
-Get the progress and the time left
-"""
-
 from datetime import datetime
 
 
@@ -19,19 +8,9 @@ class Monitor:
         self.last_time = datetime.now()
 
     def restore(self):
-        """
-        introduction: Restore monitor settings.
-        """
         self.__init__()
 
     def output(self, current_length, total_length, extra_informs=None):
-        """
-        introduction: Print the progress bar for required "for" sentence.
-
-        :param current_length: Current position of the "for" sentence. (int)
-        :param total_length: Total length of the "for" sentence. (int)
-        :param extra_informs: extra information in the specific tasks. ()
-        """
         position = round(current_length / total_length * 100)
 
         self.position = position

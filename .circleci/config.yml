@@ -68,13 +68,7 @@ jobs:
           name: run scripts
           command: |
            . venv/bin/activate
-           venv/bin/python3 examples/demo_case_fc.py
-           venv/bin/python3 examples/demo_case_gc.py
-           venv/bin/python3 examples/demo_case_hc.py
-           venv/bin/python3 examples/demo_case_sc.py
-           venv/bin/python3 examples/demo_case_yyc.py
-           venv/bin/python3 examples/demo_case_sc_with_hm.py
-           venv/bin/python3 examples/demo_case_sc_with_rs.py
+           venv/bin/python3 examples/demo_case_trans.py
 
       - store_artifacts:
           path: test-reports
