@@ -80,7 +80,7 @@ class DNAFountain(AbstractCodingAlgorithm):
 
         # pre-check the decoding process in the encoding process
         try:
-            visited_indices = [0] *  self.decode_packets
+            visited_indices = [0] * self.decode_packets
             for chuck_indices in chuck_recorder:
                 for chuck_index in chuck_indices:
                     visited_indices[chuck_index] += 1

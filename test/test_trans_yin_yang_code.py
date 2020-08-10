@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from methods.flowed import YinYangCode
+from Chamaeleo.methods.flowed import YinYangCode
 
 
 class TestEncodeDecode(unittest.TestCase):
@@ -12,8 +12,8 @@ class TestEncodeDecode(unittest.TestCase):
         self.tool.index_length = 3
         self.tool.total_count = 4
         self.tool.segment_length = 100
-        self.test_list = [list(map(int, list(str(bin(index))[2:].zfill(3)))) +
-                          [random.randint(0, 1) for _ in range(97)] for index in range(4)]
+        self.test_list = [list(map(int, list(str(bin(index))[2:].zfill(3))))
+                          + [random.randint(0, 1) for _ in range(97)] for index in range(4)]
 
     def test_list_to_sequence(self):
         dna_sequences = self.tool.silicon_to_carbon(self.test_list, 100 * 4).get("dna")
