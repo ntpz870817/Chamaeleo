@@ -121,7 +121,7 @@ class TranscodePipeline(DefaultPipeline):
                     self.logs["error bit segments"] = None
 
                 if not bit_segments:
-                    raise RuntimeError("No bit segment can be obtained!")
+                    raise ValueError("No bit segment can be obtained!")
 
                 if "index" in info:
                     indices, bit_segments = indexer.divide_all(bit_segments, self.need_tips)
@@ -306,7 +306,7 @@ class EvaluatePipeline(DefaultPipeline):
                                 if final_bit_segment in encoded_data["bit"]:
                                     success_count += 1
                             iter_log["success rate"] = str(round(success_count / len(encoded_data["bit"]) * 100, 3)) + "%"
-                        except RuntimeError:
+                        except ValueError:
                             iter_log = pipeline.output_logs()
                             iter_log["transcoding state"] = False
                             iter_log["success rate"] = "0.000%"

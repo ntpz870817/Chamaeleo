@@ -68,7 +68,7 @@ jobs:
           name: run scripts
           command: |
            . venv/bin/activate
-           venv/bin/python3 examples/demo_case_transcode.py
+            venv/bin/python3 examples/demo_case_transcode.py
             venv/bin/python3 examples/demo_case_evaluate.py
 
       - store_artifacts:
