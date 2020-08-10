@@ -110,6 +110,7 @@ class TranscodePipeline(DefaultPipeline):
                 bit_size = results["s"]
 
                 if not bit_segments:
+                    self.logs["error rate"] = "100.00%"
                     return {"bit": None, "dna": original_dna_sequences}
 
                 if self.error_correction is not None:

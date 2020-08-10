@@ -12,16 +12,8 @@ if __name__ == "__main__":
     root_path = os.path.dirname(Chamaeleo.__file__)
 
     file_paths = {
-        "DNA Fountain Input Files.tar": os.path.join(root_path, "data", "binaries", "DNA Fountain Input Files.tar"),
         "Microsoft Winmine.exe": os.path.join(root_path, "data", "binaries", "Microsoft Winmine.exe"),
-        "A Tale of Two Cities.pdf": os.path.join(root_path, "data", "books", "A Tale of Two Cities.pdf"),
-        "The Wandering Earth.pdf": os.path.join(root_path, "data", "books", "The Wandering Earth.pdf"),
-        "For Elise.wma": os.path.join(root_path, "data", "musics", "For Elise.wma"),
-        "Summer.mp3": os.path.join(root_path, "data", "musics", "Summer.mp3"),
-        "Mona Lisa.jpg": os.path.join(root_path, "data", "pictures", "Mona Lisa.jpg"),
-        "United Nations Flag.bmp": os.path.join(root_path, "data", "pictures", "United Nations Flag.bmp"),
-        "Exiting the Factory.flv": os.path.join(root_path, "data", "videos", "Exiting the Factory.flv"),
-        "I have a Dream.mp4": os.path.join(root_path, "data", "videos", "I have a Dream.mp4")
+        "Mona Lisa.jpg": os.path.join(root_path, "data", "pictures", "Mona Lisa.jpg")
     }
 
     coding_schemes = {
@@ -52,7 +44,7 @@ if __name__ == "__main__":
         nucleotide_mutation=0.001,
         nucleotide_deletion=0.001,
         sequence_loss=0.001,
-        iterations=2,
+        iterations=3,
         segment_length=120,
         need_tips=True
     )
