@@ -9,11 +9,11 @@ class TestEncodeDecode(unittest.TestCase):
     def setUp(self):
         random.seed(30)
         self.tool = Grass(need_tips=False)
+        self.tool.segment_length = 160
         self.test_list = [[random.randint(0, 1) for _ in range(160)] for _ in range(4)]
 
     def test_list_to_sequence(self):
         dna_sequences = self.tool.silicon_to_carbon(self.test_list, 160 * 4).get("dna")
-        print(dna_sequences)
         self.assertEqual(dna_sequences, [
             ['C', 'C', 'T', 'C', 'G', 'C', 'C', 'G', 'C', 'C', 'G', 'C', 'C', 'C', 'A', 'A', 'C', 'A', 'A', 'A', 'T',
              'A', 'T', 'C', 'T', 'A', 'T', 'A', 'G', 'C', 'C', 'A', 'T', 'G', 'G', 'T', 'G', 'C', 'T', 'G', 'C', 'T',
