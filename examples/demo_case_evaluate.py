@@ -59,4 +59,3 @@ if __name__ == "__main__":
 
     pipeline.evaluate()
     pipeline.output_logs(type="string")
-

@@ -44,11 +44,11 @@ class TranscodePipeline(DefaultPipeline):
 
         if not isinstance(self.coding_scheme, AbstractCodingAlgorithm):
             raise ValueError("The \"coding_scheme\" needs to "
-                             "inherit AbstractCodingScheme in methods/pipelines.py!")
+                             + "inherit AbstractCodingScheme in methods/pipelines.py!")
 
         if self.error_correction is not None and not isinstance(self.error_correction, AbstractErrorCorrectionCode):
-                raise ValueError("The error correction needs to "
-                                 "inherit AbstractErrorCorrectionCode in methods/pipelines.py!")
+            raise ValueError("The error correction needs to "
+                             + "inherit AbstractErrorCorrectionCode in methods/pipelines.py!")
 
     def transcode(self, **info):
         if "direction" in info:
@@ -90,7 +90,7 @@ class TranscodePipeline(DefaultPipeline):
                 if "output_path" in info:
                     data_handle.write_dna_file(info["output_path"], dna_sequences, self.need_tips)
 
-                return {"bit": original_bit_segments,"dna": dna_sequences}
+                return {"bit": original_bit_segments, "dna": dna_sequences}
             elif info["direction"] == "t_s":
                 if "input_path" in info:
                     dna_sequences = data_handle.read_dna_file(info["input_path"], self.need_tips)
@@ -208,15 +208,15 @@ class EvaluatePipeline(DefaultPipeline):
             raise ValueError("No coding scheme!")
         for name, coding_scheme in self.coding_schemes.items():
             if not isinstance(coding_scheme, AbstractCodingAlgorithm):
-                raise ValueError("\"coding_scheme \" " + str(name) + "[" + str(type(coding_scheme)) +
-                                 "] needs to inherit AbstractCodingScheme in methods/pipelines.py!")
+                raise ValueError("\"coding_scheme \" " + str(name) + "[" + str(type(coding_scheme))
+                                 + "] needs to inherit AbstractCodingScheme in methods/pipelines.py!")
 
         if self.error_corrections is None:
             raise ValueError("No error correction!")
         for name, error_correction in self.error_corrections.items():
             if error_correction is not None and not isinstance(error_correction, AbstractErrorCorrectionCode):
-                raise ValueError("\"error_correction \" " + str(name) + "[" + str(type(error_correction)) +
-                                 "] needs to inherit AbstractErrorCorrectionCode in methods/pipelines.py!")
+                raise ValueError("\"error_correction \" " + str(name) + "[" + str(type(error_correction))
+                                 + "] needs to inherit AbstractErrorCorrectionCode in methods/pipelines.py!")
 
         if self.needed_indices is None:
             raise ValueError("Whether each coding scheme needs \"index\" needs to be explained!")

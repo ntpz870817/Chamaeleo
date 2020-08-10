@@ -102,6 +102,7 @@ class Hamming(AbstractErrorCorrectionCode):
 
         return {"data": output_list, "type": True}
 
+
 class ReedSolomon(AbstractErrorCorrectionCode):
 
     def __init__(self, check_size=3, need_tips=False):
@@ -149,6 +150,5 @@ class ReedSolomon(AbstractErrorCorrectionCode):
         except IndexError:
             # No data acquisition
             return {"data": original_input_list, "type": False}
-
 
         return {"data": output_list, "type": True}

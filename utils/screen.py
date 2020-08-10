@@ -1,4 +1,4 @@
-def check(sequence, max_homopolymer=4,  max_content=0.6):
+def check(sequence, max_homopolymer=4, max_content=0.6):
     if not homopolymer(sequence, max_homopolymer):
         return False
     if not gc_content(sequence, max_content):

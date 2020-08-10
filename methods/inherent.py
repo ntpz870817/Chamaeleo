@@ -54,21 +54,11 @@ gc_codes = ['AAC', 'AAG', 'AAT', 'ACA', 'ACG', 'ACT', 'AGA', 'AGC', 'AGT', 'ATA'
 
 
 def get_yyc_rule_by_index(index, need_log=False):
-    """
-    introduction: Get Yin and Yang rule of YYC by index (1536 types of rules)
-
-    :param index: rule index.
-
-    :param need_log: Show the log.
-
-    :return: YYC rule with [self.support_base, self.rule1, self.rule2].
-    """
     rules = []
     temp_rule1 = ["".join(x) for x in itertools.product("01", repeat=4)]
     temp_rule2 = ["".join(x) for x in itertools.product("01", repeat=16)]
 
     m = monitor.Monitor()
-
 
     if need_log:
         print("Find all the available Yin-Yang rules.")
@@ -99,15 +89,6 @@ def get_yyc_rule_by_index(index, need_log=False):
 
 
 def _check(rule1, rule2):
-    """
-    introduction: Verify the correctness of the YYC rules.
-
-    :param rule1: Correspondence between base and binary data (RULE 1).
-    :param rule2: Conversion rule between base and binary data based on support base and current base (RULE 2).
-
-    :return: Check result.
-    """
-
     for index in range(len(rule1)):
         if rule1[index] != 0 and rule1[index] != 1:
             return False
@@ -129,6 +110,7 @@ def _check(rule1, rule2):
             return False
 
     return True
+
 
 class YYCRule:
 

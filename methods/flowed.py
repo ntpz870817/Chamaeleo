@@ -80,7 +80,7 @@ class DNAFountain(AbstractCodingAlgorithm):
 
         # pre-check the decoding process in the encoding process
         try:
-            visited_indices = [0] *  self.decode_packets
+            visited_indices = [0] * self.decode_packets
             for chuck_indices in chuck_recorder:
                 for chuck_index in chuck_indices:
                     visited_indices[chuck_index] += 1
@@ -102,8 +102,8 @@ class DNAFountain(AbstractCodingAlgorithm):
 
     def decode(self, dna_sequences):
         if self.decode_packets is None:
-            raise ValueError("We miss the parameter \"decode_packets\", " +
-                             "please try again after inputting this parameter.")
+            raise ValueError("We miss the parameter \"decode_packets\", "
+                             + "please try again after inputting this parameter.")
 
         # creating the solition distribution object
         self.prng = DNAFountain.PRNG(number=self.decode_packets, delta=self.delta, c=self.c_dist)
@@ -131,7 +131,6 @@ class DNAFountain(AbstractCodingAlgorithm):
             raise ValueError("Couldn't decode the whole file, because some bit segments are not recovered!")
 
         return bit_segments
-
 
     def update_droplets(self, droplet, bit_segments, done_segments, chunk_to_droplets):
         for chunk_index in (set(droplet.chuck_indices) & done_segments):
@@ -298,7 +297,6 @@ class YinYangCode(AbstractCodingAlgorithm):
         self.total_count = 0
         super().__init__(need_tips)
 
-
     def __init_check__(self):
         if self.virtual_nucleotide not in ["A", "C", "G", "T"]:
             raise ValueError("Virtual nucleotide needs to be one of \"A\", \"C\", \"G\", or \"T\"!")
@@ -322,16 +320,16 @@ class YinYangCode(AbstractCodingAlgorithm):
         for index in range(len(self.yin_rule)):
             if self.yin_rule[index][same[0]] + self.yin_rule[index][same[1]] != 1 \
                     or self.yin_rule[index][same[0]] * self.yin_rule[index][same[1]] != 0:
-                raise ValueError( "Wrong yin rule, the error locations are ["
-                                  + str(index) + ", " + str(same[0]) + "] and ["
-                                  + str(index) + ", " + str(same[1]) + "]! "
-                                  + "It is required by rule that these two values will have sum of 1 and product of 0.")
+                raise ValueError("Wrong yin rule, the error locations are ["
+                                 + str(index) + ", " + str(same[0]) + "] and ["
+                                 + str(index) + ", " + str(same[1]) + "]! "
+                                 + "It is required by rule that these two values will have sum of 1 and product of 0.")
             if self.yin_rule[index][same[2]] + self.yin_rule[index][same[3]] != 1 \
                     or self.yin_rule[index][same[2]] * self.yin_rule[index][same[3]] != 0:
-                raise ValueError( "Wrong yin rule, the error locations are ["
-                                  + str(index) + ", " + str(same[2]) + "] and ["
-                                  + str(index) + ", " + str(same[3]) + "]! "
-                                  + "It is required by rule that these two values will have sum of 1 and product of 0.")
+                raise ValueError("Wrong yin rule, the error locations are ["
+                                 + str(index) + ", " + str(same[2]) + "] and ["
+                                 + str(index) + ", " + str(same[3]) + "]! "
+                                 + "It is required by rule that these two values will have sum of 1 and product of 0.")
 
     def encode(self, bit_segments):
         dna_sequences = []
@@ -380,8 +378,8 @@ class YinYangCode(AbstractCodingAlgorithm):
                 self.monitor.output(self.total_count - len(bit_segments), self.total_count)
 
         if self.need_tips:
-            print("There are " + str(len(dna_sequences) * 2 - self.total_count) +
-                  " random bit segment(s) adding for reliability.")
+            print("There are " + str(len(dna_sequences) * 2 - self.total_count)
+                  + " random bit segment(s) adding for reliability.")
 
         return dna_sequences
 
