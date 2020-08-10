@@ -50,6 +50,7 @@ if __name__ == "__main__":
 
             decoded_data = pipeline.transcode(direction="t_s", input_path=dna_path, output_path=write_file_path,
                                               index=needed_index)
+
             print()
             pipeline.output_logs(type="string")
             print("transcoding state: " + str(encoded_data["bit"] == decoded_data["bit"]))
