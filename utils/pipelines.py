@@ -109,6 +109,9 @@ class TranscodePipeline(DefaultPipeline):
                 bit_segments = results["bit"]
                 bit_size = results["s"]
 
+                if not bit_segments:
+                    return {"bit": None, "dna": original_dna_sequences}
+
                 if self.error_correction is not None:
                     verified_data = self.error_correction.remove(bit_segments)
                     bit_segments = verified_data["bit"]
@@ -121,7 +124,7 @@ class TranscodePipeline(DefaultPipeline):
                     self.logs["error bit segments"] = None
 
                 if not bit_segments:
-                    raise ValueError("No bit segment can be obtained!")
+                    return {"bit": None, "dna": original_dna_sequences}
 
                 if "index" in info:
                     indices, bit_segments = indexer.divide_all(bit_segments, self.need_tips)
@@ -296,20 +299,24 @@ class EvaluatePipeline(DefaultPipeline):
                             chosen_index = random.choice(total_indices)
                             del dna_sequences[chosen_index][random.randint(0, len(dna_sequences[chosen_index]) - 1)]
 
-                        try:
-                            decoded_data = pipeline.transcode(direction="t_s", input_string=dna_sequences,
-                                                              index=needed_index)
-                            iter_log = pipeline.output_logs()
-                            iter_log["transcoding state"] = encoded_data["bit"] == decoded_data["bit"]
-                            success_count = 0
-                            for final_bit_segment in decoded_data["bit"]:
-                                if final_bit_segment in encoded_data["bit"]:
-                                    success_count += 1
-                            iter_log["success rate"] = str(round(success_count / len(encoded_data["bit"]) * 100, 3)) + "%"
-                        except ValueError:
+                        decoded_data = pipeline.transcode(direction="t_s", input_string=dna_sequences,
+                                                          index=needed_index)
+
+                        bit_segments = decoded_data["bit"]
+
+                        if bit_segments is None:
                             iter_log = pipeline.output_logs()
                             iter_log["transcoding state"] = False
                             iter_log["success rate"] = "0.000%"
+                        else:
+
+                            iter_log = pipeline.output_logs()
+                            iter_log["transcoding state"] = encoded_data["bit"] == bit_segments
+                            success_count = 0
+                            for final_bit_segment in bit_segments:
+                                if final_bit_segment in encoded_data["bit"]:
+                                    success_count += 1
+                            iter_log["success rate"] = str(round(success_count / len(bit_segments) * 100, 3)) + "%"
 
                         pipeline_logs.append(iter_log)
 
