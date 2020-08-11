@@ -8,7 +8,7 @@ class TestEncodeDecode(unittest.TestCase):
 
     def setUp(self):
         random.seed(30)
-        self.tool = DNAFountain(need_tips=False)
+        self.tool = DNAFountain(need_logs=False)
         self.tool.segment_length = 200
         self.test_list = [[random.randint(0, 1) for _ in range(200)] for _ in range(10)]
 

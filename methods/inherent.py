@@ -53,14 +53,14 @@ gc_codes = ['AAC', 'AAG', 'AAT', 'ACA', 'ACG', 'ACT', 'AGA', 'AGC', 'AGT', 'ATA'
             'TAC', 'TAG', 'TAT', 'TCA', 'TCG', 'TCT', 'TGA', 'TGC', 'TGT', 'TTA', 'TTC', 'TTG']
 
 
-def get_yyc_rule_by_index(index, need_log=False):
+def get_yyc_rule_by_index(index, need_logs=False):
     rules = []
     temp_rule1 = ["".join(x) for x in itertools.product("01", repeat=4)]
     temp_rule2 = ["".join(x) for x in itertools.product("01", repeat=16)]
 
     m = monitor.Monitor()
 
-    if need_log:
+    if need_logs:
         print("Find all the available Yin-Yang rules.")
 
     count = 0
@@ -76,13 +76,13 @@ def get_yyc_rule_by_index(index, need_log=False):
 
                 step += 1
 
-                if need_log:
+                if need_logs:
                     m.output(step, len(temp_rule1) * len(temp_rule2) * 4)
 
     if index < 0 or index >= len(rules):
         raise ValueError("We have " + str(len(rules)) + " rules, index " + str(index) + " is wrong!")
 
-    if need_log:
+    if need_logs:
         print("Current Rule is " + str(rules[index].get_info()) + ".")
 
     return rules[index].get_info()

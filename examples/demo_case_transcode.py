@@ -43,7 +43,7 @@ if __name__ == "__main__":
                 print("Doing coding scheme [" + scheme_name + "].")
             print("*" * 50)
 
-            pipeline = TranscodePipeline(coding_scheme=coding_scheme, error_correction=error_correction, need_tips=True)
+            pipeline = TranscodePipeline(coding_scheme=coding_scheme, error_correction=error_correction, need_logs=True)
 
             encoded_data = pipeline.transcode(direction="t_c", input_path=read_file_path, output_path=dna_path,
                                               segment_length=120, index=needed_index)
@@ -52,6 +52,6 @@ if __name__ == "__main__":
                                               index=needed_index)
 
             print()
-            pipeline.output_logs(type="string")
+            pipeline.output_records(type="string")
             print("transcoding state: " + str(encoded_data["bit"] == decoded_data["bit"]))
             print()

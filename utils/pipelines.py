@@ -10,16 +10,16 @@ from Chamaeleo.utils.monitor import Monitor
 class DefaultPipeline(object):
 
     def __init__(self, **info):
-        self.need_tips = info["need_tips"] if "need_tips" in info else False
+        self.need_logs = info["need_logs"] if "need_logs" in info else False
         self.monitor = Monitor()
-        self.logs = {}
+        self.records = {}
 
     def __init_check__(self):
-        if type(self.need_tips) != bool:
-            raise ValueError("\"need_tips\" must be bool type!")
+        if type(self.need_logs) != bool:
+            raise ValueError("\"need_logs\" must be bool type!")
 
-    def output_logs(self, **info):
-        raise NotImplementedError("\"output_logs\" interface needs to be implemented!")
+    def output_records(self, **info):
+        raise NotImplementedError("\"output_records\" interface needs to be implemented!")
 
 
 class TranscodePipeline(DefaultPipeline):
@@ -31,11 +31,11 @@ class TranscodePipeline(DefaultPipeline):
 
         self.__init_check__()
 
-        if self.need_tips:
+        if self.need_logs:
             print("Create a transcoding pipeline.")
-            self.coding_scheme.need_tips = True
+            self.coding_scheme.need_logs = True
             if self.error_correction is not None:
-                self.error_correction.need_tips = True
+                self.error_correction.need_logs = True
 
     def __init_check__(self):
         super().__init_check__()
@@ -55,45 +55,45 @@ class TranscodePipeline(DefaultPipeline):
             if info["direction"] == "t_c":
                 segment_length = info["segment_length"] if "segment_length" in info else 120
 
-                self.logs["payload length"] = segment_length
+                self.records["payload length"] = segment_length
 
                 if "input_path" in info:
                     bit_segments, bit_size = data_handle.read_bits_from_file(info["input_path"], segment_length,
-                                                                             self.need_tips)
+                                                                             self.need_logs)
                 elif "input_string" in info:
                     bit_segments, bit_size = data_handle.read_bits_from_str(info["input_string"], segment_length,
-                                                                            self.need_tips)
+                                                                            self.need_logs)
                 else:
                     raise ValueError("There is no digital data input here!")
 
                 original_bit_segments = copy.deepcopy(bit_segments)
 
                 if "index" in info and info["index"]:
-                    bit_segments, index_length = indexer.connect_all(bit_segments, self.need_tips)
-                    self.logs["index length"] = index_length
+                    bit_segments, index_length = indexer.connect_all(bit_segments, self.need_logs)
+                    self.records["index length"] = index_length
                 else:
-                    self.logs["index length"] = 0
+                    self.records["index length"] = 0
 
                 if self.error_correction is not None:
                     bit_segments, error_correction_length = self.error_correction.insert(bit_segments)
-                    self.logs["error-correction length"] = error_correction_length
+                    self.records["error-correction length"] = error_correction_length
                 else:
-                    self.logs["error-correction length"] = 0
+                    self.records["error-correction length"] = 0
 
                 results = self.coding_scheme.silicon_to_carbon(bit_segments, bit_size)
 
                 dna_sequences = results["dna"]
 
-                self.logs["information density"] = round(results["i"], 3)
-                self.logs["encoding runtime"] = round(results["t"], 3)
+                self.records["information density"] = round(results["i"], 3)
+                self.records["encoding runtime"] = round(results["t"], 3)
 
                 if "output_path" in info:
-                    data_handle.write_dna_file(info["output_path"], dna_sequences, self.need_tips)
+                    data_handle.write_dna_file(info["output_path"], dna_sequences, self.need_logs)
 
                 return {"bit": original_bit_segments, "dna": dna_sequences}
             elif info["direction"] == "t_s":
                 if "input_path" in info:
-                    dna_sequences = data_handle.read_dna_file(info["input_path"], self.need_tips)
+                    dna_sequences = data_handle.read_dna_file(info["input_path"], self.need_logs)
                 elif "input_string" in info:
                     dna_sequences = []
                     for index, string in enumerate(info["input_string"]):
@@ -104,38 +104,38 @@ class TranscodePipeline(DefaultPipeline):
                 original_dna_sequences = copy.deepcopy(dna_sequences)
 
                 results = self.coding_scheme.carbon_to_silicon(dna_sequences)
-                self.logs["decoding runtime"] = round(results["t"], 3)
+                self.records["decoding runtime"] = round(results["t"], 3)
 
                 bit_segments = results["bit"]
                 bit_size = results["s"]
 
                 if not bit_segments:
-                    self.logs["error rate"] = "100.00%"
+                    self.records["error rate"] = "100.00%"
                     return {"bit": None, "dna": original_dna_sequences}
 
                 if self.error_correction is not None:
                     verified_data = self.error_correction.remove(bit_segments)
                     bit_segments = verified_data["bit"]
-                    self.logs["error rate"] = str(round(verified_data["e_r"] * 100, 2)) + "%"
-                    self.logs["error indices"] = verified_data["e_i"] if verified_data["e_i"] != [] else None
-                    self.logs["error bit segments"] = verified_data["e_bit"] if verified_data["e_bit"] != [] else None
+                    self.records["error rate"] = str(round(verified_data["e_r"] * 100, 2)) + "%"
+                    self.records["error indices"] = verified_data["e_i"] if verified_data["e_i"] != [] else None
+                    self.records["error bit segments"] = verified_data["e_bit"] if verified_data["e_bit"] != [] else None
                 else:
-                    self.logs["error rate"] = None
-                    self.logs["error indices"] = None
-                    self.logs["error bit segments"] = None
+                    self.records["error rate"] = None
+                    self.records["error indices"] = None
+                    self.records["error bit segments"] = None
 
                 if not bit_segments:
                     return {"bit": None, "dna": original_dna_sequences}
 
                 if "index" in info:
-                    indices, bit_segments = indexer.divide_all(bit_segments, self.need_tips)
-                    bit_segments = indexer.sort_order(indices, bit_segments, self.need_tips)
+                    indices, bit_segments = indexer.divide_all(bit_segments, self.need_logs)
+                    bit_segments = indexer.sort_order(indices, bit_segments, self.need_logs)
 
                 if "output_path" in info:
-                    data_handle.write_bits_to_file(info["output_path"], bit_segments, bit_size, self.need_tips)
+                    data_handle.write_bits_to_file(info["output_path"], bit_segments, bit_size, self.need_logs)
                 elif "output_string" in info:
-                    string = data_handle.write_bits_to_str(bit_segments, bit_size, self.need_tips)
-                    if self.need_tips:
+                    string = data_handle.write_bits_to_str(bit_segments, bit_size, self.need_logs)
+                    if self.need_logs:
                         print(string)
 
                 return {"bit": bit_segments, "dna": original_dna_sequences}
@@ -144,12 +144,12 @@ class TranscodePipeline(DefaultPipeline):
         else:
             raise ValueError("Unknown parameter \"direction\", please use \"t_c\" or \"t_s\".")
 
-    def output_logs(self, **info):
+    def output_records(self, **info):
         if "type" in info:
             if info["type"] == "path":
                 if "path" in info:
                     with open(info["path"], "w", encoding="utf-8") as save_file:
-                        for key, value in self.logs.items():
+                        for key, value in self.records.items():
                             if type(value) == str:
                                 save_file.write(key + "," + value + "\n")
                             else:
@@ -157,15 +157,15 @@ class TranscodePipeline(DefaultPipeline):
                 else:
                     raise ValueError("\"path\" is unknown!")
             elif info["type"] == "string":
-                if self.need_tips:
+                if self.need_logs:
                     print("Transcoding log: ")
-                    for key, value in self.logs.items():
+                    for key, value in self.records.items():
                         if type(value) == str:
                             print(key + ": " + value)
                         else:
                             print(key + ": " + str(value))
 
-        return self.logs
+        return self.records
 
 
 class EvaluatePipeline(DefaultPipeline):
@@ -190,7 +190,7 @@ class EvaluatePipeline(DefaultPipeline):
 
         self.__init_check__()
 
-        self.logs = {
+        self.records = {
             "evaluation parameters": {
                 "evaluated coding schemes": list(self.coding_schemes.keys()),
                 "evaluated files": list(self.file_paths.keys()),
@@ -262,12 +262,12 @@ class EvaluatePipeline(DefaultPipeline):
                 for file_name, file_path in self.file_paths.items():
                     print(">" * 50)
                     print("*" * 50)
-                    if self.need_tips:
+                    if self.need_logs:
                         print("Run task (" + str(task_index + 1) + "/" + str(total_task) + ").")
                     print("*" * 50)
 
                     pipeline = TranscodePipeline(coding_scheme=coding_scheme, error_correction=error_correction,
-                                                 need_tips=self.need_tips)
+                                                 need_logs=self.need_logs)
 
                     encoded_data = pipeline.transcode(direction="t_c", input_path=file_path,
                                                       segment_length=self.segment_length, index=needed_index)
@@ -306,12 +306,12 @@ class EvaluatePipeline(DefaultPipeline):
                         bit_segments = decoded_data["bit"]
 
                         if bit_segments is None:
-                            iter_log = pipeline.output_logs()
+                            iter_log = pipeline.output_records()
                             iter_log["transcoding state"] = False
                             iter_log["success rate"] = "0.000%"
                         else:
 
-                            iter_log = pipeline.output_logs()
+                            iter_log = pipeline.output_records()
                             iter_log["transcoding state"] = encoded_data["bit"] == bit_segments
                             success_count = 0
                             for final_bit_segment in bit_segments:
@@ -330,14 +330,14 @@ class EvaluatePipeline(DefaultPipeline):
                     print(">" * 50)
                     print()
 
-        self.logs["results"] = results
+        self.records["results"] = results
 
-    def output_logs(self, **info):
+    def output_records(self, **info):
         if "type" in info:
             param_names = []
             param_values = []
 
-            for key, value in self.logs["evaluation parameters"].items():
+            for key, value in self.records["evaluation parameters"].items():
                 param_names.append(key)
                 param_values.append(value)
 
@@ -349,7 +349,7 @@ class EvaluatePipeline(DefaultPipeline):
                 "transcoding state", "success rate"
             ]
             result_data_group = []
-            for task_id, data in self.logs["results"].items():
+            for task_id, data in self.records["results"].items():
                 result_data = [
                     task_id, data["coding scheme"], data["error-correction"], data["file"],
                 ]
@@ -373,7 +373,7 @@ class EvaluatePipeline(DefaultPipeline):
                 else:
                     raise ValueError("\"path\" is unknown!")
             elif info["type"] == "string":
-                if self.need_tips:
+                if self.need_logs:
                     print("Evaluation log: ")
                     print(str(param_names)[1: -1].replace("\'", ""))
                     print(str(param_values)[1: -1].replace("\'", ""))
@@ -381,4 +381,4 @@ class EvaluatePipeline(DefaultPipeline):
                     for result_data in result_data_group:
                         print(str(result_data)[1: -1].replace("\'", ""))
 
-        return self.logs
+        return self.records

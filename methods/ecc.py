@@ -7,8 +7,8 @@ from Chamaeleo.methods.default import AbstractErrorCorrectionCode
 
 class Hamming(AbstractErrorCorrectionCode):
 
-    def __init__(self, need_tips=False):
-        super().__init__(need_tips)
+    def __init__(self, need_logs=False):
+        super().__init__(need_logs)
 
     def insert_one(self, input_list):
         # calculate the length needed for detection site.
@@ -105,10 +105,10 @@ class Hamming(AbstractErrorCorrectionCode):
 
 class ReedSolomon(AbstractErrorCorrectionCode):
 
-    def __init__(self, check_size=3, need_tips=False):
+    def __init__(self, check_size=3, need_logs=False):
         self.check_size = check_size
         self.tool = RSCodec(check_size)
-        super().__init__(need_tips)
+        super().__init__(need_logs)
 
     def insert_one(self, input_list):
         if len(input_list) % 8 != 0:

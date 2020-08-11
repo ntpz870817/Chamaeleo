@@ -8,7 +8,7 @@ class TestEncodeDecode(unittest.TestCase):
 
     def setUp(self):
         random.seed(30)
-        self.tool = Church(need_tips=False)
+        self.tool = Church(need_logs=False)
         self.tool.segment_length = 160
         self.test_list = [[random.randint(0, 1) for _ in range(160)] for _ in range(4)]
 

@@ -6,9 +6,9 @@ from Chamaeleo.utils.monitor import Monitor
 
 class AbstractCodingAlgorithm(object):
 
-    def __init__(self, need_tips):
+    def __init__(self, need_logs):
         self.bit_size = None
-        self.need_tips = need_tips
+        self.need_logs = need_logs
         self.monitor = Monitor()
         self.segment_length = None
         self.__init_check__()
@@ -25,7 +25,7 @@ class AbstractCodingAlgorithm(object):
         self.segment_length = len(bit_segments[0])
         start_time = datetime.now()
 
-        if self.need_tips:
+        if self.need_logs:
             print("Encode bit segments to DNA sequences by coding scheme.")
 
         self.monitor.restore()
@@ -49,7 +49,7 @@ class AbstractCodingAlgorithm(object):
 
         start_time = datetime.now()
 
-        if self.need_tips:
+        if self.need_logs:
             print("Decode DNA sequences to bit segments by coding scheme.")
         self.monitor.restore()
         bit_segments = self.decode(dna_sequences)
@@ -72,9 +72,9 @@ class AbstractCodingAlgorithm(object):
 
 class BaseCodingAlgorithm(AbstractCodingAlgorithm):
 
-    def __init__(self, need_tips=False):
+    def __init__(self, need_logs=False):
         self.mapping_rules = [[0, 0], [0, 1], [1, 0], [1, 1]]
-        super().__init__(need_tips)
+        super().__init__(need_logs)
 
     def __init_check__(self):
         pass
@@ -93,7 +93,7 @@ class BaseCodingAlgorithm(AbstractCodingAlgorithm):
 
             dna_sequences.append(dna_sequence)
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(segment_index + 1, len(bit_segments))
 
         return dna_sequences
@@ -108,7 +108,7 @@ class BaseCodingAlgorithm(AbstractCodingAlgorithm):
 
             bit_segments.append(bit_segment)
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(sequence_index + 1, len(dna_sequences))
 
         return bit_segments
@@ -116,20 +116,20 @@ class BaseCodingAlgorithm(AbstractCodingAlgorithm):
 
 class AbstractErrorCorrectionCode(object):
 
-    def __init__(self, need_tips):
-        self.need_tips = need_tips
+    def __init__(self, need_logs):
+        self.need_logs = need_logs
         self.segment_lengths = []
         self.monitor = Monitor()
 
     def insert(self, bit_segments):
-        if self.need_tips:
+        if self.need_logs:
             print("Insert the error-correction code to the bit segments.")
         verified_bit_segments = []
         if type(bit_segments) == list and type(bit_segments[0]) == list:
             for index, input_list in enumerate(bit_segments):
                 self.segment_lengths.append(len(input_list))
                 verified_bit_segments.append(self.insert_one(input_list))
-                if self.need_tips:
+                if self.need_logs:
                     self.monitor.output(index + 1, len(bit_segments))
         elif type(bit_segments) == list and type(bit_segments[0]) == int:
             self.segment_lengths = [len(bit_segments)]
@@ -142,7 +142,7 @@ class AbstractErrorCorrectionCode(object):
         return verified_bit_segments, len(verified_bit_segments[0]) - len(bit_segments[0])
 
     def remove(self, verified_bit_segments):
-        if self.need_tips:
+        if self.need_logs:
             print("Check and remove the error-correction code from the bit segments.")
         bit_segments = []
 
@@ -161,7 +161,7 @@ class AbstractErrorCorrectionCode(object):
                     error_indices.append(index)
                     error_bit_segments.append(data)
 
-                if self.need_tips:
+                if self.need_logs:
                     self.monitor.output(index + 1, len(verified_bit_segments))
 
             error_rate /= len(verified_bit_segments)

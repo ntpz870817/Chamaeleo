@@ -8,12 +8,12 @@ from Chamaeleo.methods.default import AbstractCodingAlgorithm
 
 class Church(AbstractCodingAlgorithm):
 
-    def __init__(self, need_tips=False):
+    def __init__(self, need_logs=False):
         self.carbon_options = [["A", "C"], ["G", "T"]]
 
-        super().__init__(need_tips)
+        super().__init__(need_logs)
 
-        if self.need_tips:
+        if self.need_logs:
             print("create Church et al. successfully")
             print("Church, G. M., Gao, Y., & Kosuri, S. (2012). "
                   "Next-generation digital information storage in DNA. "
@@ -39,7 +39,7 @@ class Church(AbstractCodingAlgorithm):
 
             dna_sequences.append(dna_sequence)
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(segment_index + 1, len(bit_segments))
 
         return dna_sequences
@@ -56,7 +56,7 @@ class Church(AbstractCodingAlgorithm):
 
             bit_segments.append(bit_segment)
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(sequence_index + 1, len(dna_sequences))
 
         return bit_segments
@@ -64,7 +64,7 @@ class Church(AbstractCodingAlgorithm):
 
 class Goldman(AbstractCodingAlgorithm):
 
-    def __init__(self, fixed_huffman=True, support_nucleotide="A", need_tips=False):
+    def __init__(self, fixed_huffman=True, support_nucleotide="A", need_logs=False):
         self.fixed_huffman = fixed_huffman
         self.support_nucleotide = support_nucleotide
         if self.fixed_huffman:
@@ -72,9 +72,9 @@ class Goldman(AbstractCodingAlgorithm):
         else:
             self.huffman_tree = None
 
-        super().__init__(need_tips)
+        super().__init__(need_logs)
 
-        if self.need_tips:
+        if self.need_logs:
             print("create Goldman et al. successfully")
             print("Goldman, N., Bertone, P., Chen, S., Dessimoz, C., LeProust, E. M., Sipos, B., & Birney, E. (2013). "
                   "Towards practical, high-capacity, low-maintenance information storage in synthesized DNA. "
@@ -114,7 +114,7 @@ class Goldman(AbstractCodingAlgorithm):
 
             dna_sequences.append(dna_sequence)
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(segment_index + 1, len(bit_segments))
 
         return dna_sequences
@@ -141,7 +141,7 @@ class Goldman(AbstractCodingAlgorithm):
             except ValueError:
                 pass
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(sequence_index + 1, len(dna_sequences))
 
         return bit_segments
@@ -240,13 +240,13 @@ class Goldman(AbstractCodingAlgorithm):
 
 class Grass(AbstractCodingAlgorithm):
 
-    def __init__(self, base_values=None, need_tips=False):
+    def __init__(self, base_values=None, need_logs=False):
         self.base_values = base_values
         self.mapping_rules = [[], []]
 
-        super().__init__(need_tips)
+        super().__init__(need_logs)
 
-        if need_tips:
+        if need_logs:
             print("create Grass et al. successfully")
             print("Grass, R. N., Heckel, R., Puddu, M., Paunescu, D., & Stark, W. J. (2015). "
                   "Robust chemical preservation of digital information on DNA in silica with error-correcting codes. "
@@ -295,7 +295,7 @@ class Grass(AbstractCodingAlgorithm):
 
             dna_sequences.append(dna_sequence)
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(segment_index + 1, len(bit_segments))
 
         return dna_sequences
@@ -320,7 +320,7 @@ class Grass(AbstractCodingAlgorithm):
             except IndexError:
                 pass
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(sequence_index + 1, len(dna_sequences))
 
         return bit_segments
@@ -328,7 +328,7 @@ class Grass(AbstractCodingAlgorithm):
 
 class Blawat(AbstractCodingAlgorithm):
 
-    def __init__(self, need_tips=False):
+    def __init__(self, need_logs=False):
         self.first_3 = [[0, 0], [0, 1], [1, 0], [1, 1]]
         self.last_2 = {
             str([0, 0]): ["AA", "CC", "GG", "TT"],
@@ -337,9 +337,9 @@ class Blawat(AbstractCodingAlgorithm):
             str([1, 1]): ["AT", "CA", "GC", "TG"],
         }
 
-        super().__init__(need_tips)
+        super().__init__(need_logs)
 
-        if self.need_tips:
+        if self.need_logs:
             print("create Blawat et al. successfully!")
             print("Blawat, M., Gaedke, K., Huetter, I., Chen, X. M., Turczyk, B., Inverso, S., ... & Church, G. M. (2016). "
                   "Forward error correction for DNA data storage. "
@@ -371,7 +371,7 @@ class Blawat(AbstractCodingAlgorithm):
 
             dna_sequences.append(dna_sequence)
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(segment_index + 1, len(bit_segments))
 
         return dna_sequences
@@ -400,7 +400,7 @@ class Blawat(AbstractCodingAlgorithm):
             except IndexError:
                 pass
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(sequence_index + 1, len(dna_sequences))
 
         return bit_segments

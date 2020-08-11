@@ -12,7 +12,7 @@ from Chamaeleo.utils import screen
 class DNAFountain(AbstractCodingAlgorithm):
 
     def __init__(self, homopolymer=4, gc_content=0.2, redundancy=0.5, header_size=4,
-                 c_dist=0.1, delta=0.5, recursion_depth=10000000, decode_packets=None, need_tips=False):
+                 c_dist=0.1, delta=0.5, recursion_depth=10000000, decode_packets=None, need_logs=False):
         self.homopolymer = homopolymer
         self.gc_content = gc_content
         self.redundancy = redundancy
@@ -25,9 +25,9 @@ class DNAFountain(AbstractCodingAlgorithm):
         # adjust the maximum recursion depth to "self.recursion_depth" in Python.
         sys.setrecursionlimit(self.recursion_depth)
 
-        super().__init__(need_tips)
+        super().__init__(need_logs)
 
-        if self.need_tips:
+        if self.need_logs:
             print("Create DNA Fountain successfully")
             print("Erlich, Y., & Zielinski, D. (2017). "
                   "DNA Fountain enables a robust and efficient storage architecture. "
@@ -75,7 +75,7 @@ class DNAFountain(AbstractCodingAlgorithm):
                 dna_sequences.append(dna_sequence)
                 chuck_recorder.append(droplet.chuck_indices)
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(len(dna_sequences), final_count)
 
         # pre-check the decoding process in the encoding process
@@ -90,7 +90,7 @@ class DNAFountain(AbstractCodingAlgorithm):
                     if visited == 0:
                         no_visit_indices.append(index)
                 raise ValueError("bit segment " + str(no_visit_indices) + " are not been encoded!")
-            if self.need_tips:
+            if self.need_logs:
                 print("Pre-check the decoding process.")
             self.decode(dna_sequences)
         except ValueError:
@@ -121,7 +121,7 @@ class DNAFountain(AbstractCodingAlgorithm):
 
             self.update_droplets(droplet, bit_segments, done_segments, chunk_to_droplets)
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(len(done_segments), self.decode_packets)
 
             if len(done_segments) == self.decode_packets:
@@ -281,7 +281,7 @@ class YinYangCode(AbstractCodingAlgorithm):
 
     def __init__(self, yang_rule=None, yin_rule=None, virtual_nucleotide="A",
                  max_homopolymer=4, max_content=0.6,
-                 max_iterations=20, need_tips=False):
+                 max_iterations=20, need_logs=False):
         if not yang_rule:
             yang_rule = [0, 1, 0, 1]
         if not yin_rule:
@@ -295,7 +295,7 @@ class YinYangCode(AbstractCodingAlgorithm):
         self.max_content = max_content
         self.index_length = 0
         self.total_count = 0
-        super().__init__(need_tips)
+        super().__init__(need_logs)
 
     def __init_check__(self):
         if self.virtual_nucleotide not in ["A", "C", "G", "T"]:
@@ -374,10 +374,10 @@ class YinYangCode(AbstractCodingAlgorithm):
             if not is_finish:
                 dna_sequences.append(self.addition(fixed_bit_segment))
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(self.total_count - len(bit_segments), self.total_count)
 
-        if self.need_tips:
+        if self.need_logs:
             print("There are " + str(len(dna_sequences) * 2 - self.total_count)
                   + " random bit segment(s) adding for reliability.")
 
@@ -400,7 +400,7 @@ class YinYangCode(AbstractCodingAlgorithm):
             bit_segments.append(upper_bit_segment)
             bit_segments.append(lower_bit_segment)
 
-            if self.need_tips:
+            if self.need_logs:
                 self.monitor.output(sequence_index + 1, len(dna_sequences))
 
         remain_bit_segments = []

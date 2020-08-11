@@ -1,17 +1,17 @@
 from Chamaeleo.utils.monitor import Monitor
 
 
-def connect_all(bit_segments, need_tips=False):
+def connect_all(bit_segments, need_logs=False):
     index_binary_length = int(len(str(bin(len(bit_segments)))) - 2)
 
-    if need_tips:
+    if need_logs:
         print("Add index in the binary matrix.")
 
     monitor = Monitor()
     connected_bit_segments = []
     for row in range(len(bit_segments)):
         connected_bit_segments.append(connect(row, bit_segments[row], index_binary_length))
-        if need_tips:
+        if need_logs:
             monitor.output(row + 1, len(bit_segments))
 
     return connected_bit_segments, index_binary_length
@@ -24,10 +24,10 @@ def connect(index, bit_segment, index_binary_length):
     return one_list
 
 
-def divide_all(bit_segments, need_tips=False):
+def divide_all(bit_segments, need_logs=False):
     index_binary_length = int(len(str(bin(len(bit_segments)))) - 2)
 
-    if need_tips:
+    if need_logs:
         print("Divide index and data from binary matrix.")
 
     monitor = Monitor()
@@ -38,7 +38,7 @@ def divide_all(bit_segments, need_tips=False):
         index, data = divide(bit_segments[row], index_binary_length)
         indices.append(index)
         divided_matrix.append(data)
-        if need_tips:
+        if need_logs:
             monitor.output(row + 1, len(bit_segments))
 
     return indices, divided_matrix
@@ -52,10 +52,10 @@ def divide(bit_segment, index_binary_length):
     return index, divided_list
 
 
-def sort_order(indices, bit_segments, need_tips=False):
+def sort_order(indices, bit_segments, need_logs=False):
     monitor = Monitor()
 
-    if need_tips:
+    if need_logs:
         print("Restore data order according to index.")
 
     sorted_bit_segments = []
@@ -66,7 +66,7 @@ def sort_order(indices, bit_segments, need_tips=False):
         else:
             sorted_bit_segments.append([0 for _ in range(len(bit_segments[0]))])
 
-        if need_tips:
+        if need_logs:
             monitor.output(index + 1, max(indices) + 1)
 
     return sorted_bit_segments

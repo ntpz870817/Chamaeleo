@@ -46,8 +46,8 @@ if __name__ == "__main__":
         sequence_loss=0.001,
         iterations=3,
         segment_length=120,
-        need_tips=True
+        need_logs=True
     )
 
     pipeline.evaluate()
-    pipeline.output_logs(type="string")
+    pipeline.output_records(type="string")
