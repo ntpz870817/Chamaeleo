@@ -124,11 +124,12 @@ class AbstractErrorCorrectionCode(object):
     def insert(self, bit_segments):
         if self.need_logs:
             print("Insert the error-correction code to the bit segments.")
+        self.segment_lengths = []
         verified_bit_segments = []
         if type(bit_segments) == list and type(bit_segments[0]) == list:
-            for index, input_list in enumerate(bit_segments):
-                self.segment_lengths.append(len(input_list))
-                verified_bit_segments.append(self.insert_one(input_list))
+            for index, bit_segment in enumerate(bit_segments):
+                self.segment_lengths.append(len(bit_segment))
+                verified_bit_segments.append(self.insert_one(bit_segment))
                 if self.need_logs:
                     self.monitor.output(index + 1, len(bit_segments))
         elif type(bit_segments) == list and type(bit_segments[0]) == int:
