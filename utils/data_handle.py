@@ -148,7 +148,7 @@ def write_dna_file(path, dna_sequences, need_logs=False):
 
     with open(path, "w") as file:
         if need_logs:
-            print("Read DNA sequences from file: " + path)
+            print("Write DNA sequences to file: " + path)
 
         for index, dna_sequence in enumerate(dna_sequences):
             file.write("".join(dna_sequence) + "\n")

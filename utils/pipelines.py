@@ -127,7 +127,7 @@ class TranscodePipeline(DefaultPipeline):
                 if not bit_segments:
                     return {"bit": None, "dna": original_dna_sequences}
 
-                if "index" in info:
+                if "index" in info and info["index"]:
                     indices, bit_segments = indexer.divide_all(bit_segments, self.need_logs)
                     bit_segments = indexer.sort_order(indices, bit_segments, self.need_logs)
 
@@ -260,11 +260,11 @@ class EvaluatePipeline(DefaultPipeline):
         for (scheme_name, coding_scheme), needed_index in zip(self.coding_schemes.items(), self.needed_indices):
             for correct_name, error_correction in self.error_corrections.items():
                 for file_name, file_path in self.file_paths.items():
-                    print(">" * 50)
-                    print("*" * 50)
                     if self.need_logs:
+                        print(">" * 50)
+                        print("*" * 50)
                         print("Run task (" + str(task_index + 1) + "/" + str(total_task) + ").")
-                    print("*" * 50)
+                        print("*" * 50)
 
                     pipeline = TranscodePipeline(coding_scheme=coding_scheme, error_correction=error_correction,
                                                  need_logs=self.need_logs)
@@ -274,7 +274,7 @@ class EvaluatePipeline(DefaultPipeline):
 
                     pipeline_logs = []
                     for iteration in range(self.iterations):
-                        print("iteration " + str(iteration + 1) + ": ")
+                        # print("iteration " + str(iteration + 1) + ": ")
                         chosen_count = int(len(encoded_data["dna"]) * (1 - self.sequence_loss))
                         dna_sequences = random.sample(copy.deepcopy(encoded_data["dna"]), chosen_count)
 
@@ -319,6 +319,13 @@ class EvaluatePipeline(DefaultPipeline):
                                     success_count += 1
                             iter_log["success rate"] = str(round(success_count / len(bit_segments) * 100, 3)) + "%"
 
+                        string = file_name + ", " + scheme_name + ", " + correct_name + ", "
+                        string += str(iter_log["information density"]) + ", " + \
+                                  str(iter_log["encoding runtime"]) + ", " + \
+                                  str(iter_log["decoding runtime"]) + ", " + \
+                                  str(iter_log["transcoding state"]) + ", " + \
+                                  str(iter_log["success rate"])
+                        print(string)
                         pipeline_logs.append(iter_log)
 
                     result = {
@@ -327,8 +334,10 @@ class EvaluatePipeline(DefaultPipeline):
                     }
                     results["task " + str(task_index)] = result
                     task_index += 1
-                    print(">" * 50)
-                    print()
+
+                    if self.need_logs:
+                        print(">" * 50)
+                        print()
 
         self.records["results"] = results
 

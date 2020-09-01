@@ -12,8 +12,8 @@ if __name__ == "__main__":
     root_path = os.path.dirname(Chamaeleo.__file__)
 
     file_paths = {
-        "Microsoft Winmine.exe": os.path.join(root_path, "data", "binaries", "Microsoft Winmine.exe"),
-        "Mona Lisa.jpg": os.path.join(root_path, "data", "pictures", "Mona Lisa.jpg")
+        "Mona Lisa.jpg": os.path.join(root_path, "data", "pictures", "Mona Lisa.jpg"),
+        "Microsoft Winmine.exe": os.path.join(root_path, "data", "binaries", "Microsoft Winmine.exe")
     }
 
     coding_schemes = {
