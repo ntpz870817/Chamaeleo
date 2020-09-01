@@ -320,11 +320,10 @@ class EvaluatePipeline(DefaultPipeline):
                             iter_log["success rate"] = str(round(success_count / len(bit_segments) * 100, 3)) + "%"
 
                         string = file_name + ", " + scheme_name + ", " + correct_name + ", "
-                        string += str(iter_log["information density"]) + ", " \
-                                  + str(iter_log["encoding runtime"]) + ", " \
-                                  + str(iter_log["decoding runtime"]) + ", " \
-                                  + str(iter_log["transcoding state"]) + ", "
-                        str(iter_log["success rate"])
+                        string += str(iter_log["information density"]) + ", "
+                        string += str(iter_log["encoding runtime"]) + ", "
+                        string += str(iter_log["decoding runtime"]) + ", "
+                        string += str(iter_log["transcoding state"]) + str(iter_log["success rate"])
                         print(string)
                         pipeline_logs.append(iter_log)
 
