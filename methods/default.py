@@ -11,7 +11,6 @@ class AbstractCodingAlgorithm(object):
         self.need_logs = need_logs
         self.monitor = Monitor()
         self.segment_length = None
-        self.__init_check__()
 
     def __init_check__(self):
         raise NotImplementedError("\"init_check\" interface needs to be implemented!")
@@ -73,8 +72,8 @@ class AbstractCodingAlgorithm(object):
 class BaseCodingAlgorithm(AbstractCodingAlgorithm):
 
     def __init__(self, need_logs=False):
-        self.mapping_rules = [[0, 0], [0, 1], [1, 0], [1, 1]]
         super().__init__(need_logs)
+        self.mapping_rules = [[0, 0], [0, 1], [1, 0], [1, 1]]
 
     def __init_check__(self):
         pass

@@ -9,9 +9,9 @@ from Chamaeleo.methods.default import AbstractCodingAlgorithm
 class Church(AbstractCodingAlgorithm):
 
     def __init__(self, need_logs=False):
+        super().__init__(need_logs)
         self.carbon_options = [["A", "C"], ["G", "T"]]
 
-        super().__init__(need_logs)
 
         if self.need_logs:
             print("create Church et al. successfully")
@@ -65,6 +65,7 @@ class Church(AbstractCodingAlgorithm):
 class Goldman(AbstractCodingAlgorithm):
 
     def __init__(self, fixed_huffman=True, support_nucleotide="A", need_logs=False):
+        super().__init__(need_logs)
         self.fixed_huffman = fixed_huffman
         self.support_nucleotide = support_nucleotide
         if self.fixed_huffman:
@@ -72,7 +73,7 @@ class Goldman(AbstractCodingAlgorithm):
         else:
             self.huffman_tree = None
 
-        super().__init__(need_logs)
+        self.__init_check__()
 
         if self.need_logs:
             print("create Goldman et al. successfully")
@@ -241,10 +242,11 @@ class Goldman(AbstractCodingAlgorithm):
 class Grass(AbstractCodingAlgorithm):
 
     def __init__(self, base_values=None, need_logs=False):
+        super().__init__(need_logs)
         self.base_values = base_values
         self.mapping_rules = [[], []]
 
-        super().__init__(need_logs)
+        self.__init_check__()
 
         if need_logs:
             print("create Grass et al. successfully")
@@ -329,6 +331,7 @@ class Grass(AbstractCodingAlgorithm):
 class Blawat(AbstractCodingAlgorithm):
 
     def __init__(self, need_logs=False):
+        super().__init__(need_logs)
         self.first_3 = [[0, 0], [0, 1], [1, 0], [1, 1]]
         self.last_2 = {
             str([0, 0]): ["AA", "CC", "GG", "TT"],
@@ -336,8 +339,7 @@ class Blawat(AbstractCodingAlgorithm):
             str([1, 0]): ["AG", "CT", "GA", "TC"],
             str([1, 1]): ["AT", "CA", "GC", "TG"],
         }
-
-        super().__init__(need_logs)
+        self.__init_check__()
 
         if self.need_logs:
             print("create Blawat et al. successfully!")

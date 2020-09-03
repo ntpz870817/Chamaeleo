@@ -69,7 +69,7 @@ jobs:
           command: |
            . venv/bin/activate
             venv/bin/python3 examples/demo_case_transcode.py
-            venv/bin/python3 examples/demo_case_evaluate.py
+            venv/bin/python3 examples/demo_case_robustness.py
 
       - store_artifacts:
           path: test-reports

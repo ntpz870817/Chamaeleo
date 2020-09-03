@@ -5,7 +5,7 @@ from Chamaeleo.methods.default import BaseCodingAlgorithm
 from Chamaeleo.methods.ecc import Hamming, ReedSolomon
 from Chamaeleo.methods.fixed import Church, Goldman, Grass, Blawat
 from Chamaeleo.methods.flowed import DNAFountain, YinYangCode
-from Chamaeleo.utils.pipelines import EvaluatePipeline
+from Chamaeleo.utils.pipelines import RobustnessPipeline
 
 
 if __name__ == "__main__":
@@ -35,7 +35,7 @@ if __name__ == "__main__":
         True
     ]
 
-    pipeline = EvaluatePipeline(
+    pipeline = RobustnessPipeline(
         coding_schemes=coding_schemes,
         error_corrections=error_corrections,
         needed_indices=needed_indices,

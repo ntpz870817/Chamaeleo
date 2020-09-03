@@ -168,7 +168,7 @@ class TranscodePipeline(DefaultPipeline):
         return self.records
 
 
-class EvaluatePipeline(DefaultPipeline):
+class RobustnessPipeline(DefaultPipeline):
 
     def __init__(self, **info):
         super().__init__(**info)

@@ -11,8 +11,9 @@ from Chamaeleo.utils import screen
 
 class DNAFountain(AbstractCodingAlgorithm):
 
-    def __init__(self, homopolymer=4, gc_content=0.2, redundancy=0.5, header_size=4,
+    def __init__(self, homopolymer=4, gc_content=0.2, redundancy=0.07, header_size=4,
                  c_dist=0.1, delta=0.5, recursion_depth=10000000, decode_packets=None, need_logs=False):
+        super().__init__(need_logs)
         self.homopolymer = homopolymer
         self.gc_content = gc_content
         self.redundancy = redundancy
@@ -25,7 +26,7 @@ class DNAFountain(AbstractCodingAlgorithm):
         # adjust the maximum recursion depth to "self.recursion_depth" in Python.
         sys.setrecursionlimit(self.recursion_depth)
 
-        super().__init__(need_logs)
+        self.__init_check__()
 
         if self.need_logs:
             print("Create DNA Fountain successfully")
@@ -282,6 +283,8 @@ class YinYangCode(AbstractCodingAlgorithm):
     def __init__(self, yang_rule=None, yin_rule=None, virtual_nucleotide="A",
                  max_homopolymer=4, max_content=0.6,
                  max_iterations=20, need_logs=False):
+        super().__init__(need_logs)
+
         if not yang_rule:
             yang_rule = [0, 1, 0, 1]
         if not yin_rule:
@@ -295,7 +298,11 @@ class YinYangCode(AbstractCodingAlgorithm):
         self.max_content = max_content
         self.index_length = 0
         self.total_count = 0
-        super().__init__(need_logs)
+
+        self.__init_check__()
+
+        if self.need_logs:
+            print("Create Yin-Yang Code successfully")
 
     def __init_check__(self):
         if self.virtual_nucleotide not in ["A", "C", "G", "T"]:
