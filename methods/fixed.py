@@ -12,7 +12,6 @@ class Church(AbstractCodingAlgorithm):
         super().__init__(need_logs)
         self.carbon_options = [["A", "C"], ["G", "T"]]
 
-
         if self.need_logs:
             print("create Church et al. successfully")
             print("Church, G. M., Gao, Y., & Kosuri, S. (2012). "
