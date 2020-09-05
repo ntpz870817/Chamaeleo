@@ -446,12 +446,14 @@ class YinYangCode(AbstractCodingAlgorithm):
                     if work_flags[0] and current_nucleotide_1 is None:
                         current_nucleotide_1 = self._bits_to_nucleotide(fixed_bit, bit, support_nucleotide_1)
                         if not screen.check("".join(dna_sequence[0]) + current_nucleotide_1,
-                                        max_homopolymer=self.max_homopolymer, max_content=self.max_content):
+                                            max_homopolymer=self.max_homopolymer,
+                                            max_content=self.max_content):
                             current_nucleotide_1 = None
                     if work_flags[1] and current_nucleotide_2 is None:
                         current_nucleotide_2 = self._bits_to_nucleotide(bit, fixed_bit, support_nucleotide_2)
                         if not screen.check("".join(dna_sequence[1]) + current_nucleotide_2,
-                                        max_homopolymer=self.max_homopolymer, max_content=self.max_content):
+                                            max_homopolymer=self.max_homopolymer,
+                                            max_content=self.max_content):
                             current_nucleotide_2 = None
 
                 if current_nucleotide_1 is None:
