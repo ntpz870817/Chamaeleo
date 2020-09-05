@@ -12,7 +12,8 @@ from Chamaeleo.utils import screen
 class DNAFountain(AbstractCodingAlgorithm):
 
     def __init__(self, homopolymer=4, gc_content=0.2, redundancy=0.07, header_size=4,
-                 c_dist=0.1, delta=0.5, recursion_depth=10000000, decode_packets=None, need_logs=False):
+                 c_dist=0.1, delta=0.5, recursion_depth=10000000, decode_packets=None, need_pre_check=False,
+                 need_logs=False):
         super().__init__(need_logs)
         self.homopolymer = homopolymer
         self.gc_content = gc_content
@@ -21,6 +22,7 @@ class DNAFountain(AbstractCodingAlgorithm):
         self.c_dist = c_dist
         self.delta = delta
         self.recursion_depth = recursion_depth
+        self.need_pre_check = need_pre_check
         self.prng = None
         self.decode_packets = decode_packets
         # adjust the maximum recursion depth to "self.recursion_depth" in Python.
@@ -80,24 +82,26 @@ class DNAFountain(AbstractCodingAlgorithm):
                 self.monitor.output(len(dna_sequences), final_count)
 
         # pre-check the decoding process in the encoding process
-        try:
-            visited_indices = [0] * self.decode_packets
-            for chuck_indices in chuck_recorder:
-                for chuck_index in chuck_indices:
-                    visited_indices[chuck_index] += 1
-            if 0 in visited_indices:
-                no_visit_indices = []
-                for index, visited in enumerate(visited_indices):
-                    if visited == 0:
-                        no_visit_indices.append(index)
-                raise ValueError("bit segment " + str(no_visit_indices) + " are not been encoded!")
-            if self.need_logs:
-                print("Pre-check the decoding process.")
-            self.decode(dna_sequences)
-        except ValueError:
-            raise ValueError("Based on the pre decoding operation, "
-                             "it is found that the encoded data does not meet the full rank condition."
-                             "Please increase \"redundancy\" or use compression to change the original digital data.")
+        if self.need_pre_check:
+            try:
+                visited_indices = [0] * self.decode_packets
+                for chuck_indices in chuck_recorder:
+                    for chuck_index in chuck_indices:
+                        visited_indices[chuck_index] += 1
+                if 0 in visited_indices:
+                    no_visit_indices = []
+                    for index, visited in enumerate(visited_indices):
+                        if visited == 0:
+                            no_visit_indices.append(index)
+                    raise ValueError("bit segment " + str(no_visit_indices) + " are not been encoded!")
+                if self.need_logs:
+                    print("Pre-check the decoding process.")
+                self.decode(dna_sequences)
+            except ValueError:
+                raise ValueError("Based on the pre decoding operation, "
+                                 "it is found that the encoded data does not meet the full rank condition."
+                                 "Please increase \"redundancy\" or use compression to "
+                                 "change the original digital data.")
 
         return dna_sequences
 
@@ -441,12 +445,12 @@ class YinYangCode(AbstractCodingAlgorithm):
                 for bit in [0, 1]:
                     if work_flags[0] and current_nucleotide_1 is None:
                         current_nucleotide_1 = self._bits_to_nucleotide(fixed_bit, bit, support_nucleotide_1)
-                        if screen.check("".join(dna_sequence[0]) + current_nucleotide_1,
+                        if not screen.check("".join(dna_sequence[0]) + current_nucleotide_1,
                                         max_homopolymer=self.max_homopolymer, max_content=self.max_content):
                             current_nucleotide_1 = None
                     if work_flags[1] and current_nucleotide_2 is None:
                         current_nucleotide_2 = self._bits_to_nucleotide(bit, fixed_bit, support_nucleotide_2)
-                        if screen.check("".join(dna_sequence[1]) + current_nucleotide_2,
+                        if not screen.check("".join(dna_sequence[1]) + current_nucleotide_2,
                                         max_homopolymer=self.max_homopolymer, max_content=self.max_content):
                             current_nucleotide_2 = None
 
@@ -465,7 +469,9 @@ class YinYangCode(AbstractCodingAlgorithm):
                     support_nucleotide_2 = current_nucleotide_2
 
             for potential_dna_sequence in dna_sequence:
-                if potential_dna_sequence is not None:
+                if potential_dna_sequence is not None and screen.check("".join(potential_dna_sequence),
+                                                                       max_homopolymer=self.max_homopolymer,
+                                                                       max_content=self.max_content):
                     return potential_dna_sequence
 
     def _bits_to_nucleotide(self, upper_bit, lower_bit, support_nucleotide):

@@ -390,3 +390,145 @@ class RobustnessPipeline(DefaultPipeline):
                         print(str(result_data)[1: -1].replace("\'", ""))
 
         return self.records
+
+
+class IndexPipeline(DefaultPipeline):
+
+    def __init__(self, **info):
+        super().__init__(**info)
+
+        self.coding_schemes = info["coding_schemes"] if "coding_schemes" in info else None
+        self.needed_indices = info["needed_indices"] if "needed_indices" in info else None
+
+        self.file_paths = info["file_paths"] if "file_paths" in info else None
+
+        self.segment_length = info["segment_length"] if "segment_length" in info else 200
+
+        self.__init_check__()
+
+        self.records = {
+            "index parameters": {
+                "evaluated coding schemes": list(self.coding_schemes.keys()),
+                "evaluated files": list(self.file_paths.keys()),
+                "segment length": self.segment_length
+            }
+        }
+
+    def __init_check__(self):
+        super().__init_check__()
+        if self.coding_schemes is None:
+            raise ValueError("No coding scheme!")
+        for name, coding_scheme in self.coding_schemes.items():
+            if not isinstance(coding_scheme, AbstractCodingAlgorithm):
+                raise ValueError("\"coding_scheme \" " + str(name) + "[" + str(type(coding_scheme))
+                                 + "] needs to inherit AbstractCodingScheme in methods/default.py!")
+
+        if self.needed_indices is None:
+            raise ValueError("Whether each coding scheme needs \"index\" needs to be explained!")
+        if len(self.coding_schemes) != len(self.needed_indices):
+            raise ValueError("Coding scheme and its index requirements need to be matched one by one!")
+        for index, needed_index in enumerate(self.needed_indices):
+            if type(needed_index) is not bool:
+                raise ValueError(str(index) in "\"needed_indices\" must be bool type!")
+
+        if self.file_paths is None:
+            raise ValueError("No digital file path!")
+        for file_name, file_path in self.file_paths.items():
+            if not os.path.exists(file_path):
+                raise ValueError("The path of digital file " + str(file_name) + ": " + file_path + " does not exist!")
+
+        if self.segment_length <= -1 or type(self.segment_length) != int:
+            raise ValueError("Wrong value in the \"segment_length\", "
+                             "the value is in the range of [-1, +inf) and the type is int!")
+
+    def calculate(self):
+        results = {}
+        task_index = 0
+        total_task = len(self.coding_schemes) * len(self.file_paths)
+        for file_name, file_path in self.file_paths.items():
+            original_bit_segments, bit_size = data_handle.read_bits_from_file(file_path,
+                                                                              self.segment_length,
+                                                                              self.need_logs)
+            bit_segments_with_indices, index_length = indexer.connect_all(original_bit_segments, self.need_logs)
+            for (scheme_name, coding_scheme), needed_index in zip(self.coding_schemes.items(), self.needed_indices):
+                coding_scheme.need_logs = True
+                if self.need_logs:
+                    print(">" * 50)
+                    print("*" * 50)
+                    print("Run task (" + str(task_index + 1) + "/" + str(total_task) + ").")
+                    print("*" * 50)
+
+                if needed_index:
+                    bit_segments = bit_segments_with_indices
+                else:
+                    bit_segments = original_bit_segments
+
+                dna_sequences = coding_scheme.silicon_to_carbon(bit_segments, bit_size)["dna"]
+
+                gc_distribution = [0 for _ in range(101)]
+                homo_distribution = [0 for _ in range(max(list(map(len, dna_sequences))))]
+
+                for dna_sequence in dna_sequences:
+                    dna_segment = "".join(dna_sequence)
+                    gc_content = int(((dna_segment.count("C") + dna_segment.count("G")) / len(dna_segment) * 100) + 0.5)
+                    gc_distribution[gc_content] += 1
+                    for homo_length in [homo + 1 for homo in range(len(dna_sequence))][::-1]:
+                        is_find = False
+                        missing_segments = ["A" * homo_length, "C" * homo_length, "G" * homo_length, "T" * homo_length]
+                        for missing_segment in missing_segments:
+                            if missing_segment in dna_segment:
+                                is_find = True
+                                homo_distribution[homo_length] += 1
+                                break
+                        if is_find:
+                            break
+                if self.need_logs:
+                    print(">" * 50)
+                    print()
+
+                results["task " + str(task_index)] = {
+                    "coding scheme": scheme_name,
+                    "file": file_name,
+                    "gc": str(gc_distribution).replace(", ", "-"),
+                    "homo": str(homo_distribution).replace(", ", "-")
+                }
+                task_index += 1
+
+        self.records["results"] = results
+
+    # noinspection PyTypeChecker
+    def output_records(self, **info):
+        if "type" in info:
+            param_names = []
+            param_values = []
+
+            for key, value in self.records["index parameters"].items():
+                param_names.append(key)
+                param_values.append(value)
+
+            result_names = [
+                "task id", "coding scheme", "file", "gc content", "maximum homopolymer"
+            ]
+            result_data_group = []
+            for task_id, data in self.records["results"].items():
+                result_data_group.append([task_id, data["coding scheme"], data["file"], data["gc"] + data["homo"]])
+            if info["type"] == "path":
+                if "path" in info:
+                    with open(info["path"], "w", encoding="utf-8") as save_file:
+                        save_file.write(str(param_names)[1: -1].replace("\'", "") + "\n")
+                        save_file.write(str(param_values)[1: -1].replace("\'", "") + "\n")
+                        save_file.write(str(result_names)[1: -1].replace("\'", "") + "\n")
+                        for result_data in result_data_group:
+                            save_file.write(str(result_data)[1: -1].replace("\'", "") + "\n")
+                else:
+                    raise ValueError("\"path\" is unknown!")
+            elif info["type"] == "string":
+                if self.need_logs:
+                    print("Index log: ")
+                    print(str(param_names)[1: -1].replace("\'", ""))
+                    print(str(param_values)[1: -1].replace("\'", ""))
+                    print(str(result_names)[1: -1].replace("\'", ""))
+                    for result_data in result_data_group:
+                        print(str(result_data)[1: -1].replace("\'", ""))
+
+        return self.records
