@@ -5,7 +5,7 @@ from Chamaeleo.methods.default import BaseCodingAlgorithm
 from Chamaeleo.methods.fixed import Church, Goldman, Grass, Blawat
 from Chamaeleo.methods.flowed import DNAFountain, YinYangCode
 
-from Chamaeleo.utils.pipelines import IndexPipeline
+from Chamaeleo.utils.pipelines import BasicFeaturePipeline
 
 if __name__ == "__main__":
     root_path = os.path.dirname(Chamaeleo.__file__)
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         False, True
     ]
 
-    pipeline = IndexPipeline(
+    pipeline = BasicFeaturePipeline(
         coding_schemes=coding_schemes,
         needed_indices=needed_indices,
         file_paths=file_paths,

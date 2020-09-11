@@ -392,7 +392,7 @@ class RobustnessPipeline(DefaultPipeline):
         return self.records
 
 
-class IndexPipeline(DefaultPipeline):
+class BasicFeaturePipeline(DefaultPipeline):
 
     def __init__(self, **info):
         super().__init__(**info)

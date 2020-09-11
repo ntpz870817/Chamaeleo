@@ -69,6 +69,7 @@ jobs:
           command: |
            . venv/bin/activate
             venv/bin/python3 examples/demo_case_transcode.py
+            venv/bin/python3 examples/demo_case_basic_feature.py
             venv/bin/python3 examples/demo_case_robustness.py
 
       - store_artifacts:
