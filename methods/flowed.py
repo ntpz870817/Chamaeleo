@@ -12,7 +12,7 @@ from Chamaeleo.utils import screen
 class DNAFountain(AbstractCodingAlgorithm):
 
     def __init__(self, homopolymer=4, gc_content=0.2, redundancy=0.07, header_size=4,
-                 c_dist=0.1, delta=0.5, recursion_depth=10000000, decode_packets=None, need_pre_check=False,
+                 c_dist=0.1, delta=0.05, recursion_depth=10000000, decode_packets=None, need_pre_check=False,
                  need_logs=False):
         super().__init__(need_logs)
         self.homopolymer = homopolymer

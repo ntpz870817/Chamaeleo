@@ -117,8 +117,8 @@ class TranscodePipeline(DefaultPipeline):
                     verified_data = self.error_correction.remove(bit_segments)
                     bit_segments = verified_data["bit"]
                     self.records["error rate"] = str(round(verified_data["e_r"] * 100, 2)) + "%"
-                    self.records["error indices"] = verified_data["e_i"] if verified_data["e_i"] != [] else None
-                    self.records["error bit segments"] = verified_data["e_bit"] if verified_data["e_bit"] != [] else None
+                    self.records["error indices"] = str(verified_data["e_i"]).replace(", ", "-") if verified_data["e_i"] != [] else None
+                    self.records["error bit segments"] = str(verified_data["e_bit"]).replace(", ", "-") if verified_data["e_bit"] != [] else None
                 else:
                     self.records["error rate"] = None
                     self.records["error indices"] = None
@@ -274,7 +274,6 @@ class RobustnessPipeline(DefaultPipeline):
 
                     pipeline_logs = []
                     for iteration in range(self.iterations):
-                        # print("iteration " + str(iteration + 1) + ": ")
                         chosen_count = int(len(encoded_data["dna"]) * (1 - self.sequence_loss))
                         dna_sequences = random.sample(copy.deepcopy(encoded_data["dna"]), chosen_count)
 
@@ -305,25 +304,36 @@ class RobustnessPipeline(DefaultPipeline):
 
                         bit_segments = decoded_data["bit"]
 
+                        temps = []
+                        for bit_segment in bit_segments:
+                            if bit_segment is not None:
+                                temps.append(bit_segment)
+                        bit_segments = temps
+
+                        if len(bit_segments) == 0:
+                            bit_segments = None
+
                         if bit_segments is None:
                             iter_log = pipeline.output_records()
                             iter_log["transcoding state"] = False
                             iter_log["success rate"] = "0.000%"
                         else:
-
                             iter_log = pipeline.output_records()
-                            iter_log["transcoding state"] = encoded_data["bit"] == bit_segments
                             success_count = 0
                             for final_bit_segment in bit_segments:
                                 if final_bit_segment in encoded_data["bit"]:
                                     success_count += 1
-                            iter_log["success rate"] = str(round(success_count / len(bit_segments) * 100, 3)) + "%"
+
+                            total_count = len(encoded_data["bit"])
+                            iter_log["transcoding state"] = (len(encoded_data["bit"]) == success_count)
+                            iter_log["success rate"] = str(round(success_count / total_count * 100, 3)) + "%"
 
                         string = file_name + ", " + scheme_name + ", " + correct_name + ", "
                         string += str(iter_log["information density"]) + ", "
                         string += str(iter_log["encoding runtime"]) + ", "
                         string += str(iter_log["decoding runtime"]) + ", "
-                        string += str(iter_log["transcoding state"]) + str(iter_log["success rate"])
+                        string += str(iter_log["transcoding state"]) + ", "
+                        string += str(iter_log["success rate"])
                         print(string)
                         pipeline_logs.append(iter_log)
 

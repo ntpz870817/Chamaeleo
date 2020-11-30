@@ -152,14 +152,19 @@ class AbstractErrorCorrectionCode(object):
         if type(verified_bit_segments) == list and type(verified_bit_segments[0]) == list:
             error_rate = 0
             for index, verified_bit_segment in enumerate(verified_bit_segments):
-                output = self.remove_one(verified_bit_segment)
-                data, data_type = output.get("data"), output.get("type")
-                if data_type and len(data) >= self.segment_lengths[index]:
-                    bit_segments.append(data[len(data) - self.segment_lengths[index]:])
+                if verified_bit_segment is not None:
+                    output = self.remove_one(verified_bit_segment)
+                    data, data_type = output.get("data"), output.get("type")
+                    if data_type and len(data) >= self.segment_lengths[index]:
+                        bit_segments.append(data[len(data) - self.segment_lengths[index]:])
+                    else:
+                        error_rate += 1
+                        error_indices.append(index)
+                        error_bit_segments.append(data)
                 else:
                     error_rate += 1
                     error_indices.append(index)
-                    error_bit_segments.append(data)
+                    error_bit_segments.append(None)
 
                 if self.need_logs:
                     self.monitor.output(index + 1, len(verified_bit_segments))

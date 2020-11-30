@@ -21,7 +21,7 @@ setup(
     ],
     package_data={
         "Chamaeleo": [
-            "data/binaries/DNA Fountain Input Files.tar",
+            "data/binaries/DNA Fountain Input Files.tar.gz",
             "data/binaries/Microsoft Winmine.exe",
             "data/books/A Tale of Two Cities.pdf",
             "data/books/The Wandering Earth.pdf",
