@@ -51,37 +51,22 @@ def write_bits_to_str(matrix, bit_size, need_logs=False):
     return str(bytes(values), encoding="utf8")
 
 
-def compress_from_file(path, compress_type="gzip"):
-    if compress_type == "gzip":
-        new_path = path + ".gz"
-        compress_file = gzip.GzipFile(filename="", mode="wb", compresslevel=9, fileobj=open(new_path, "wb"))
-        with open(path, "wb") as file:
-            compress_file.write(file.read())
-        compress_file.close()
-    elif compress_type == "lzw":
-        new_path = ""
-        pass
-    else:
-        raise ValueError("No such compress type!")
-
+def compress_from_file(path):
+    new_path = path + ".gz"
+    compress_file = gzip.GzipFile(filename="", mode="wb", compresslevel=9, fileobj=open(new_path, "wb"))
+    with open(path, "wb") as file:
+        compress_file.write(file.read())
+    compress_file.close()
     return new_path
 
 
-def decompress_from_file(path, decompress_type="gzip"):
-    if decompress_type == "gzip":
-        new_path = path[:-3]
-        decompress_file = gzip.GzipFile(mode="rb", fileobj=open(path, "rb"))
-        with open(new_path, "wb") as file:
-            file.write(decompress_file.read())
-        decompress_file.close()
-    elif decompress_type == "lzw":
-        new_path = ""
-        pass
-    else:
-        raise ValueError("No such decompress type!")
-
+def decompress_from_file(path):
+    new_path = path[:-3]
+    decompress_file = gzip.GzipFile(mode="rb", fileobj=open(path, "rb"))
+    with open(new_path, "wb") as file:
+        file.write(decompress_file.read())
+    decompress_file.close()
     return new_path
-
 
 
 def read_bits_from_file(path, segment_length=120, need_logs=False):
