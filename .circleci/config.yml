@@ -71,6 +71,8 @@ jobs:
             venv/bin/python3 examples/demo_case_transcode.py
             venv/bin/python3 examples/demo_case_basic_feature.py
             venv/bin/python3 examples/demo_case_robustness.py
+            venv/bin/python3 examples/demo_case_best_choice.py
+
 
       - store_artifacts:
           path: test-reports
