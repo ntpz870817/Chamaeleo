@@ -1,7 +1,10 @@
 import copy
+import csv
 import os
 import random
 
+import numpy
+from terminaltables import AsciiTable
 from Chamaeleo.methods.default import AbstractCodingAlgorithm, AbstractErrorCorrectionCode
 from Chamaeleo.utils import data_handle, indexer
 from Chamaeleo.utils.monitor import Monitor
@@ -117,8 +120,10 @@ class TranscodePipeline(DefaultPipeline):
                     verified_data = self.error_correction.remove(bit_segments)
                     bit_segments = verified_data["bit"]
                     self.records["error rate"] = str(round(verified_data["e_r"] * 100, 2)) + "%"
-                    self.records["error indices"] = str(verified_data["e_i"]).replace(", ", "-") if verified_data["e_i"] != [] else None
-                    self.records["error bit segments"] = str(verified_data["e_bit"]).replace(", ", "-") if verified_data["e_bit"] != [] else None
+                    self.records["error indices"] = str(verified_data["e_i"]).replace(", ", "-") \
+                        if verified_data["e_i"] != [] else None
+                    self.records["error bit segments"] = str(verified_data["e_bit"]).replace(", ", "-") \
+                        if verified_data["e_bit"] != [] else None
                 else:
                     self.records["error rate"] = None
                     self.records["error indices"] = None
@@ -542,3 +547,120 @@ class BasicFeaturePipeline(DefaultPipeline):
                         print(str(result_data)[1: -1].replace("\'", ""))
 
         return self.records
+
+
+class OptimalChoicePipeline(DefaultPipeline):
+
+    def __init__(self, **info):
+        super().__init__(**info)
+
+        self.coding_schemes = info["coding_schemes"] if "coding_schemes" in info else None
+        self.feature_log_path = info["feature_log_path"] if "feature_log_path" in info else None
+        self.robustness_log_path = info["robustness_log_path"] if "robustness_log_path" in info else None
+
+        self.__init_check__()
+
+    def __init_check__(self):
+        super().__init_check__()
+        if self.coding_schemes is None:
+            raise ValueError("No coding scheme!")
+        for name, coding_scheme in self.coding_schemes.items():
+            if not isinstance(coding_scheme, AbstractCodingAlgorithm):
+                raise ValueError("\"coding_scheme \" " + str(name) + "[" + str(type(coding_scheme))
+                                 + "] needs to inherit AbstractCodingScheme in methods/default.py!")
+
+        if self.feature_log_path is None:
+            raise ValueError("\"feature_log_path\" must be available!")
+
+        if self.robustness_log_path is None:
+            raise ValueError("\"robustness_log_path\" must be available!")
+
+    def calculate_best(self):
+        information_density_results = {}
+        gc_suitable_rate_results = {}
+        gc_bias_results = {}
+        homopolymer_results = {}
+        recover_results = {}
+
+        with open(self.feature_log_path, "r") as file:
+            rows = csv.reader(file)
+            for index, row in enumerate(rows):
+                if index > 2:
+                    name = row[1][1:]
+                    [r1, r2] = row[3].split("][")
+                    gc = numpy.array(list(map(int, r1[1:].replace("[", "").split("-"))))
+                    gc = gc / numpy.sum(gc)
+                    rate = numpy.sum(gc[41: 61])
+                    if row[1] in gc_suitable_rate_results:
+                        gc_suitable_rate_results[name].append(rate)
+                    else:
+                        gc_suitable_rate_results[name] = [rate]
+                    max_bias = max(numpy.nonzero(gc)[0][-1] - 51, 51 - numpy.nonzero(gc)[0][1])
+                    if row[1] in gc_bias_results:
+                        gc_bias_results[name].append(max_bias)
+                    else:
+                        gc_bias_results[name] = [max_bias]
+                    ho = numpy.array(list(map(int, r2[:-1].split("-"))))
+                    if row[1] in homopolymer_results:
+                        homopolymer_results[name].append(numpy.nonzero(ho)[0][-1])
+                    else:
+                        homopolymer_results[name] = [numpy.nonzero(ho)[0][-1]]
+
+        with open(self.robustness_log_path, "r") as file:
+            rows = csv.reader(file)
+            for index, row in enumerate(rows):
+                if index > 2:
+                    name = row[1][1:]
+                    information_density = float(row[7])
+                    recover = float(row[14].replace("%", "")) / 100.0
+                    if row[1] in information_density_results:
+                        information_density_results[name].append(information_density)
+                    else:
+                        information_density_results[name] = [information_density]
+                    if row[1] in recover_results:
+                        recover_results[name].append(recover)
+                    else:
+                        recover_results[name] = [recover]
+
+        names = set()
+        for name, value in gc_suitable_rate_results.items():
+            names.add(name)
+        for name, value in recover_results.items():
+            names.add(name)
+
+        title = [
+            "scheme id", "coding scheme", "average information density",
+            "GC content within 40% - 60%", "maximum bias of GC content", "maximum homopolymer",
+            "average recover rate"
+        ]
+
+        record_group = [title]
+        for index, name in enumerate(list(names)):
+            one_record = [
+                str(index + 1), name,
+                str(numpy.mean(numpy.array(information_density_results[name]))),
+                str(round(numpy.mean(numpy.array(gc_suitable_rate_results[name])) * 100, 2)) + "%",
+                str(round(numpy.max(numpy.array(gc_bias_results[name])), 2)) + "%",
+                str(numpy.max(numpy.array(homopolymer_results[name]))) + "nt",
+                str(round(numpy.mean(numpy.array(recover_results[name])) * 100, 2)) + "%"
+            ]
+            record_group.append(one_record)
+
+        print("Evaluation results.")
+        table_instance = AsciiTable(record_group, title)
+        for i in range(len(title)):
+            table_instance.justify_columns[i] = 'center'
+        print(table_instance.table)
+
+    def output_records(self, **info):
+        selected_coding_scheme = self.coding_schemes[info["selected_coding_scheme"]]
+        pipeline = TranscodePipeline(coding_scheme=selected_coding_scheme, error_correction=info["error_correction"],
+                                     need_logs=info["need_logs"])
+        encoded_data = pipeline.transcode(direction="t_c",
+                                          input_path=info["input_path"], output_path=info["output_path"],
+                                          segment_length=info["segment_length"], index=info["needed_index"])
+        return {
+            "dna": encoded_data["dna"],
+            "information density": pipeline.records["information density"],
+            "encoding runtime": pipeline.records["encoding runtime"]
+        }
