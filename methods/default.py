@@ -56,7 +56,7 @@ class AbstractCodingAlgorithm(object):
 
         for segment_index, bit_segment in enumerate(bit_segments):
             if len(bit_segment) != self.segment_length:
-                bit_segments[segment_index] = bit_segment[len(bit_segment) - self.segment_length:]
+                bit_segments[segment_index] = bit_segment[: self.segment_length]
 
         decoding_runtime = (datetime.now() - start_time).total_seconds()
 

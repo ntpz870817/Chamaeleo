@@ -130,7 +130,7 @@ def write_bits_to_file(path, matrix, bit_size, need_logs=False):
                 temp_byte *= 2
                 temp_byte += matrix[row][col]
                 if bit_index == 8:
-                    if byte_size >= 0:
+                    if byte_size > 0:
                         file.write(struct.pack("B", int(temp_byte)))
                         bit_index = 0
                         temp_byte = 0

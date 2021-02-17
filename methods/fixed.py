@@ -97,7 +97,7 @@ class Goldman(AbstractCodingAlgorithm):
             dna_sequence = []
 
             if len(bit_segment) % 8 != 0:
-                bit_segment = [0 for _ in range(8 - self.segment_length % 8)] + bit_segment
+                bit_segment = bit_segment + [0 for _ in range(8 - self.segment_length % 8)]
 
             ternary_segment = []
             for position in range(0, len(bit_segment), 8):
@@ -279,7 +279,7 @@ class Grass(AbstractCodingAlgorithm):
             dna_sequence = []
 
             if len(bit_segment) % 16 != 0:
-                bit_segment = [0 for _ in range(16 - self.segment_length % 16)] + bit_segment
+                bit_segment = bit_segment + [0 for _ in range(16 - self.segment_length % 16)]
 
             for position in range(0, len(bit_segment), 16):
                 decimal_number = int("".join(list(map(str, bit_segment[position: position + 16]))), 2)
@@ -356,7 +356,7 @@ class Blawat(AbstractCodingAlgorithm):
             dna_sequence = []
 
             if len(bit_segment) % 8 != 0:
-                bit_segment = [0 for _ in range(8 - self.segment_length % 8)] + bit_segment
+                bit_segment = bit_segment + [0 for _ in range(8 - self.segment_length % 8)]
 
             for position in range(0, len(bit_segment), 8):
                 carbon_piece, silicon_piece = [None] * 5, bit_segment[position: position + 8]
