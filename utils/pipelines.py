@@ -324,22 +324,28 @@ class RobustnessPipeline(DefaultPipeline):
                             iter_log["success rate"] = "0.000%"
                         else:
                             iter_log = pipeline.output_records()
-                            success_count = 0
-                            for final_bit_segment in bit_segments:
-                                if final_bit_segment in encoded_data["bit"]:
-                                    success_count += 1
-
-                            total_count = len(encoded_data["bit"])
-                            iter_log["transcoding state"] = (len(encoded_data["bit"]) == success_count)
+                            decoded_bit_segments, encoded_bit_segments = set(), set()
+                            for bit_segment in bit_segments:
+                                decoded_bit_segments.add(str(bit_segment))
+                            for bit_segment in encoded_data["bit"]:
+                                encoded_bit_segments.add(str(bit_segment))
+                            intersection = encoded_bit_segments & decoded_bit_segments
+                            success_count, total_count = len(intersection), len(encoded_bit_segments)
+                            iter_log["transcoding state"] = (total_count == success_count)
+                            iter_log["success count"] = success_count
+                            iter_log["total count"] = total_count
                             iter_log["success rate"] = str(round(success_count / total_count * 100, 3)) + "%"
 
-                        string = file_name + ", " + scheme_name + ", " + correct_name + ", "
+                        string = scheme_name + ", " + correct_name + ", " + file_name + ", "
                         string += str(iter_log["information density"]) + ", "
                         string += str(iter_log["encoding runtime"]) + ", "
                         string += str(iter_log["decoding runtime"]) + ", "
                         string += str(iter_log["transcoding state"]) + ", "
+                        string += str(iter_log["success count"]) + ", "
+                        string += str(iter_log["total count"]) + ", "
                         string += str(iter_log["success rate"])
-                        print(string)
+                        if self.need_logs:
+                            print(string)
                         pipeline_logs.append(iter_log)
 
                     result = {
