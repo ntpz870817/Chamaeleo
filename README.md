@@ -54,16 +54,31 @@ https://www.youtube.com/watch?v=MgYzJGmBXU8. Youtube.
 
 If you think this repo helps or being used in your research, please consider refer this paper. 
 
-[Chamaeleo: a robust library for DNA storage coding schemes](https://www.biorxiv.org/content/10.1101/2020.01.02.892588v3)
+[Chamaeleo: an integrated evaluation platform for DNA storage](http://www.synbioj.com/EN/abstract/abstract139.shtml)
+
+with its [English version](https://www.biorxiv.org/content/10.1101/2020.01.02.892588v3)
 
 Thank you!
 
+English version:
 ````
 @article{ping2020chamaeleo,
-  title={Chamaeleo: a robust library for DNA storage coding schemes},
+  title={Chamaeleo: an integrated evaluation platform for DNA storage},
   author={Ping, Zhi and Zhang, Haoling and Chen, Shihong and Zhuang, Qianlong and Zhu, Sha and Shen, Yue},
-  journal={bioRxiv},
+  journal={Synthetic Biology Journal},
   year={2020},
-  publisher={Cold Spring Harbor Laboratory}
+  pages={1-15},
+}
+````
+
+
+Chinese version:
+````
+@article{ping2020chamaeleo,
+  title={Chamaeleo: DNA 存储碱基编解码算法的可拓展集成与系统评估平台},
+  author={平质, 张颢龄, 陈世宏, 倪鸣, 徐讯, 朱砂, 沈玥},
+  journal={合成生物学},
+  year={2020},
+  pages={1-15},
 }
 ````
