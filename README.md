@@ -75,7 +75,7 @@ English version:
 Chinese version:
 ````
 @article{ping2020chamaeleo,
-  title={Chamaeleo: DNA 存储碱基编解码算法的可拓展集成与系统评估平台},
+  title={Chamaeleo:DNA存储碱基编解码算法的可拓展集成与系统评估平台},
   author={平质, 张颢龄, 陈世宏, 倪鸣, 徐讯, 朱砂, 沈玥},
   journal={合成生物学},
   year={2020},
