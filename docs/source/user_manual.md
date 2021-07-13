@@ -109,17 +109,15 @@ Taking Yin-Yang DNA Storage Code as an Example, the specific usage (using init m
 ```python
 from Chamaeleo.utils.pipelines import TranscodePipeline
 from Chamaeleo.methods.flowed import YinYangCode
-from Chamaeleo.methods.ecc import Hamming
 
 
 coding_scheme = YinYangCode()
-error_correction = Hamming()
 needed_index = True
 
 write_file_path = "TARGET.xx"
 dna_path = "XXXXXX.dna"
     
-pipeline = TranscodePipeline(coding_scheme=coding_scheme, error_correction=error_correction, need_logs=True)
+pipeline = TranscodePipeline(coding_scheme=coding_scheme, error_correction=None, need_logs=True)
 
 decoded_data = pipeline.transcode(direction="t_s", input_path=dna_path, output_path=write_file_path,
                                   index=needed_index)
@@ -168,3 +166,5 @@ pipeline = TranscodePipeline(coding_scheme=coding_scheme, error_correction=error
 decoded_data = pipeline.transcode(direction="t_s", input_path=dna_path, output_path=write_file_path,
                                   index=needed_index)
 ```
+
+For more examples in other pipelines, please see [**here**](https://github.com/ntpz870817/Chamaeleo/tree/master/examples).
