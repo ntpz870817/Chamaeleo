@@ -48,51 +48,39 @@ In addition, some non-robust external packages may lead to instability or even a
 ├── examples                          // Example module
 │    ├── generated_files              // DNA sequence set file or binary file generated in the test
 │    │    ├── README.md               // Description document of generated files and the above folder
-│    ├── demo_case_fc.py              // Demo case of DNA Fountain Code
-│    ├── demo_case_fc_with_hm.py      // Demo case of DNA Fountain Code with Hamming Code
-│    ├── demo_case_fc_with_rs.py      // Demo case of DNA Fountain Code with Reed-Solomon Code
-│    ├── demo_case_gc.py              // Demo case of Grass' Code
-│    ├── demo_case_gc_with_hm.py      // Demo case of Grass' Code with Hamming Code
-│    ├── demo_case_gc_with_rs.py      // Demo case of Grass' Code with Reed-Solomon Code
-│    ├── demo_case_hc.py              // Demo case of Goldman's Code
-│    ├── demo_case_hc_with_hm.py      // Demo case of Goldman's Code with Hamming Code
-│    ├── demo_case_hc_with_rs.py      // Demo case of Goldman's Code with Reed-Solomon Code
-│    ├── demo_case_sc.py              // Demo case of Simple (Church's) Code
-│    ├── demo_case_sc_with_hm.py      // Demo case of Simple (Church's) Code with Hamming Code
-│    ├── demo_case_sc_with_rs.py      // Demo case of Simple (Church's) Code with Reed-Solomon Code
-│    ├── demo_case_yyc.py             // Demo case of Yin-Yang Code
-│    ├── demo_case_yyc_with_hm.py     // Demo case of Yin-Yang Code with Hamming Code
-│    ├── demo_case_yyc_with_rs.py     // Demo case of Yin-Yang Code with Reed-Solomon Code
+│    ├── log_files                    // Examples of log files
+│    │    ├── robustness.logs         // An example of robustness logs (can be open by txt)
+│    │    ├── seq_features.logs       // An example of DNA sequence feature logs (can be open by txt)
+│    ├── demo_case_basic_feature.py   // Demo case of sequence analysis based on Mona Lisa figure encoded by different algorithms
+│    ├── demo_case_best_choice.py     // Demo case of best choice comparison based on Mona Lisa figure encoded by base code and Church code
+│    ├── demo_case_robustness.py      // Demo case of robustness analysis based on Mona Lisa figure encoded by base code and Church code 
+│    ├── demo_case_transcode.py       // Demo case of transcoding pipeline using different algorithms
 ├── methods                           // Method module
-│    ├── components                   // Inherent property folder
-│    │    ├── index_operator.py       // Processing the relationship between index and data
-│    │    ├── inherent.py             // Inherent property
-│    │    ├── validity.py             // Determining whether a DNA sequence is easy or not for sequencing and synthesis
-│    ├── verifies                     // Error-Correction Method
-│    │    ├── hm.py                   // Hamming error correction
-│    │    ├── rs.py                   // Reed-Solomon error correction
-│    ├── fc.py                        // FC (DNA Storage Code based on Fountain code, created by Erlich et. al)
-│    ├── gc.py                        // GC (DNA Storage Code created by Grass et. al)
-│    ├── hc.py                        // HC (DNA Storage Code based on Huffman code, created by Goldman et. al)
-│    ├── sc.py                        // SC (Simple DNA Storage Code, created by Church et. al)
-│    ├── yyc.py                       // YYC (Yin-Yang DNA Storage Code, created by Ping et. al)
+│    ├── default.py                   // Interfaces of Chamaeleo package
+│    ├── ecc.py                       // Implements of error-correction code
+│    ├── fixed.py                     // Implements of trans-coding algorithm with fixed rules
+│    ├── flowed.py                    // Implements of trans-coding algorithm with screening operation
+│    ├── inherent.py                  // Inherent property obtained by original paper
 ├── test                              // Test module
 │    ├── generated_files              // DNA sequence set file or binary file generated in the test
 │    │    ├── README.md               // Description document of generated files and the above folder
-│    ├── test_fc_trans.py             // Functional test for the trans-coding of Erlich' Code
-│    ├── test_gc_trans.py             // Functional test for the trans-coding of Grass' Code
-│    ├── test_hc_trans.py             // Functional test for the trans-coding of Goldman's Code
-│    ├── test_hm_verify.py            // Functional test for the verification of Hamming Code
-│    ├── test_index_operator.py       // Functional test for the index operator
-│    ├── test_rs_verify.py            // Functional test for the verification of Reed-Solomon Code
-│    ├── test_sc_trans.py             // Functional test for the trans-coding of Simple (Church's) Code
-│    ├── test_validity.py             // Functional test for validity screening
-│    ├── test_yyc_trans.py            // Functional test for the trans-coding of Yin-Yang Code
+│    ├── test_ecc_hamming.py          // Functional test for the verification of Hamming Code
+│    ├── test_ecc_reed_solomon.py     // Functional test for the verification of Reed-Solomon Code
+│    ├── test_indexer.py              // Functional test for adding indices, removing indices, and sorting based on indices 
+│    ├── test_screen.py               // Functional test for screening operation
+│    ├── test_trans_base.py           // Functional test for the trans-coding of Base Code
+│    ├── test_trans_blawat.py         // Functional test for the trans-coding of Blawat Code
+│    ├── test_trans_church.py         // Functional test for the trans-coding of Church Code
+│    ├── test_trans_dna_fountain.py   // Functional test for the trans-coding of DNA Fountain Code
+│    ├── test_trans_goldman.py        // Functional test for the trans-coding of Goldman Code
+│    ├── test_trans_grass.py          // Functional test for the trans-coding of Grass Code
+│    ├── test_trans_yin_yang_code.py  // Functional test for the trans-coding of Yin-Yang Code
 ├── utils                             // Util module
 │    ├── data_handle.py               // Conversion of DNA sequences and binary document
-│    ├── log.py                       // Outputting the logs in console
-│    ├── model_saver.py               // Save model to file and load model from file
+│    ├── indexer.py                   // Processing the relationship between index and data
 │    ├── monitor.py                   // Getting the progress situation and the time left
+│    ├── pipelines.py                 // Operation pipelines of transcoding, analysing, and evaluation
+│    ├── screen.py                    // Screening operation, which determines whether a DNA sequence is easy or not for sequencing and synthesis
 ├── .gitignore                        // Upload ignore file
 ├── codec_factory.py                  // Main calling function
 ├── LICENSE                           // Protocol of kit
@@ -196,32 +184,6 @@ for index in range(length):
     monitor.output(index, length)
     # do something
 ```
-
-### Log Output Specification
-We want you to print each core step to the console through [**log.py**](https://github.com/ntpz870817/Chamaeleo/blob/master/utils/log.py)  in folder **utils**.
-This helps us understand what procedure the kit takes.
-
-The specific usage is as follows:
-
-```python
-import sys
-import Chamaeleo.utils.log as log
-
-log.output(log.NORMAL, str(__name__), str(sys._getframe().f_code.co_name),
-           "Restore the disrupted data order.")
-
-log.output(log.WARN, str(__name__), str(sys._getframe().f_code.co_name),
-           "There may be a large number of motifs that are difficult to use. "
-           "We recommend stopping and modifying the rules.")
-
-log.output(log.ERROR, str(__name__), str(sys._getframe().f_code.co_name),
-           "The file selection operation was not performed correctly. Please complete the operation again!")
-```
-We have declared three types available now: NORMAL, WARN, and ERROR.
-If the type is ERROR, we will end this program immediately.
-- If the type is NORMAL, print normal.
-- If the type is WARN, print yellow and high light.
-- If the type is ERROR, print red and high light.
 
 ### Variable Naming Specification
 * The naming of variables requires the basic expression of the meaning of variables.
