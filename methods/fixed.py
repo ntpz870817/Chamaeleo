@@ -1,8 +1,6 @@
 import random
 import re
-
 from Chamaeleo.methods.inherent import *
-
 from Chamaeleo.methods.default import AbstractCodingAlgorithm
 
 

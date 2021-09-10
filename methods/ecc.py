@@ -1,7 +1,5 @@
 import copy
-
 from reedsolo import RSCodec, ReedSolomonError
-
 from Chamaeleo.methods.default import AbstractErrorCorrectionCode
 
 

@@ -1,6 +1,5 @@
 import os
 import Chamaeleo
-
 from Chamaeleo.methods.default import BaseCodingAlgorithm
 from Chamaeleo.methods.ecc import Hamming, ReedSolomon
 from Chamaeleo.methods.fixed import Church, Goldman, Grass, Blawat
@@ -20,7 +19,7 @@ if __name__ == "__main__":
     coding_schemes = {
         "Base": BaseCodingAlgorithm(),
         "Church et al.": Church(), "Goldman et al.": Goldman(), "Grass et al.": Grass(), "Blawat et al.": Blawat(),
-        "DNA Fountain": DNAFountain(redundancy=0.5), "Yin-Yang Code": YinYangCode()
+        "DNA Fountain": DNAFountain(), "Yin-Yang Code": YinYangCode()
     }
 
     error_corrections = {

@@ -1,11 +1,7 @@
 import gzip
 import pickle
 import struct
-from warnings import warn
-
-import math
-import os
-
+from numpy import fromfile, array, uint8
 from Chamaeleo.utils.monitor import Monitor
 
 
@@ -71,46 +67,21 @@ def decompress_from_file(path):
 
 def read_bits_from_file(path, segment_length=120, need_logs=False):
     monitor = Monitor()
+    if need_logs:
+        print("Read binary matrix from file: " + path)
 
-    with open(path, mode="rb") as file:
+    matrix, values = [], fromfile(file=path, dtype=uint8)
+    for current, value in enumerate(values):
+        matrix += list(map(int, list(str(bin(value))[2:].zfill(8))))
         if need_logs:
-            print("Read binary matrix from file: " + path)
+            monitor.output(current + 1, len(values))
+    if len(matrix) % segment_length != 0:
+        matrix += [0] * (segment_length - len(matrix) % segment_length)
 
-        size = os.path.getsize(path)
+    matrix = array(matrix)
+    matrix = matrix.reshape(int(len(matrix) / segment_length), segment_length)
 
-        if segment_length > 0:
-            # Set init storage matrix
-            matrix = [[0 for _ in range(segment_length)] for _ in range(math.ceil(size * 8 / segment_length))]
-
-            row = 0
-            col = 0
-            for byte_index in range(size):
-                # Read a file as bytes
-                one_byte = file.read(1)
-                element = list(map(int, list(str(bin(struct.unpack("B", one_byte)[0]))[2:].zfill(8))))
-                for bit_index in range(8):
-                    matrix[row][col] = element[bit_index]
-                    col += 1
-                    if col == segment_length:
-                        col = 0
-                        row += 1
-                if need_logs:
-                    monitor.output(byte_index + 1, size)
-        else:
-            matrix = []
-            for byte_index in range(size):
-                # Read a file as bytes
-                one_byte = file.read(1)
-                matrix += list(map(int, list(str(bin(struct.unpack("B", one_byte)[0]))[2:].zfill(8))))
-
-            matrix = [matrix]
-    if int(len(str(bin(len(matrix)))) - 2) * 4 > segment_length:
-        if need_logs:
-            warn("The proportion of index in whole sequence may be high. \n"
-                 "It is recommended to increase the length of output DNA sequences "
-                 "or to divide the file into more segment pools")
-
-    return matrix, size * 8
+    return matrix.tolist(), len(values) * 8
 
 
 def write_bits_to_file(path, matrix, bit_size, need_logs=False):
@@ -120,23 +91,12 @@ def write_bits_to_file(path, matrix, bit_size, need_logs=False):
         if need_logs:
             print("Write file from binary matrix: " + path)
 
-        byte_size = int(bit_size / 8)
-        # Change bit to byte (8 -> 1), and write a file as bytes
-        bit_index = 0
-        temp_byte = 0
-        for row in range(len(matrix)):
-            for col in range(len(matrix[0])):
-                bit_index += 1
-                temp_byte *= 2
-                temp_byte += matrix[row][col]
-                if bit_index == 8:
-                    if byte_size > 0:
-                        file.write(struct.pack("B", int(temp_byte)))
-                        bit_index = 0
-                        temp_byte = 0
-                        byte_size -= 1
+        matrix = array(matrix).reshape(-1)
+        for position in range(0, bit_size, 8):
+            file.write(struct.pack("B", int("".join(list(map(str, matrix[position: position + 8]))), 2)))
+
             if need_logs:
-                monitor.output(row + 1, len(matrix))
+                monitor.output(int(position / 8 + 1), int(bit_size / 8))
 
     return True
 

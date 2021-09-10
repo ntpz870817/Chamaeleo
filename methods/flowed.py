@@ -284,9 +284,9 @@ class DNAFountain(AbstractCodingAlgorithm):
 
 class YinYangCode(AbstractCodingAlgorithm):
 
-    def __init__(self, yang_rule=None, yin_rule=None, virtual_nucleotide="A",
-                 max_homopolymer=4, max_content=0.6,
-                 max_iterations=20, need_logs=False):
+    def __init__(self, yang_rule=None, yin_rule=None, virtual_nucleotide="A", max_iterations=100,
+                 max_ratio=0.8, faster=False,
+                 max_homopolymer=4, max_content=0.6, need_logs=False):
         super().__init__(need_logs)
 
         if not yang_rule:
@@ -300,6 +300,8 @@ class YinYangCode(AbstractCodingAlgorithm):
         self.max_iterations = max_iterations
         self.max_homopolymer = max_homopolymer
         self.max_content = max_content
+        self.max_ratio = max_ratio
+        self.faster = faster
         self.index_length = 0
         self.total_count = 0
 
@@ -343,15 +345,138 @@ class YinYangCode(AbstractCodingAlgorithm):
                                  + "It is required by rule that these two values will have sum of 1 and product of 0.")
 
     def encode(self, bit_segments):
-        dna_sequences = []
-
         self.index_length = int(len(str(bin(len(bit_segments)))) - 2)
         self.total_count = len(bit_segments)
 
-        while len(bit_segments) > 0:
-            fixed_bit_segment = bit_segments.pop()
+        if self.faster:
+            dna_sequences = self.faster_encode(bit_segments)
+        else:
+            dna_sequences = self.normal_encode(bit_segments)
 
-            is_finish = False
+        if self.need_logs:
+            print("There are " + str(len(dna_sequences) * 2 - self.total_count)
+                  + " random bit segment(s) adding for reliability.")
+
+        return dna_sequences
+
+    def normal_encode(self, bit_segments):
+        dna_sequences = []
+        if self.need_logs:
+            print("Separate \'good\' binary segments from \'bad\' binary segments.")
+
+        bad_data = []
+        for row in range(len(bit_segments)):
+            if numpy.sum(bit_segments[row]) > len(bit_segments[row]) * self.max_ratio \
+                    or numpy.sum(bit_segments[row]) < len(bit_segments[row]) * (1 - self.max_ratio):
+                bad_data.append(row)
+
+        if len(bit_segments) < len(bad_data) * 5:
+            if self.need_logs:
+                print("There may be a large number of sequences that are difficult for synthesis or sequencing. "
+                      + "We recommend you to re-select the rule or take a new run.")
+
+        if len(bad_data) == 0 and len(bit_segments) == 0:
+            return [], []
+        elif len(bad_data) == 0:
+            good_data = []
+            for row in range(len(bit_segments)):
+                if self.need_logs:
+                    self.monitor.output(row + 1, len(bit_segments))
+                good_data.append(bit_segments[row])
+            return good_data, []
+        elif len(bad_data) == len(bit_segments):
+            bad_data = []
+            for row in range(len(bit_segments)):
+                if self.need_logs:
+                    self.monitor.output(row + 1, len(bit_segments))
+                bad_data.append(bit_segments[row])
+            return [], bad_data
+        else:
+            good_data = []
+            bad_data = []
+            for row in range(len(bit_segments)):
+                if self.need_logs:
+                    self.monitor.output(row + 1, len(bit_segments))
+                if row in bad_data:
+                    bad_data.append(bit_segments[row])
+                else:
+                    good_data.append(bit_segments[row])
+
+        if self.need_logs:
+            print("Encode based on random pair iteration.")
+
+        while len(good_data) + len(bad_data) > 0:
+            if len(good_data) > 0 and len(bad_data) > 0:
+                fixed_bit_segment, is_finish, state = good_data.pop(), False, True
+            elif len(good_data) > 0:
+                fixed_bit_segment, is_finish, state = good_data.pop(), False, False
+            elif len(bad_data) > 0:
+                fixed_bit_segment, is_finish, state = bad_data.pop(), False, True
+            else:
+                raise ValueError("Wrong pairing for Yin-Yang Code!")
+
+            for pair_time in range(self.max_iterations):
+                if state:
+                    if len(bad_data) > 0:
+                        selected_index = random.randint(0, len(bad_data) - 1)
+                        selected_bit_segment = bad_data[selected_index]
+                    else:
+                        break
+                else:
+                    if len(good_data) > 0:
+                        selected_index = random.randint(0, len(good_data) - 1)
+                        selected_bit_segment = good_data[selected_index]
+                    else:
+                        break
+
+                dna_sequence = [[], []]
+                support_nucleotide_1 = self.virtual_nucleotide
+                support_nucleotide_2 = self.virtual_nucleotide
+                for bit_1, bit_2 in zip(fixed_bit_segment, selected_bit_segment):
+                    current_nucleotide_1 = self._bits_to_nucleotide(bit_1, bit_2, support_nucleotide_1)
+                    current_nucleotide_2 = self._bits_to_nucleotide(bit_2, bit_1, support_nucleotide_2)
+                    dna_sequence[0].append(current_nucleotide_1)
+                    dna_sequence[1].append(current_nucleotide_2)
+                    support_nucleotide_1 = current_nucleotide_1
+                    support_nucleotide_2 = current_nucleotide_2
+
+                if screen.check("".join(dna_sequence[0]),
+                                max_homopolymer=self.max_homopolymer, max_content=self.max_content):
+                    is_finish = True
+                    dna_sequences.append(dna_sequence[0])
+                    if state:
+                        del bad_data[selected_index]
+                    else:
+                        del good_data[selected_index]
+                    break
+                elif screen.check("".join(dna_sequence[1]),
+                                  max_homopolymer=self.max_homopolymer, max_content=self.max_content):
+                    is_finish = True
+                    dna_sequences.append(dna_sequence[1])
+                    if state:
+                        del bad_data[selected_index]
+                    else:
+                        del good_data[selected_index]
+                    break
+
+            # additional information
+            if not is_finish:
+                dna_sequences.append(self.addition(fixed_bit_segment, self.total_count))
+
+            if self.need_logs:
+                self.monitor.output(self.total_count - (len(good_data) + len(bad_data)), self.total_count)
+
+        return dna_sequences
+
+    def faster_encode(self, bit_segments):
+        if self.need_logs:
+            print("Faster setting may increases the number of additional binary segments "
+                  + "(3 ~ 4 times than that of normal setting).")
+
+        dna_sequences = []
+
+        while len(bit_segments) > 0:
+            fixed_bit_segment, is_finish = bit_segments.pop(), False
             for pair_time in range(self.max_iterations):
                 if len(bit_segments) > 0:
                     selected_index = random.randint(0, len(bit_segments) - 1)
@@ -383,14 +508,10 @@ class YinYangCode(AbstractCodingAlgorithm):
 
             # additional information
             if not is_finish:
-                dna_sequences.append(self.addition(fixed_bit_segment))
+                dna_sequences.append(self.addition(fixed_bit_segment, self.total_count))
 
             if self.need_logs:
                 self.monitor.output(self.total_count - len(bit_segments), self.total_count)
-
-        if self.need_logs:
-            print("There are " + str(len(dna_sequences) * 2 - self.total_count)
-                  + " random bit segment(s) adding for reliability.")
 
         return dna_sequences
 
@@ -422,9 +543,10 @@ class YinYangCode(AbstractCodingAlgorithm):
 
         return remain_bit_segments
 
-    def addition(self, fixed_bit_segment):
+    def addition(self, fixed_bit_segment, total_count):
         while True:
-            random_index = random.randint(self.total_count + 3, math.pow(2, self.index_length) - 1)
+            # insert at least 2 interval.
+            random_index = random.randint(total_count + 3, math.pow(2, self.index_length) - 1)
             random_segment = list(map(int, list(str(bin(random_index))[2:].zfill(self.index_length))))
 
             dna_sequence = [[], []]

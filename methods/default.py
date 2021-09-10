@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from Chamaeleo.methods.inherent import index_base, base_index
 from Chamaeleo.utils.monitor import Monitor
 
@@ -27,9 +26,7 @@ class AbstractCodingAlgorithm(object):
         if self.need_logs:
             print("Encode bit segments to DNA sequences by coding scheme.")
 
-        self.monitor.restore()
         dna_sequences = self.encode(bit_segments)
-        self.monitor.restore()
 
         encoding_runtime = (datetime.now() - start_time).total_seconds()
 
@@ -50,9 +47,7 @@ class AbstractCodingAlgorithm(object):
 
         if self.need_logs:
             print("Decode DNA sequences to bit segments by coding scheme.")
-        self.monitor.restore()
         bit_segments = self.decode(dna_sequences)
-        self.monitor.restore()
 
         for segment_index, bit_segment in enumerate(bit_segments):
             if len(bit_segment) != self.segment_length:
@@ -85,7 +80,7 @@ class BaseCodingAlgorithm(AbstractCodingAlgorithm):
             dna_sequence = []
 
             if len(bit_segment) % 2 != 0:
-                bit_segment = [0] + bit_segment
+                bit_segment = bit_segment + [0]
 
             for position in range(0, len(bit_segment), 2):
                 dna_sequence.append(index_base.get(self.mapping_rules.index(bit_segment[position: position + 2])))
@@ -137,8 +132,6 @@ class AbstractErrorCorrectionCode(object):
         else:
             raise ValueError("The matrix must be 1-dimensional or 2-dimensional, and the value is of type \"int\".")
 
-        self.monitor.restore()
-
         return verified_bit_segments, len(verified_bit_segments[0]) - len(bit_segments[0])
 
     def remove(self, verified_bit_segments):
@@ -183,8 +176,6 @@ class AbstractErrorCorrectionCode(object):
                 error_bit_segments.append(data)
         else:
             raise ValueError("The matrix must be 1-dimensional or 2-dimensional, and the value is of type \"int\".")
-
-        self.monitor.restore()
 
         return {"bit": bit_segments, "e_r": error_rate, "e_i": error_indices, "e_bit": error_bit_segments}
 

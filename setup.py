@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name="Chamaeleo",
-    version="1.31",
+    version="1.32",
     description="library for the well accepted coding schemes of DNA storage",
     long_description="Chamaeleo is currently the only collection focused on different codec methods for DNA storage. "
                      "This kit is mainly developed and operated by BGI-Research (Shenzhen). "
@@ -37,7 +37,7 @@ setup(
     },
     package_dir={"Chamaeleo": "."},
     install_requires=[
-        "reedsolo", "terminaltables"
+        "numpy", "reedsolo", "terminaltables"
     ],
     license="MIT",
     classifiers=[
