@@ -1,6 +1,5 @@
 import random
 import unittest
-
 from Chamaeleo.methods.flowed import DNAFountain
 
 
@@ -108,6 +107,7 @@ class TestEncodeDecode(unittest.TestCase):
         ])
 
     def test_sequence_to_list(self):
+        self.tool.bit_size = 640
         self.tool.decode_packets = 10
         bit_segments = self.tool.carbon_to_silicon([
             ['A', 'G', 'G', 'A', 'A', 'G', 'G', 'G', 'A', 'A', 'A', 'G', 'A', 'A', 'A', 'A', 'T', 'A', 'T', 'A', 'A',

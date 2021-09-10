@@ -166,7 +166,7 @@ class AbstractErrorCorrectionCode(object):
                 if verified_bit_segment is not None:
                     output = self.remove_one(verified_bit_segment)
                     data, data_type = output.get("data"), output.get("type")
-                    if data_type and len(data) >= self.segment_length:
+                    if data_type:
                         if self.segment_length is not None:
                             bit_segments.append(data[len(data) - self.segment_length:])
                         else:

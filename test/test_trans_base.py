@@ -35,6 +35,7 @@ class TestEncodeDecode(unittest.TestCase):
         ])
 
     def test_sequence_to_list(self):
+        self.tool.bit_size = 640
         bit_segments = self.tool.carbon_to_silicon([
             ['G', 'C', 'C', 'G', 'C', 'A', 'A', 'C', 'G', 'G', 'C', 'G', 'G', 'T', 'C', 'T', 'A', 'C', 'A', 'T',
              'A', 'T', 'T', 'G', 'A', 'T', 'T', 'T', 'A', 'C', 'G', 'C', 'T', 'T', 'T', 'T', 'G', 'C', 'G', 'A',

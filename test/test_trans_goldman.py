@@ -1,6 +1,5 @@
 import random
 import unittest
-
 from Chamaeleo.methods.fixed import Goldman
 
 
@@ -38,6 +37,7 @@ class TestEncodeDecode(unittest.TestCase):
         ])
 
     def test_sequence_to_list(self):
+        self.tool.bit_size = 640
         bit_segments = self.tool.carbon_to_silicon([
             ['T', 'C', 'G', 'T', 'G', 'T', 'G', 'T', 'G', 'C', 'A', 'G', 'T', 'C', 'T', 'A', 'T', 'G', 'C', 'A', 'G',
              'A', 'G', 'A', 'G', 'C', 'A', 'T', 'C', 'A', 'C', 'A', 'G', 'T', 'C', 'G', 'A', 'T', 'C', 'A', 'G', 'C',
