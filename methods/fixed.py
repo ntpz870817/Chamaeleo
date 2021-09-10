@@ -84,6 +84,8 @@ class Goldman(AbstractCodingAlgorithm):
 
     def encode(self, bit_segments):
         if not self.fixed_huffman:
+            print("In this encoding process, the ternary Huffman tree is "
+                  + "generated according to the file. Please keep it properly.")
             self.huffman_tree = self.adaptive_huffman_tree(bit_segments, 3)
 
         dna_sequences = []
@@ -95,7 +97,7 @@ class Goldman(AbstractCodingAlgorithm):
             dna_sequence = []
 
             if len(bit_segment) % 8 != 0:
-                bit_segment = bit_segment + [0 for _ in range(8 - self.segment_length % 8)]
+                raise ValueError("The length of inputted binary segment must be divided by 8!")
 
             ternary_segment = []
             for position in range(0, len(bit_segment), 8):
@@ -118,6 +120,9 @@ class Goldman(AbstractCodingAlgorithm):
         return dna_sequences
 
     def decode(self, dna_sequences):
+        if self.huffman_tree is None:
+            raise ValueError("The Ternary Huffman tree need to be pre-declared!")
+
         bit_segments = []
 
         for sequence_index, dna_sequence in enumerate(dna_sequences):
@@ -277,7 +282,7 @@ class Grass(AbstractCodingAlgorithm):
             dna_sequence = []
 
             if len(bit_segment) % 16 != 0:
-                bit_segment = bit_segment + [0 for _ in range(16 - self.segment_length % 16)]
+                raise ValueError("The length of inputted binary segment must be divided by 16!")
 
             for position in range(0, len(bit_segment), 16):
                 decimal_number = int("".join(list(map(str, bit_segment[position: position + 16]))), 2)
@@ -308,7 +313,8 @@ class Grass(AbstractCodingAlgorithm):
                 for position in range(0, len(dna_sequence), 9):
                     decimal_number, carbon_piece = 0, dna_sequence[position: position + 9]
                     for index in [0, 3, 6]:
-                        value = self.mapping_rules[1][self.mapping_rules[0].index("".join(carbon_piece[index: index + 3]))]
+                        position = self.mapping_rules[0].index("".join(carbon_piece[index: index + 3]))
+                        value = self.mapping_rules[1][position]
                         decimal_number = decimal_number * 47 + value
 
                     bit_segment += list(map(int, list(str(bin(decimal_number))[2:].zfill(16))))
@@ -340,7 +346,7 @@ class Blawat(AbstractCodingAlgorithm):
 
         if self.need_logs:
             print("create Blawat et al. successfully!")
-            print("Blawat, M., Gaedke, K., Huetter, I., Chen, X. M., Turczyk, B., Inverso, S., ... & Church, G. M. (2016). "
+            print("Blawat, M., Gaedke, K., Huetter, I., Chen, X. M., Turczyk, B., ... & Church, G. M. (2016). "
                   "Forward error correction for DNA data storage. "
                   "Procedia Computer Science, 80, 1011-1022.")
 
@@ -354,7 +360,7 @@ class Blawat(AbstractCodingAlgorithm):
             dna_sequence = []
 
             if len(bit_segment) % 8 != 0:
-                bit_segment = bit_segment + [0 for _ in range(8 - self.segment_length % 8)]
+                raise ValueError("The length of inputted binary segment must be divided by 8!")
 
             for position in range(0, len(bit_segment), 8):
                 carbon_piece, silicon_piece = [None] * 5, bit_segment[position: position + 8]
@@ -379,25 +385,20 @@ class Blawat(AbstractCodingAlgorithm):
         bit_segments = []
 
         for sequence_index, dna_sequence in enumerate(dna_sequences):
-            try:
-                bit_segment = []
-                for position in range(0, len(dna_sequence), 5):
-                    carbon_piece, silicon_piece = dna_sequence[position: position + 5], []
-                    for index in [0, 1, 3]:
-                        silicon_piece += self.first_3[base_index.get(carbon_piece[index])]
+            bit_segment = []
+            for position in range(0, len(dna_sequence), 5):
+                carbon_piece, silicon_piece = dna_sequence[position: position + 5], []
+                for index in [0, 1, 3]:
+                    silicon_piece += self.first_3[base_index.get(carbon_piece[index])]
 
-                    combination = carbon_piece[2] + carbon_piece[4]
-                    for value, options in self.last_2.items():
-                        if combination in options:
-                            silicon_piece += [int(value[1]), int(value[4])]
+                combination = carbon_piece[2] + carbon_piece[4]
+                for value, options in self.last_2.items():
+                    if combination in options:
+                        silicon_piece += [int(value[1]), int(value[4])]
 
-                    bit_segment += silicon_piece
+                bit_segment += silicon_piece
 
-                bit_segments.append(bit_segment)
-            except ValueError:
-                pass
-            except IndexError:
-                pass
+            bit_segments.append(bit_segment)
 
             if self.need_logs:
                 self.monitor.output(sequence_index + 1, len(dna_sequences))

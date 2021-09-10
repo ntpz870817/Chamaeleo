@@ -28,7 +28,8 @@ if __name__ == "__main__":
         coding_schemes=coding_schemes,
         needed_indices=needed_indices,
         file_paths=file_paths,
-        segment_length=120,
+        segment_length=128,
+        index_length=16,
         need_logs=True)
 
     pipeline.calculate()

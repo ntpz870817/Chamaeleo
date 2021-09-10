@@ -19,6 +19,10 @@ class AbstractCodingAlgorithm(object):
             if type(bit_segment) != list or type(bit_segment[0]) != int:
                 raise ValueError("The dimension of bit matrix can only be 2!")
 
+        if self.need_logs:
+            print("The bit size of the encoded file is " + str(self.bit_size) + " bits and"
+                  + " the length of final encoded binary segments is " + str(self.segment_length))
+
         self.bit_size = bit_size
         self.segment_length = len(bit_segments[0])
         start_time = datetime.now()
@@ -39,6 +43,15 @@ class AbstractCodingAlgorithm(object):
         return {"dna": dna_sequences, "i": information_density, "t": encoding_runtime}
 
     def carbon_to_silicon(self, dna_sequences):
+        if self.bit_size is None:
+            raise ValueError("The parameter \"bit_size\" is needed, "
+                             + "which guides the number of bits reserved at the end of the digital file!")
+        if self.segment_length is None:
+            raise ValueError("The parameter \"segment_length\" is needed, "
+                             + "which clears the information that may exist in each sequence. "
+                             + "For example, assuming that the coding scheme requires an even binary segment length, "
+                             + "if the inputted length is an odd number, a bit [0] is added at the end.")
+
         for dna_sequence in dna_sequences:
             if type(dna_sequence) != list or type(dna_sequence[0]) != str:
                 raise ValueError("The dimension of nucleotide matrix can only be 2!")
@@ -80,7 +93,7 @@ class BaseCodingAlgorithm(AbstractCodingAlgorithm):
             dna_sequence = []
 
             if len(bit_segment) % 2 != 0:
-                bit_segment = bit_segment + [0]
+                raise ValueError("The length of inputted binary segment must be divided by 2!")
 
             for position in range(0, len(bit_segment), 2):
                 dna_sequence.append(index_base.get(self.mapping_rules.index(bit_segment[position: position + 2])))
@@ -112,25 +125,30 @@ class AbstractErrorCorrectionCode(object):
 
     def __init__(self, need_logs):
         self.need_logs = need_logs
-        self.segment_lengths = []
+        self.segment_length = None
         self.monitor = Monitor()
 
     def insert(self, bit_segments):
         if self.need_logs:
             print("Insert the error-correction code to the bit segments.")
-        self.segment_lengths = []
         verified_bit_segments = []
         if type(bit_segments) == list and type(bit_segments[0]) == list:
+            self.segment_length = len(bit_segments[0])
             for index, bit_segment in enumerate(bit_segments):
-                self.segment_lengths.append(len(bit_segment))
                 verified_bit_segments.append(self.insert_one(bit_segment))
                 if self.need_logs:
                     self.monitor.output(index + 1, len(bit_segments))
         elif type(bit_segments) == list and type(bit_segments[0]) == int:
-            self.segment_lengths = [len(bit_segments)]
+            self.segment_length = len(bit_segments)
             verified_bit_segments = self.insert_one(bit_segments)
         else:
             raise ValueError("The matrix must be 1-dimensional or 2-dimensional, and the value is of type \"int\".")
+
+        if self.need_logs:
+            print("The error-correction code automatically records the original length (" + str(self.segment_length)
+                  + ") of each binary segment, which provide more information when an error really occurs.")
+            print("We recommend you save this code through serialized object!")
+            print("Generally, ignoring it during decoding does not cause more problems.")
 
         return verified_bit_segments, len(verified_bit_segments[0]) - len(bit_segments[0])
 
@@ -148,8 +166,11 @@ class AbstractErrorCorrectionCode(object):
                 if verified_bit_segment is not None:
                     output = self.remove_one(verified_bit_segment)
                     data, data_type = output.get("data"), output.get("type")
-                    if data_type and len(data) >= self.segment_lengths[index]:
-                        bit_segments.append(data[len(data) - self.segment_lengths[index]:])
+                    if data_type and len(data) >= self.segment_length:
+                        if self.segment_length is not None:
+                            bit_segments.append(data[len(data) - self.segment_length:])
+                        else:
+                            bit_segments.append(data)
                     else:
                         error_rate += 1
                         error_indices.append(index)
@@ -169,7 +190,10 @@ class AbstractErrorCorrectionCode(object):
             data, data_type = output.get("data"), output.get("type")
             if data_type:
                 error_rate = 0
-                bit_segments = [data[len(data) - self.segment_lengths[0]:]]
+                if self.segment_length is not None:
+                    bit_segments = data[len(data) - self.segment_length:]
+                else:
+                    bit_segments = data
             else:
                 error_rate = 1
                 error_indices.append(0)

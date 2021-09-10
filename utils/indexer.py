@@ -1,11 +1,12 @@
 from Chamaeleo.utils.monitor import Monitor
 
 
-def connect_all(bit_segments, need_logs=False):
-    index_binary_length = int(len(str(bin(len(bit_segments)))) - 2)
+def connect_all(bit_segments, index_binary_length=None, need_logs=False):
+    if index_binary_length is None:
+        index_binary_length = int(len(str(bin(len(bit_segments)))) - 2)
 
     if need_logs:
-        print("Add index in the binary matrix.")
+        print("Add index (with the length " + str(index_binary_length) + ") in the binary matrix.")
 
     monitor = Monitor()
     connected_bit_segments = []
@@ -24,8 +25,9 @@ def connect(index, bit_segment, index_binary_length):
     return one_list
 
 
-def divide_all(bit_segments, need_logs=False):
-    index_binary_length = int(len(str(bin(len(bit_segments)))) - 2)
+def divide_all(bit_segments, index_binary_length=None, need_logs=False):
+    if index_binary_length is None:
+        index_binary_length = int(len(str(bin(len(bit_segments)))) - 2)
 
     if need_logs:
         print("Divide index and data from binary matrix.")

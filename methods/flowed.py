@@ -11,12 +11,12 @@ from Chamaeleo.utils import screen
 
 class DNAFountain(AbstractCodingAlgorithm):
 
-    def __init__(self, homopolymer=4, gc_content=0.2, redundancy=0.07, header_size=4,
+    def __init__(self, homopolymer=4, gc_bias=0.2, redundancy=0.07, header_size=4,
                  c_dist=0.1, delta=0.05, recursion_depth=10000000, decode_packets=None, need_pre_check=False,
                  need_logs=False):
         super().__init__(need_logs)
         self.homopolymer = homopolymer
-        self.gc_content = gc_content
+        self.gc_bias = gc_bias
         self.redundancy = redundancy
         self.header_size = header_size
         self.c_dist = c_dist
@@ -43,8 +43,8 @@ class DNAFountain(AbstractCodingAlgorithm):
         if self.header_size < 0:
             raise ValueError("The parameter \"header_size\" is wrong, it is greater than or equal to 0!")
 
-        if self.gc_content < 0 or self.gc_content > 0.5:
-            raise ValueError("The parameter \"gc_content\" is wrong, it is in the range of [0, 0.5]!")
+        if self.gc_bias < 0 or self.gc_bias > 0.5:
+            raise ValueError("The parameter \"gc_bias\" is wrong, it is in the range of [0, 0.5]!")
 
     def encode(self, bit_segments):
         for segment_index, bit_segment in enumerate(bit_segments):
@@ -74,7 +74,7 @@ class DNAFountain(AbstractCodingAlgorithm):
 
             # check validity.
             if screen.check("".join(dna_sequence),
-                            max_homopolymer=self.homopolymer, max_content=0.5 + self.gc_content):
+                            max_homopolymer=self.homopolymer, max_content=0.5 + self.gc_bias):
                 dna_sequences.append(dna_sequence)
                 chuck_recorder.append(droplet.chuck_indices)
 
@@ -102,6 +102,9 @@ class DNAFountain(AbstractCodingAlgorithm):
                                  "it is found that the encoded data does not meet the full rank condition."
                                  "Please increase \"redundancy\" or use compression to "
                                  "change the original digital data.")
+        else:
+            if self.need_logs:
+                print("We recommend that you test whether it can be decoded before starting the wet experiment.")
 
         return dna_sequences
 
@@ -285,8 +288,7 @@ class DNAFountain(AbstractCodingAlgorithm):
 class YinYangCode(AbstractCodingAlgorithm):
 
     def __init__(self, yang_rule=None, yin_rule=None, virtual_nucleotide="A", max_iterations=100,
-                 max_ratio=0.8, faster=False,
-                 max_homopolymer=4, max_content=0.6, need_logs=False):
+                 max_ratio=0.8, faster=False, max_homopolymer=4, max_content=0.6, need_logs=False):
         super().__init__(need_logs)
 
         if not yang_rule:
@@ -355,7 +357,7 @@ class YinYangCode(AbstractCodingAlgorithm):
 
         if self.need_logs:
             print("There are " + str(len(dna_sequences) * 2 - self.total_count)
-                  + " random bit segment(s) adding for reliability.")
+                  + " random bit segment(s) adding for logical reliability.")
 
         return dna_sequences
 
@@ -516,6 +518,13 @@ class YinYangCode(AbstractCodingAlgorithm):
         return dna_sequences
 
     def decode(self, dna_sequences):
+        if self.index_length is None:
+            raise ValueError("The parameter \"index_length\" is needed, "
+                             + "which is used to eliminate additional random binary segments.")
+        if self.total_count is None:
+            raise ValueError("The parameter \"total_count\" is needed, "
+                             + "which is used to eliminate additional random binary segments.")
+
         bit_segments = []
 
         for sequence_index, dna_sequence in enumerate(dna_sequences):

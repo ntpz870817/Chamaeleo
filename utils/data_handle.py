@@ -65,7 +65,7 @@ def decompress_from_file(path):
     return new_path
 
 
-def read_bits_from_file(path, segment_length=120, need_logs=False):
+def read_bits_from_file(path, segment_length=120, need_logs=True):
     monitor = Monitor()
     if need_logs:
         print("Read binary matrix from file: " + path)
@@ -81,10 +81,14 @@ def read_bits_from_file(path, segment_length=120, need_logs=False):
     matrix = array(matrix)
     matrix = matrix.reshape(int(len(matrix) / segment_length), segment_length)
 
+    if need_logs:
+        print("There are " + str(len(values) * 8) + " bits in the inputted file. "
+              + "Please keep this information in mind if you do not consider storing the model in serialization!")
+
     return matrix.tolist(), len(values) * 8
 
 
-def write_bits_to_file(path, matrix, bit_size, need_logs=False):
+def write_bits_to_file(path, matrix, bit_size, need_logs=True):
     monitor = Monitor()
 
     with open(path, "wb+") as file:
@@ -101,7 +105,7 @@ def write_bits_to_file(path, matrix, bit_size, need_logs=False):
     return True
 
 
-def read_dna_file(path, need_logs=False):
+def read_dna_file(path, need_logs=True):
     monitor = Monitor()
 
     dna_sequences = []

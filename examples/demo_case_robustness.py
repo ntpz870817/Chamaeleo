@@ -35,6 +35,7 @@ if __name__ == "__main__":
         sequence_loss=0.001,
         iterations=3,
         segment_length=120,
+        index_length=16,
         need_logs=True
     )
 

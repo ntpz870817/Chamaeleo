@@ -110,7 +110,7 @@ class ReedSolomon(AbstractErrorCorrectionCode):
 
     def insert_one(self, input_list):
         if len(input_list) % 8 != 0:
-            input_list = [0 for _ in range(8 - len(input_list) % 8)] + input_list
+            raise ValueError("The length of inputted binary segment must be divided by 8!")
 
         byte_list = []
         for index in range(0, len(input_list), 8):

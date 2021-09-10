@@ -72,7 +72,12 @@ class TranscodePipeline(DefaultPipeline):
                 original_bit_segments = copy.deepcopy(bit_segments)
 
                 if "index" in info and info["index"]:
-                    bit_segments, index_length = indexer.connect_all(bit_segments, self.need_logs)
+                    if "index_length" in info:
+                        bit_segments, index_length = indexer.connect_all(bit_segments, info["index_length"],
+                                                                         self.need_logs)
+                    else:
+                        bit_segments, index_length = indexer.connect_all(bit_segments, None, self.need_logs)
+
                     self.records["index length"] = index_length
                 else:
                     self.records["index length"] = 0
@@ -133,7 +138,11 @@ class TranscodePipeline(DefaultPipeline):
                     return {"bit": None, "dna": original_dna_sequences}
 
                 if "index" in info and info["index"]:
-                    indices, bit_segments = indexer.divide_all(bit_segments, self.need_logs)
+                    if "index_length" in info:
+                        indices, bit_segments = indexer.divide_all(bit_segments, info["index_length"], self.need_logs)
+                    else:
+                        indices, bit_segments = indexer.divide_all(bit_segments, None, self.need_logs)
+
                     bit_segments = indexer.sort_order(indices, bit_segments, self.need_logs)
 
                 if "output_path" in info:
@@ -192,6 +201,7 @@ class RobustnessPipeline(DefaultPipeline):
         self.iterations = info["iterations"] if "iterations" in info else 1
 
         self.segment_length = info["segment_length"] if "segment_length" in info else 120
+        self.index_length = info["index_length"] if "index_length" in info else None
 
         self.__init_check__()
 
@@ -275,7 +285,8 @@ class RobustnessPipeline(DefaultPipeline):
                                                  need_logs=self.need_logs)
 
                     encoded_data = pipeline.transcode(direction="t_c", input_path=file_path,
-                                                      segment_length=self.segment_length, index=needed_index)
+                                                      segment_length=self.segment_length,
+                                                      index=needed_index, index_length=self.index_length)
 
                     pipeline_logs = []
                     for iteration in range(self.iterations):
@@ -305,7 +316,7 @@ class RobustnessPipeline(DefaultPipeline):
                             del dna_sequences[chosen_index][random.randint(0, len(dna_sequences[chosen_index]) - 1)]
 
                         decoded_data = pipeline.transcode(direction="t_s", input_string=dna_sequences,
-                                                          index=needed_index)
+                                                          index=needed_index, index_length=self.index_length)
 
                         bit_segments = decoded_data["bit"]
 
@@ -423,7 +434,8 @@ class BasicFeaturePipeline(DefaultPipeline):
 
         self.file_paths = info["file_paths"] if "file_paths" in info else None
 
-        self.segment_length = info["segment_length"] if "segment_length" in info else 200
+        self.segment_length = info["segment_length"] if "segment_length" in info else 120
+        self.index_length = info["index_length"] if "index_length" in info else None
 
         self.__init_check__()
 
@@ -470,7 +482,8 @@ class BasicFeaturePipeline(DefaultPipeline):
             original_bit_segments, bit_size = data_handle.read_bits_from_file(file_path,
                                                                               self.segment_length,
                                                                               self.need_logs)
-            bit_segments_with_indices, index_length = indexer.connect_all(original_bit_segments, self.need_logs)
+            bit_segments_with_indices, index_length = indexer.connect_all(original_bit_segments, self.index_length,
+                                                                          self.need_logs)
             for (scheme_name, coding_scheme), needed_index in zip(self.coding_schemes.items(), self.needed_indices):
                 coding_scheme.need_logs = True
                 if self.need_logs:

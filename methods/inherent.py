@@ -1,5 +1,4 @@
 import itertools
-
 import numpy
 import Chamaeleo.utils.monitor as monitor
 
