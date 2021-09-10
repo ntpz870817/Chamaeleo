@@ -22,6 +22,8 @@ class Monitor:
 
         string += "|"
 
+        current_state = max(current_state, 1)
+
         pass_time = (datetime.now() - self.last_time).total_seconds()
         wait_time = int(pass_time * (total_state - current_state) / current_state)
 

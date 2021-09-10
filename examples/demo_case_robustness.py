@@ -1,6 +1,5 @@
 import os
 import Chamaeleo
-
 from Chamaeleo.methods.default import BaseCodingAlgorithm
 from Chamaeleo.methods.ecc import Hamming, ReedSolomon
 from Chamaeleo.methods.fixed import Church
@@ -18,9 +17,7 @@ if __name__ == "__main__":
         "Base": BaseCodingAlgorithm(), "Church et al.": Church()
     }
     error_corrections = {
-        "None": None,
-        "Hamming": Hamming(),
-        "ReedSolomon": ReedSolomon()
+        "None": None, "Hamming": Hamming(), "ReedSolomon": ReedSolomon()
     }
 
     needed_indices = [

@@ -1,10 +1,9 @@
 import os
 import Chamaeleo
-
 from Chamaeleo.methods.default import BaseCodingAlgorithm
 from Chamaeleo.methods.fixed import Church
-
 from Chamaeleo.utils.pipelines import OptimalChoicePipeline
+
 
 if __name__ == "__main__":
     root_path = os.path.dirname(Chamaeleo.__file__)
@@ -33,5 +32,5 @@ if __name__ == "__main__":
         selected_coding_scheme="Church et al.",
         error_correction=None,
         input_path=read_file_path, output_path=dna_path,
-        segment_length=256, needed_index=True, need_logs=True,
+        segment_length=120, needed_index=True, need_logs=True,
     )

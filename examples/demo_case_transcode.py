@@ -44,13 +44,19 @@ if __name__ == "__main__":
 
             pipeline = TranscodePipeline(coding_scheme=coding_scheme, error_correction=error_correction, need_logs=True)
 
-            encoded_data = pipeline.transcode(direction="t_c", input_path=read_file_path, output_path=dna_path,
-                                              segment_length=120, index=needed_index)
+            try:
+                encoded_data = pipeline.transcode(direction="t_c", input_path=read_file_path, output_path=dna_path,
+                                                  segment_length=120, index=needed_index)
 
-            decoded_data = pipeline.transcode(direction="t_s", input_path=dna_path, output_path=write_file_path,
-                                              index=needed_index)
+                decoded_data = pipeline.transcode(direction="t_s", input_path=dna_path, output_path=write_file_path,
+                                                  index=needed_index)
 
-            print()
-            pipeline.output_records(type="string")
-            print("transcoding state: " + str(encoded_data["bit"] == decoded_data["bit"]))
-            print()
+                print()
+                pipeline.output_records(type="string")
+                print("transcoding state: " + str(encoded_data["bit"] == decoded_data["bit"]))
+                print()
+
+            except ValueError as error:
+                print(error)
+
+
