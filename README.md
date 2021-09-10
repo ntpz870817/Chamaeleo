@@ -20,16 +20,16 @@ We recommend that you read the user manual first and then the contributor manual
 
 **Chamaeleo** has undergone major adjustments before.
 Versions smaller than **1.3** are unstable.
-If you insist on using earlier versions, you may get unexpected results (especially actual information density).
+If you insist on using earlier versions, you may get unexpected results.
 
 You can find the latest version in:
 (1) GitHub release [here](https://github.com/ntpz870817/Chamaeleo/releases/),
 (2) PyPI website [here](https://pypi.org/project/Chamaeleo/).
-Simply, installation through the command line (pip install Chamaeleo) is the easiest way to obtain the latest and most stable version of Chamaeleo.
+Simply, installation through the command line (**pip install Chamaeleo**) is the easiest way to obtain the latest and most stable version of Chamaeleo.
 
 As a kind suggestion, when you first touch this package, pipeline cases in the examples folder (please note [here](https://github.com/ntpz870817/Chamaeleo/tree/master/examples)) may help you get started well.
 
-Sometimes the results (especially actual information density) obtained by Chamaeleo do not meet your expectations.
+Sometimes the results obtained by Chamaeleo do not meet your expectations.
 We recommend that you can check by following steps:
 (1) related length settings include segment length, index length, and error-correction length.
 (2) the method for calculating information density. For the built-in calculation method, it is bound inside the class AbstractCodingAlgorithm(please note [here](https://github.com/ntpz870817/Chamaeleo/blob/master/methods/default.py#L40)).
