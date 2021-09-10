@@ -8,7 +8,7 @@ class TestEncodeDecode(unittest.TestCase):
 
     def setUp(self):
         random.seed(30)
-        self.tool = YinYangCode(need_logs=False)
+        self.tool = YinYangCode(faster=True, need_logs=False)
         self.tool.index_length = 3
         self.tool.total_count = 4
         self.tool.segment_length = 100
