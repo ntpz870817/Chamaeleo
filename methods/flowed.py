@@ -378,31 +378,29 @@ class YinYangCode(AbstractCodingAlgorithm):
                       + "We recommend you to re-select the rule or take a new run.")
 
         if len(bad_data) == 0 and len(bit_segments) == 0:
-            return [], []
+            return []
         elif len(bad_data) == 0:
-            good_data = []
+            good_data, band_data = [], []
             for row in range(len(bit_segments)):
                 if self.need_logs:
                     self.monitor.output(row + 1, len(bit_segments))
                 good_data.append(bit_segments[row])
-            return good_data, []
         elif len(bad_data) == len(bit_segments):
-            bad_data = []
+            good_data, bad_data = [], []
             for row in range(len(bit_segments)):
                 if self.need_logs:
                     self.monitor.output(row + 1, len(bit_segments))
                 bad_data.append(bit_segments[row])
-            return [], bad_data
         else:
-            good_data = []
-            bad_data = []
+            x, y = [], []
             for row in range(len(bit_segments)):
                 if self.need_logs:
                     self.monitor.output(row + 1, len(bit_segments))
                 if row in bad_data:
-                    bad_data.append(bit_segments[row])
+                    y.append(bit_segments[row])
                 else:
-                    good_data.append(bit_segments[row])
+                    x.append(bit_segments[row])
+            good_data, bad_data = x, y
 
         if self.need_logs:
             print("Encode based on random pair iteration.")
