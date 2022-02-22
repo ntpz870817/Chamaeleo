@@ -125,7 +125,7 @@ decoded_data = pipeline.transcode(direction="t_s", input_path=dna_path, output_p
 
 Sometimes, we need to add error-correcting validation and serial numbers for each piece of data (for recovery).
 
-In the encoding process, we need to to instantiate the validation function:
+In the encoding process, we need to instantiate the validation function:
 
 ```python
 from Chamaeleo.utils.pipelines import TranscodePipeline
